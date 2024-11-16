@@ -1,5 +1,6 @@
 package game.tile;
 
+import game.DavinCiCode;
 import game.player.Player;
 
 import java.util.ArrayList;
@@ -8,12 +9,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static game.DavinCiCode.*;
 import static game.DavinCiCode.MAX_TILE_NUMBER;
 import static game.DavinCiCode.MIN_TILE_NUMBER;
 
 public class TileManager {
 
     private final List<Tile> deck = new ArrayList<>();
+    private final Player firstPlayer; //선공
+    private final Player secondPlayer; //후공
+
+    public TileManager(Player firstPlayer, Player secondPlayer) {
+        this.firstPlayer = firstPlayer;
+        this.secondPlayer = secondPlayer;
+    }
 
     public void initGame(Player firstPlayer, Player secondPlayer) {
         generateTile();
@@ -45,7 +54,13 @@ public class TileManager {
     }
 
     private void distributeTile() {
+        List<Tile> firstTile = deck.subList(0, NUMBER_OF_INIT_TILE);
+        firstPlayer.giveTileToPlayer(firstTile);
+        firstTile.clear();
 
+        List<Tile> secondTile = deck.subList(0, NUMBER_OF_INIT_TILE);
+        secondPlayer.giveTileToPlayer(secondTile);
+        secondTile.clear();
     }
 
     public boolean isNotEqual(Tile selectedOpponentTile, Tile guessedOpponentTile) {
