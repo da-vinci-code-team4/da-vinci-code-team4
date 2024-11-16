@@ -3,6 +3,8 @@ package game.player;
 import game.tile.Tile;
 import game.tile.TileManager;
 
+import java.util.List;
+
 import static game.tile.TileType.*;
 
 abstract public class Player {
@@ -13,6 +15,10 @@ abstract public class Player {
     public Player(TileManager tileManager, String name) {
         this.tileManager = tileManager;
         this.name = name;
+    }
+
+    public void giveTileToPlayer(List<Tile> tiles) {
+
     }
 
     public boolean turnStart() {
