@@ -9,4 +9,7 @@ abstract public class Tile {
         this.tileColor = tileColor;
     }
 
+    public boolean isTileType(TileType tileType) {
+        return false;
+    }
 }
