@@ -5,6 +5,9 @@ import game.tile.TileManager;
 
 public class DavinCiCode {
 
+    public static final int MIN_TILE_NUMBER = 0;
+    public static final int MAX_TILE_NUMBER = 11;
+
     private final TileManager tileManager;
     private final Player firstPlayer;
     private final Player secondPlayer;
