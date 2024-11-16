@@ -55,11 +55,11 @@ public class TileManager {
 
     private void distributeTile() {
         List<Tile> firstTile = deck.subList(0, NUMBER_OF_INIT_TILE);
-        firstPlayer.giveTileToPlayer(firstTile);
+        firstPlayer.addTileToDeck(firstTile);
         firstTile.clear();
 
         List<Tile> secondTile = deck.subList(0, NUMBER_OF_INIT_TILE);
-        secondPlayer.giveTileToPlayer(secondTile);
+        secondPlayer.addTileToDeck(secondTile);
         secondTile.clear();
     }
 
