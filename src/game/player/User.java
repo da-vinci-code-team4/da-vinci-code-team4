@@ -42,8 +42,9 @@ public class User extends Player {
     }
 
     @Override
-    public int insertJokerTile() {
-        return 0;
+    public int inputJokerTilePosition() {
+        //사용자가 원하는 조커 타일의 위치를 입력 받음(타일의 위치는 1부터 시작)
+        return scanner.nextInt();
     }
 
     @Override
