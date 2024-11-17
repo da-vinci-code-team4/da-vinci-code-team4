@@ -1,10 +1,10 @@
 package game.player;
 
+import game.tile.JokerTile;
 import game.tile.Tile;
 import game.tile.TileManager;
-import java.util.List;
-import java.util.Scanner;
-import java.util.TreeMap;
+
+import java.util.*;
 
 import static game.tile.TileType.*;
 
@@ -13,14 +13,12 @@ abstract public class Player {
     Scanner scanner = new Scanner(System.in);
 
     //플레이어가 가진 타일덱
-    private TreeMap<Integer, Tile> myTileDeck = new TreeMap<>();
+    private TreeSet<Tile> myTileDeck = new TreeSet<>();
 
     private final TileManager tileManager;
     private final String name;
     private int rank;
     private int score;
-
-    private static int tileNo;
 
     public Player(TileManager tileManager,String name, int rank, int score) {
         this.tileManager = tileManager;
@@ -30,15 +28,7 @@ abstract public class Player {
     }
 
     public boolean turnStart() {
-        if(tileManager.deck != null){
-            Tile newTile = getTileFromDeque();
-            if (newTile.isTileType(JOKER)) {
-                insertJokerTile(); //조커타일이면 조커타일 정렬 메소드 호출
-            }
-            else {
-                addTileToDeck(newTile, 1); //일반타일이면 그냥 덱에 추가하는 메소드
-            }
-        }
+        drawTileFromDeck();
 
         Tile selectedTile = selectOpponentPlayerTile();
 
@@ -52,29 +42,53 @@ abstract public class Player {
         return false;
     }
 
-    public Tile getTileFromDeque() {
-        //턴마다 (남아 있다면)타일을 하나씩 가져옴
-        return //랜덤으로 하나 받는 메소드를 tileManager 에서 호출 해서 리턴함;
-    }
-
-    public void addTileToDeck(Tile tile, int opt) {
-        //타일을 받아서 덱에 추가
-        myTileDeck.put(++tileNo, tile);
-    }
-
-    public void addTileToDeck(List<Tile> tiles) {
-        //타일을 받아서 덱에 추가
+    public void giveTileToPlayerAtStart(List<Tile> tiles) {
+        //게임 시작 시 타일을 받아서 덱에 추가
         for (Tile tile : tiles) {
-            myTileDeck.put(++tileNo, tile);
+            if (tile.isTileType(JOKER)) { //조커 타일이면 사용자로부터 위치 입력 받음
+                int position = inputJokerTilePosition();
+
+                tile.defineTileWeightTo(getJokerTileWeight(position));
+            }
+
+            myTileDeck.add(tile);
         }
     }
 
+    private void drawTileFromDeck() {
+        Optional<Tile> newTile = tileManager.getTileFromDeck();
+        if (newTile.isEmpty()) { //덱이 비어있으면 return
+            return;
+        }
+
+        Tile tile = newTile.get();
+        if (tile.isTileType(JOKER)) {
+            int position = inputJokerTilePosition(); //조커 타일이면 조커 타일 위치 선택
+
+            tile.defineTileWeightTo(getJokerTileWeight(position));
+        }
+
+        myTileDeck.add(tile);
+    }
+
+    private int getJokerTileWeight(int position) {
+        if (position == 1) {
+            return myTileDeck.getFirst().getWeight() - 3;
+        }
+
+        return myTileDeck.stream()
+                .limit(position - 1)
+                .skip(Math.max(0, position - 2))
+                .findFirst()
+                .get()
+                .getWeight() + 3;
+    }
 
     //상대 타일 맞추기
     abstract public Tile selectOpponentPlayerTile();
 
     //조커타일인 경우 재정렬해주는 타일
-    abstract public int insertJokerTile();
+    abstract public int inputJokerTilePosition();
 
     //타일을 맞춘 뒤 계속 맞출것인지
     abstract public boolean chooseToKeepTurn();

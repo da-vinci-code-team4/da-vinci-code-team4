@@ -15,7 +15,7 @@ public class Computer extends Player{
     }
 
     @Override
-    public int insertJokerTile() {
+    public int inputJokerTilePosition() {
         return 0;
     }
 
