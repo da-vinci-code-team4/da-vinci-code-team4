@@ -1,17 +1,11 @@
 package game.tile;
 
-import game.DavinCiCode;
 import game.player.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static game.DavinCiCode.*;
-import static game.DavinCiCode.MAX_TILE_NUMBER;
-import static game.DavinCiCode.MIN_TILE_NUMBER;
 
 public class TileManager {
 
@@ -28,6 +22,10 @@ public class TileManager {
         generateTile();
         shuffle();
         distributeTile();
+    }
+
+    public Optional<Tile> getTileFromDeck() {
+        return deck.isEmpty() ? Optional.empty() : Optional.of(deck.removeFirst());
     }
 
     private void generateTile() {
@@ -55,11 +53,11 @@ public class TileManager {
 
     private void distributeTile() {
         List<Tile> firstTile = deck.subList(0, NUMBER_OF_INIT_TILE);
-        firstPlayer.addTileToDeck(firstTile);
+        firstPlayer.giveTileToPlayerAtStart(firstTile);
         firstTile.clear();
 
         List<Tile> secondTile = deck.subList(0, NUMBER_OF_INIT_TILE);
-        secondPlayer.addTileToDeck(secondTile);
+        secondPlayer.giveTileToPlayerAtStart(secondTile);
         secondTile.clear();
     }
 
