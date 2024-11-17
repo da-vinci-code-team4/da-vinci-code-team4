@@ -1,6 +1,7 @@
 package game.tile;
 
-abstract public class Tile {
+abstract public class Tile implements Comparable<Tile>{
+    private int weight; //정렬 때 사용할 가중치(가중치 기준 오름차순으로 정렬됨)
     private final TileType tileType;
     private final TileColor tileColor;
 
@@ -14,6 +15,20 @@ abstract public class Tile {
     }
 
     public boolean isTileType(TileType tileType) {
-        return false;
+        return this.tileType.equals(tileType);
+    }
+
+    @Override
+    public int compareTo(Tile o) {
+        //가중치가 동일하면서 색상이 다른 경우 흑이 먼저 옴
+        if (this.weight == o.weight && !this.tileColor.equals(o.tileColor)) {
+            return this.tileColor.compareTo(o.tileColor);
+        }
+        //가중치가 작을수록 우선
+        return Integer.compare(this.weight, o.weight);
+    }
+
+    public int getWeight() {
+        return weight;
     }
 }
