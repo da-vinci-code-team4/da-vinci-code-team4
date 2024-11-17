@@ -9,6 +9,10 @@ abstract public class Tile {
         this.tileColor = tileColor;
     }
 
+    public void defineTileWeightTo(int weight) {
+        this.weight = weight;
+    }
+
     public boolean isTileType(TileType tileType) {
         return false;
     }
