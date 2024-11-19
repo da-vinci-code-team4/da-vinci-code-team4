@@ -21,7 +21,7 @@ abstract public class Tile implements Comparable<Tile>{
     @Override
     public int compareTo(Tile o) {
         //가중치가 동일하면서 색상이 다른 경우 흑이 먼저 옴
-        if (this.weight == o.weight && !this.tileColor.equals(o.tileColor)) {
+        if (this.weight == o.weight) {
             return this.tileColor.compareTo(o.tileColor);
         }
         //가중치가 작을수록 우선
