@@ -1,12 +1,15 @@
 package game.player;
 
-import game.tile.JokerTile;
+import game.save.Record;
 import game.tile.Tile;
 import game.tile.TileManager;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.TreeSet;
 
-import static game.tile.TileType.*;
+import static game.tile.TileType.JOKER;
 
 
 abstract public class Player {
@@ -27,18 +30,27 @@ abstract public class Player {
         this.score = score;
     }
 
-    public boolean turnStart() {
+    public boolean turnStart(Record record) {
+        /*
+        * 기록해야 하는 것
+        * 1. 플레이어가 뽑은 타일
+        * 2. 고른 상대방 타일 정보와 플레이어가 예측한 타일 정보
+        * 3. 결과(맞췄는지)
+        * 4. 타일 현황(Status, 오픈된 타일, 가진 개수, 덱에 남은 타일 등)
+        * */
+
+
         drawTileFromDeck();
 
         Tile selectedTile = selectOpponentPlayerTile();
 
         //상대 타일과 맞는지 확인하는 메소드를 호출해야함
-        if (selectedTile.equals()) {
+        /*if (selectedTile.equals()) {
             //만약 같으면 chooseToKeepTurn() 호출
             if(chooseToKeepTurn()){
                 return true;
             }
-        }
+        }*/
         return false;
     }
 
