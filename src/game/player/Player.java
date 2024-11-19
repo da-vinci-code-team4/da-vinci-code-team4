@@ -10,17 +10,17 @@ import static game.tile.TileType.*;
 
 
 abstract public class Player {
-    Scanner scanner = new Scanner(System.in);
 
-    //플레이어가 가진 타일덱
-    private TreeSet<Tile> myTileDeck = new TreeSet<>();
+    public static final int INSERTED_TILE_WEIGHT_GAP = 3;
 
     private final TileManager tileManager;
     private final String name;
     private int rank;
     private int score;
+    private TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
+    Scanner scanner = new Scanner(System.in);
 
-    public Player(TileManager tileManager,String name, int rank, int score) {
+    public Player(TileManager tileManager, String name, int rank, int score) {
         this.tileManager = tileManager;
         this.name = name;
         this.rank = rank;
@@ -73,7 +73,7 @@ abstract public class Player {
 
     private int getJokerTileWeight(int position) {
         if (position == 1) {
-            return myTileDeck.getFirst().getWeight() - 3;
+            return myTileDeck.getFirst().getWeight() - INSERTED_TILE_WEIGHT_GAP;
         }
 
         return myTileDeck.stream()
@@ -81,7 +81,7 @@ abstract public class Player {
                 .skip(Math.max(0, position - 2))
                 .findFirst()
                 .get()
-                .getWeight() + 3;
+                .getWeight() + INSERTED_TILE_WEIGHT_GAP;
     }
 
     //상대 타일 맞추기
