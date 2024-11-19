@@ -1,6 +1,9 @@
 package game;
 
 import game.player.Player;
+import game.save.Record;
+import game.save.Recorder;
+import game.status.Status;
 import game.tile.TileManager;
 
 public class DavinCiCode {
@@ -12,6 +15,11 @@ public class DavinCiCode {
     private final TileManager tileManager;
     private final Player firstPlayer;
     private final Player secondPlayer;
+    private final Recorder recorder = new Recorder();
+    private final Status status = new Status();
+
+    private int turn = 0;
+
 
     public DavinCiCode(TileManager tileManager, Player firstPlayer, Player secondPlayer) {
         this.tileManager = tileManager;
@@ -22,14 +30,29 @@ public class DavinCiCode {
     public void startGame() {
         tileManager.initGame(firstPlayer, secondPlayer);
 
-        boolean keepTurn = true;
-        while (keepTurn) {
-            keepTurn = firstPlayer.turnStart();
-        }
+        while (true) {
+            playGame(firstPlayer);
+            if (status.isAllTileOpened()) {
 
-        keepTurn = true;
-        while (keepTurn) {
-            keepTurn = secondPlayer.turnStart();
+                break;
+            }
+
+            playGame(secondPlayer);
+            if (status.isAllTileOpened()) {
+
+                break;
+            }
+        }
+    }
+
+    private void playGame(Player player) {
+        boolean keepTurn = true;
+        while (keepTurn) { //모든 카드가 오픈 되었는지 확인하는 코드 나중에 추가
+            Record record = Record.of(++turn, player);
+            keepTurn = player.turnStart(record);
+            recorder.save(record);
+
+            if(status.isAllTileOpened()) return;
         }
     }
 }
