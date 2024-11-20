@@ -1,17 +1,17 @@
 package main;
-//
+
 //import game.DavinCiCode;
 //import game.player.Player;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
-import java.awt.*;
 
 public class Main {
-//    Scanner scanner = new Scanner(System.in);
-//    FileFactory fileFactory = new FileFactory();
-//    private Player user;
-//    private Player computer;
-//
+    Scanner scanner = new Scanner(System.in);
+
+    FileFactory fileFactory = new FileFactory();
+    //    private Player user;
+
     public static void main(String[] args) {
         Main program = new Main();
         program.run();
@@ -26,12 +26,15 @@ public class Main {
     }
 
 
-
     private void viewRecordList() {
+
     }
+
     private void viewRanking() {
-
-
+        ArrayList<ArrayList<String>> arrayList = fileFactory.readRankFile();
+        for (Object data : arrayList) {
+            System.out.println(data);
+        }
     }
 
     void run() {

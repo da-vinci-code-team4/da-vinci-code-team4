@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileFactory {
@@ -16,17 +17,20 @@ public class FileFactory {
         return filein;
     }
 
-    void readFile(String filename) {
-        Scanner inFile = openFile(filename);
-
+    public ArrayList<ArrayList<String>> readRankFile() {
+        Scanner rankFile = openFile("ranking.txt");
+        ArrayList returnList = new ArrayList();
+        while (rankFile.hasNext()) {
+            ArrayList temp = new ArrayList();
+            temp.add(rankFile.next());
+            temp.add(rankFile.next());
+            temp.add(rankFile.next());
+            temp.add(rankFile.next());
+            returnList.add(temp);
+        }
+        return returnList;
     }
 
-    void makeFile(String filename) {
-
-    }
-
-    //아래는 별도 클래스로 뺄건지 정해야함
-    //세이브 파일 양식도 정해야함
     public void readSaveFile(String filename) {
 
     }
