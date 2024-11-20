@@ -1,53 +1,69 @@
 package main;
-
-import game.DavinCiCode;
-import game.player.Player;
+//
+//import game.DavinCiCode;
+//import game.player.Player;
 import java.util.Scanner;
-public class Main {
-    void run(){
-        System.out.println("Hello, Would!");
-    }
+import javax.swing.*;
+import java.awt.*;
 
-    Scanner scanner = new Scanner(System.in);
-    FileFactory fileFactory = new FileFactory();
-    private Player user;
-    private Player computer;
+public class Main {
+//    Scanner scanner = new Scanner(System.in);
+//    FileFactory fileFactory = new FileFactory();
+//    private Player user;
+//    private Player computer;
+//
     public static void main(String[] args) {
-        Main m = new Main();
-        m.run();
         Main program = new Main();
         program.run();
     }
-    void menu() {
-        //테스트용 메뉴로 스윙 작업 시 변경 예정
-        int inpMenu = scanner.nextInt();
-        while(true){
-            switch (inpMenu) {
-                case 1: //게임시작
-                    DavinCiCode game = new DavinCiCode(Player firstPlayer, Player secondPlayer);
-                    break;
-                case 2: //현황보기
-                    viewStatus();
-                    break;
-                case 3: //기록보기
-                    viewRecordList();
-                    break;
-                case 4: //랭크보기
-                    viewRanking();
-                    break;
-            }
-            if(inpMenu == 0) {
-                break;
-            }
-        }
+
+    private void gameStart() {
+//        DavinCiCode game = new DavinCiCode(Player firstPlayer, Player secondPlayer);
     }
+
     private void viewStatus() {
+
     }
+
+
+
     private void viewRecordList() {
     }
     private void viewRanking() {
+
+
     }
+
     void run() {
-        menu();
+        makeUI();
+    }
+
+    public void makeUI() {
+        JFrame frame = new JFrame("다빈치코드");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1080, 720);
+        frame.setLocationRelativeTo(null);
+
+        // JPanel 생성
+        JPanel mainPanel = new JPanel();
+        frame.add(mainPanel);
+
+        // 버튼 생성
+        JButton gameStartBtn = new JButton("게임시작");
+        JButton viewStatusBtn = new JButton();
+        JButton viewRankingBtn = new JButton();
+
+        // 버튼 클릭 시 행동 정의
+        gameStartBtn.addActionListener(e -> gameStart());
+        viewStatusBtn.addActionListener(e -> viewStatus());
+        viewRankingBtn.addActionListener(e -> viewRanking());
+
+        // 버튼을 패널에 추가
+        mainPanel.add(gameStartBtn);
+        mainPanel.add(viewStatusBtn);
+        mainPanel.add(viewRankingBtn);
+
+        // 프레임을 화면에 표시
+        frame.setVisible(true);
     }
 }
