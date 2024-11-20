@@ -5,7 +5,6 @@ import game.tile.NumberTile;
 import game.tile.Tile;
 import game.tile.TileColor;
 import game.tile.TileManager;
-import game.tile.TileType;
 
 import static game.tile.TileColor.*;
 import static game.tile.TileType.*;
@@ -17,7 +16,7 @@ public class User extends Player {
     }
 
     @Override
-    public Tile selectOpponentPlayerTile() {
+    public Tile getSelectedTile() {
         TileColor color;
 
         String colorInp = scanner.next();
@@ -32,10 +31,10 @@ public class User extends Player {
         }
 
         if(typeInp.equals("조커")) {
-            return new JokerTile(JOKER, color);
+            return JokerTile.of(color);
         }
         if(typeInp.equals("숫자")) {
-            return new NumberTile(NUMBER, color, typeNum);
+            return NumberTile.of(color, typeNum);
         }
 
         return null;

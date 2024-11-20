@@ -10,7 +10,7 @@ public class Computer extends Player{
     }
 
     @Override
-    public Tile selectOpponentPlayerTile() {
+    public Tile getSelectedTile() {
         return null;
     }
 
