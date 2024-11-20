@@ -27,7 +27,7 @@ public class TileManager {
     public Optional<Tile> getTileFromDeck() {
         return deck.isEmpty() ?
                 Optional.empty() :
-                Optional.of(deck.removeFirst());
+                Optional.of(deck.remove(0));
     }
 
     private void generateTile() {
@@ -65,5 +65,17 @@ public class TileManager {
 
     public boolean isNotEqual(Tile selectedOpponentTile, Tile guessedOpponentTile) {
         return false;
+    }
+
+    //Open된 상태의 타일을 제공합니다.
+    public List<Tile> getOpenTiles(){
+        List<Tile> tileList = new ArrayList<>();
+
+        for(Tile t : deck)
+            if (t.getState()){
+                tileList.add(t);
+            }
+
+        return tileList;
     }
 }

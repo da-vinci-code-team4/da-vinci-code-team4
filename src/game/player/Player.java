@@ -1,6 +1,6 @@
 package game.player;
 
-import game.save.Record;
+// import game.save.Record;
 import game.tile.Tile;
 import game.tile.TileManager;
 
@@ -16,11 +16,11 @@ abstract public class Player {
 
     public static final int INSERTED_TILE_WEIGHT_GAP = 3;
 
-    private final TileManager tileManager;
+    final TileManager tileManager;
     private final String name;
     private int rank;
     private int score;
-    private TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
+    TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
     Scanner scanner = new Scanner(System.in);
 
     public Player(TileManager tileManager, String name, int rank, int score) {

@@ -2,6 +2,7 @@ package game.tile;
 
 abstract public class Tile implements Comparable<Tile>{
     private int weight; //정렬 때 사용할 가중치(가중치 기준 오름차순으로 정렬됨)
+    private Boolean isOpen;
     private final TileType tileType;
     private final TileColor tileColor;
 
@@ -30,5 +31,9 @@ abstract public class Tile implements Comparable<Tile>{
 
     public int getWeight() {
         return weight;
+    }
+
+    public Boolean getState(){
+        return isOpen;
     }
 }
