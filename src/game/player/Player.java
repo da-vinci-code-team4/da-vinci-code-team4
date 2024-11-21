@@ -44,34 +44,6 @@ abstract public class Player {
     }
 
     /**
-     * 플레이어가 턴을 시작하면 호출되는 메서드다.
-     *
-     * @param status 턴을 시작하고 게임 내용을 기록할 status 객체의 참조를 입력 받는다
-     * @return 플레이어의 턴이 계속 유지 된다면 true, 턴이 종료되면 false를 반환한다
-     */
-    public boolean turnStart(Status status) {
-        /*
-         * 턴 진행 중 기록해야 하는 것
-         * 1. 플레이어가 뽑은 타일
-         * 2. 고른 상대방 타일 정보와 플레이어가 예측한 타일 정보
-         * 3. 결과(맞췄는지)
-         * 4. 타일 현황(Status, 오픈된 타일, 가진 개수, 덱에 남은 타일 등)
-         * */
-        drawTileFromDeck(status);
-
-        Tile selectedTile = getSelectedTile();
-
-        //상대 타일과 맞는지 확인하는 메소드를 호출해야함
-        /*if (selectedTile.equals()) {
-            //만약 같으면 chooseToKeepTurn() 호출
-            if(chooseToKeepTurn()){
-                return true;
-            }
-        }*/
-        return false;
-    }
-
-    /**
      * 게임 시작 시 타일을 메니져에게 분배 받을 때 호출되는 메서드다.
      * 만약 조커 타일이 있다면 사용자가 원하는 위치에 조커 타일을 둔다.
      *
