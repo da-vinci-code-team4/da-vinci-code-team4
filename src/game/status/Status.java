@@ -5,6 +5,8 @@ import game.player.Player;
 import game.player.User;
 import game.tile.Tile;
 
+import static game.status.TurnResult.*;
+
 public class Status {
 
     int cntRemain;
@@ -32,7 +34,7 @@ public class Status {
      * @param player 현재 턴을 진행한 플레이어
      */
     public void saveResult(TurnResult result, Player player) {
-        if (result == TurnResult.MATCH) {
+        if (result.equals(MATCH)) {
             if (player instanceof User) {
                 subCntOpponentRemainTile();
                 addCntMyCorrectTile();
