@@ -1,13 +1,10 @@
 package game.player;
 
-import game.save.Record;
+import game.status.Status;
 import game.tile.Tile;
 import game.tile.TileManager;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.TreeSet;
+import java.util.*;
 
 import static game.tile.TileType.JOKER;
 
@@ -18,25 +15,26 @@ import static game.tile.TileType.JOKER;
 abstract public class Player {
 
     /**
-     * 조커 타일과 숫자 타일의 가중치 차이다.
-     * 조커 타일의 위치를 플레이어가 정하면 해당 위치 주변의 숫자 타일과 가중치 차이를 3만큼 벌린다.
-     * */
-    public static final int INSERTED_JOKER_TILE_WEIGHT_GAP = 3;
+     * 조커 타일과 주변 타일과의 가중치 차이다.
+     */
+    public static final int INSERTED_JOKER_TILE_WEIGHT_GAP = 2;
 
     private final TileManager tileManager;
     private final String name;
     private int rank;
     private int score;
 
-    /**플레이어가 가진 타일을 저장한다.*/
+    /**
+     * 플레이어가 가진 타일을 저장한다.
+     */
     private TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
     Scanner scanner = new Scanner(System.in);
 
     /**
      * @param tileManager 전체 덱을 관리하는 타일 메니져를 입력 받는다
-     * @param name 플레이어의 이름을 입력 받는다
-     * @param rank 플레이어의 랭킹을 입력 받는다
-     * @param score 플레이어의 점수를 입력 받는다
+     * @param name        플레이어의 이름을 입력 받는다
+     * @param rank        플레이어의 랭킹을 입력 받는다
+     * @param score       플레이어의 점수를 입력 받는다
      */
     public Player(TileManager tileManager, String name, int rank, int score) {
         this.tileManager = tileManager;
@@ -113,6 +111,7 @@ abstract public class Player {
         }
 
         myTileDeck.add(tile);
+        status.saveDrawTile(tile.clone());
     }
 
     /**
@@ -156,6 +155,7 @@ abstract public class Player {
 
     /**
      * 플레이어가 상대방 타일을 맞췄을 때 턴을 유지할지 선택하는 메서드다.
+     *
      * @return 플레이어의 턴 유지 여부를 반환한다
      * @implSpec 이 메서드는 플레이어가 상대방의 타일을 맞췄을 때 턴을 유지할 것인지 여부를 반환해야 한다(유지하면 true, 아니면 false).
      */
