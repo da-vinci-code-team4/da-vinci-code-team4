@@ -1,6 +1,7 @@
 package game;
 
 import game.player.Player;
+import game.save.Record;
 import game.save.Recorder;
 import game.status.Status;
 import game.tile.NumberTile;
@@ -54,11 +55,11 @@ public class GameManager {
 
         while (!status.isAllTileOpened()) {
             while (!status.isAllTileOpened() && playGame(firstPlayer)) {
-
+                recorder.save(Record.of(++turn, firstPlayer, status)); //status는 나중에 스냅샷으로 깊은 복사 저장
             }
 
             while (!status.isAllTileOpened() && playGame(secondPlayer)) {
-
+                recorder.save(Record.of(++turn, secondPlayer, status));
             }
         }
     }
