@@ -55,7 +55,7 @@ public class GameManager {
 
         while (!status.isAllTileOpen()) {
             while (!status.isAllTileOpen() && playGame(firstPlayer)) {
-                recorder.save(Record.of(++turn, firstPlayer, status)); //status는 나중에 스냅샷으로 깊은 복사 저장
+                recorder.save(Record.of(++turn, firstPlayer, status));
             }
 
             while (!status.isAllTileOpen() && playGame(secondPlayer)) {
