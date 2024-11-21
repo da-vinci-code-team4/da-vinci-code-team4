@@ -39,7 +39,7 @@ public class NumberTile extends Tile {
     @Override
     public Tile clone() {
         Tile tile = NumberTile.of(this.getTileColor(), this.number);
-        tile.setOpen(this.isOpened());
+        tile.setOpen(this.isOpen());
         return tile;
     }
 

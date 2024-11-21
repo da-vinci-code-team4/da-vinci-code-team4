@@ -4,15 +4,13 @@ import game.tile.JokerTile;
 import game.tile.NumberTile;
 import game.tile.Tile;
 import game.tile.TileColor;
-import game.tile.TileManager;
 
 import static game.tile.TileColor.*;
-import static game.tile.TileType.*;
 
 public class User extends Player {
 
-    public User(TileManager tileManager, String name, int rank, int score) {
-        super(tileManager, name, rank, score);
+    public User(String name, int rank, int score) {
+        super(name, rank, score);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class JokerTile extends Tile {
     @Override
     public Tile clone() {
         Tile tile = JokerTile.of(this.getTileColor());
-        tile.setOpen(this.isOpened());
+        tile.setOpen(this.isOpen());
         tile.defineTileWeightTo(this.getWeight());
         return tile;
     }

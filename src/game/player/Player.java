@@ -14,33 +14,28 @@ import static game.tile.TileType.JOKER;
  */
 abstract public class Player {
 
-    /**
-     * 조커 타일과 주변 타일과의 가중치 차이다.
-     */
-    public static final int INSERTED_JOKER_TILE_WEIGHT_GAP = 2;
-
-    private final TileManager tileManager;
+    private TileManager tileManager;
     private final String name;
     private int rank;
     private int score;
 
-    /**
-     * 플레이어가 가진 타일을 저장한다.
-     */
+    /**플레이어가 가진 타일을 저장한다.*/
     private TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
     Scanner scanner = new Scanner(System.in);
 
     /**
-     * @param tileManager 전체 덱을 관리하는 타일 메니져를 입력 받는다
      * @param name        플레이어의 이름을 입력 받는다
      * @param rank        플레이어의 랭킹을 입력 받는다
      * @param score       플레이어의 점수를 입력 받는다
      */
-    public Player(TileManager tileManager, String name, int rank, int score) {
-        this.tileManager = tileManager;
+    public Player(String name, int rank, int score) {
         this.name = name;
         this.rank = rank;
         this.score = score;
+    }
+
+    public void setTileManager(TileManager tileManager) {
+        this.tileManager = tileManager;
     }
 
     /**
@@ -70,7 +65,7 @@ abstract public class Player {
      * 만약 조커 타일을 뽑았다면 사용자가 원하는 위치에 조커 타일을 둔다.
      */
     public Optional<Tile> drawTile(Status status) {
-        Optional<Tile> drawTile = tileManager.getTileFromDeck();
+        Optional<Tile> drawTile = tileManager.getTile();
         if (drawTile.isEmpty()) { //덱이 비어있으면 return
             return drawTile;
         }
@@ -95,7 +90,7 @@ abstract public class Player {
      * @param position 사용자가 원하는 조커 타일의 위치를 입력 받는다(위치는 1부터 시작하며 n을 입력 받는다면 왼쪽에서부터 n번째 타일이라는 의미다)
      * @return position에 정렬 되기 위한 가중치를 계산하여 반환한다
      */
-    private int getJokerTileWeight(int position) {
+    public int getJokerTileWeight(int position) {
         if (position <= 0 || myTileDeck.size() + 1 < position) {
             throw new IllegalArgumentException("position을 다시 입력해주세요.");
         }
@@ -139,5 +134,10 @@ abstract public class Player {
 
     public Tile getGuessedTile() {
         return null;
+    }
+
+    //테스트용
+    public TreeSet<Tile> getMyTileDeck() {
+        return myTileDeck;
     }
 }

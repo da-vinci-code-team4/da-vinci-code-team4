@@ -51,7 +51,8 @@ public class GameManager {
      * 게임 진행을 관리하는 메서드다.
      * */
     public void startGame() {
-        tileManager.initGame(firstPlayer, secondPlayer);
+        tileManager.initGame();
+        tileManager.distributeTile();
 
         while (!status.isAllTileOpen()) {
             while (!status.isAllTileOpen() && playGame(firstPlayer)) {
@@ -71,7 +72,7 @@ public class GameManager {
      *
      * @param player 현재 턴을 시작하는 플레이어다
      * */
-    private boolean playGame(Player player) {
+    public boolean playGame(Player player) {
         Optional<Tile> drawTile = player.drawTile(status);
 
         Tile selectedTile = player.getSelectedTile();
