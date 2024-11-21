@@ -70,9 +70,17 @@ abstract public class Tile implements Comparable<Tile>{
         return weight;
     }
 
+    public TileType getTileType() {
+        return tileType;
+    }
+
     public TileColor getTileColor() {
         return tileColor;
     }
 
     public abstract Tile clone();
+
+    public void setOpen(boolean opened) {
+        isOpened = opened;
+    }
 }
