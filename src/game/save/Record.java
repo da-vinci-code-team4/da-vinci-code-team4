@@ -34,6 +34,6 @@ public class Record {
      * @return 생성된 객체를 반환한다
      */
     public static Record of(int turn, Player player, Status status) {
-        return new Record(turn, player, status);
+        return new Record(turn, player, status.clone());
     }
 }

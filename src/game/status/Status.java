@@ -28,6 +28,32 @@ public class Status {
     }
 
     /**
+     * Status 인스턴스를 복사할 때 사용하는 메서드다.
+     *
+     * @param status 복사할 status 인스턴스를 입력받는다
+     */
+    private Status(Status status) {
+        cntRemain = status.cntRemain;
+        cntOpponentCorrectTile = status.cntOpponentCorrectTile;
+        cntMyCorrectTile = status.cntMyCorrectTile;
+        cntOpponentRemainTile = status.cntOpponentRemainTile;
+        cntMyRemainTile = status.cntMyRemainTile;
+        drawTile = status.drawTile.clone();
+        selectTile = status.selectTile.clone();
+        guessTile = status.guessTile.clone();
+        openTile = status.openTile.clone();
+    }
+
+    /**
+     * Status 인스턴스에 대해 깊은 복사를 수행한다.
+     *
+     * @return 깊은 복사 된 Status 인스턴스를 반환한다
+     */
+    public Status clone() {
+        return new Status(this);
+    }
+
+    /**
      * 턴 결과를 저장하는 메서드
      *
      * @param result MATCH면 상대 타일을 맞춘 것 FAIL 이면 못 맞춤
