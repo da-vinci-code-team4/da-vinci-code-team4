@@ -1,4 +1,4 @@
-package game;
+package main.game;
 
 import game.player.Player;
 import game.save.Record;
@@ -10,12 +10,6 @@ import game.tile.TileManager;
  * 전체적인 게임 진행을 담당하는 클래스다.
  */
 public class GameManager {
-
-    /**타일 번호 최솟값*/
-    public static final int MIN_TILE_NUMBER = 0;
-
-    /**타일 번호 최댓값*/
-    public static final int MAX_TILE_NUMBER = 11;
 
     /** 게임 시작 시 각 플레이어가 나눠가지는 타일의 수*/
     public static final int NUMBER_OF_INIT_TILE = 4;
@@ -47,16 +41,11 @@ public class GameManager {
 
         while (true) {
             playGame(firstPlayer);
-            if (status.isAllTileOpened()) {
-
-                break;
-            }
+            if (status.isAllTileOpened()) break;
 
             playGame(secondPlayer);
-            if (status.isAllTileOpened()) {
-
-                break;
-            }
+            if (status.isAllTileOpened()) break;
+            
         }
     }
 
