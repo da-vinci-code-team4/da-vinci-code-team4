@@ -80,14 +80,18 @@ abstract public class Player {
      * @param tiles 분배된 타일을 입력 받는다
      */
     public void giveTileToPlayerAtStart(List<Tile> tiles) {
+        List<Tile> jokerTile = new ArrayList<>();
         for (Tile tile : tiles) {
-            if (tile.isTileType(JOKER)) { //조커 타일이면 사용자로부터 위치 입력 받음
-                int position = inputJokerTilePosition();
-
-                tile.defineTileWeightTo(getJokerTileWeight(position));
+            if (tile.isTileType(JOKER)) { //조커 타일이면 숫자 타일 먼저 배치
+                jokerTile.add(tile);
+                continue;
             }
-
             myTileDeck.add(tile);
+        }
+
+        for (Tile tile : jokerTile) { //조커 타일 배치
+            int position = inputJokerTilePosition();
+            tile.defineTileWeightTo(getJokerTileWeight(position));
         }
     }
 
