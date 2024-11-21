@@ -62,15 +62,17 @@ public class GameManager {
 
     /**
      * startGame()으로부터 호출되어 플레이어에게 턴을 시작하도록 메서드를 호출한다.
-     * Record 인스턴스를 각 턴 시작 전에 생성하여 게임 상황을 기록할 수 있도록 플레이어에게 넘겨준다.
+     * status를 각 턴마다 게임 상황을 기록할 수 있도록 플레이어에게 넘겨준다.
+     * 변경된 status를 Record를 생성하여 기록한 뒤 저장한다.
      *
      * @param player 현재 턴을 시작하는 플레이어다
      * */
     private void playGame(Player player) {
         boolean keepTurn = true;
-        while (keepTurn) { //모든 카드가 오픈 되었는지 확인하는 코드 나중에 추가
-            Record record = Record.of(++turn, player);
-            keepTurn = player.turnStart(record);
+        while (keepTurn) {
+            keepTurn = player.turnStart(status);
+
+            Record record = Record.of(++turn, player, status);
             recorder.save(record);
 
             if (status.isAllTileOpened()) return;
