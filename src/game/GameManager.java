@@ -71,7 +71,7 @@ public class GameManager {
     private boolean playGame(Player player) {
         Optional<Tile> drawTile = player.drawTile(status);
 
-        Tile selectedTile = player.selectTileFromOpponent();
+        Tile selectedTile = player.getSelectedTile();
         status.saveSelectedTile(selectedTile.clone());
 
         Tile guessedTile = player.getGuessedTile();
