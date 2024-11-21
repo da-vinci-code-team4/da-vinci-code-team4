@@ -133,4 +133,8 @@ abstract public class Player {
      * @implSpec 이 메서드는 플레이어가 상대방의 타일을 맞췄을 때 턴을 유지할 것인지 여부를 반환해야 한다(유지하면 true, 아니면 false).
      */
     abstract public boolean chooseToKeepTurn();
+
+    public Tile getGuessedTile() {
+        return null;
+    }
 }
