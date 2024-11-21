@@ -1,10 +1,13 @@
 package main.game.tiles;
 
-import main.game.player.Player;
-import main.game.tiles.Tile.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import main.game.player.Player;
 
 // import static main.game.DavinCiCode.*;
 
@@ -27,7 +30,7 @@ public class TileManager {
     }
 
     //덱에서 타일 가져오기
-    public Optional<Tile> getTileFromDeck() {
+    public Optional<Tile> drawTile() {
         return deck.isEmpty() ?
                 Optional.empty() :
                 Optional.of(deck.remove(0));
@@ -62,11 +65,11 @@ public class TileManager {
     //타일 분배
     private void distributeTile() {
         List<Tile> firstTile = deck.subList(0, Tile.NUMBER_OF_INIT_TILE);
-        firstPlayer.giveTileToPlayerAtStart(firstTile);
+        firstPlayer.giveInitTile(firstTile);
         firstTile.clear();
 
         List<Tile> secondTile = deck.subList(0, Tile.NUMBER_OF_INIT_TILE);
-        secondPlayer.giveTileToPlayerAtStart(secondTile);
+        secondPlayer.giveInitTile(secondTile);
         secondTile.clear();
     }
 
