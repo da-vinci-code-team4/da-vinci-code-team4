@@ -101,6 +101,9 @@ abstract public class Player {
         }
 
         int index = position - 1;
+        if (index == 0) {
+            return 0;
+        }
         if (index == myTileDeck.size()) {
             return myTileDeck.last().getWeight() + 4;
         }
