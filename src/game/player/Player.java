@@ -113,21 +113,30 @@ abstract public class Player {
 
     /**
      * 조커 타일의 가중치를 결정하는 메서드다.
+     * 조커 타일은 왼쪽 타일 + 4만큼의 가중치를 가진다.
+     * 만약 오른쪽에 이미 타일이 조커 타일이 있다면 왼쪽 타일 + 2만큼의 가중치를 가진다.
      *
      * @param position 사용자가 원하는 조커 타일의 위치를 입력 받는다(위치는 1부터 시작하며 n을 입력 받는다면 왼쪽에서부터 n번째 타일이라는 의미다)
      * @return position에 정렬 되기 위한 가중치를 계산하여 반환한다
      */
     private int getJokerTileWeight(int position) {
-        if (position == 1) {
-            return myTileDeck.getFirst().getWeight() - INSERTED_JOKER_TILE_WEIGHT_GAP;
+        if (position <= 0 || myTileDeck.size() + 1 < position) {
+            throw new IllegalArgumentException("position을 다시 입력해주세요.");
         }
 
-        return myTileDeck.stream()
-                .limit(position - 1)
-                .skip(Math.max(0, position - 2))
-                .findFirst()
-                .get()
-                .getWeight() + INSERTED_JOKER_TILE_WEIGHT_GAP;
+        int index = position - 1;
+        if (index == myTileDeck.size()) {
+            return myTileDeck.last().getWeight() + 4;
+        }
+
+        ArrayList<Tile> tiles = new ArrayList<>(myTileDeck);
+        Tile prevTile = tiles.get(index - 1);
+        Tile nextTile = tiles.get(index);
+        if (nextTile.isTileType(JOKER)) {
+            return prevTile.getWeight() + 2;
+        }
+
+        return prevTile.getWeight() + 4;
     }
 
     //상대 타일 맞추기
