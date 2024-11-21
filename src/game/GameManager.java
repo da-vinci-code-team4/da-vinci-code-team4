@@ -1,6 +1,7 @@
 package game;
 
 import game.player.Player;
+import game.save.Record;
 import game.save.Recorder;
 import game.status.Status;
 import game.tile.NumberTile;
@@ -54,11 +55,11 @@ public class GameManager {
 
         while (!status.isAllTileOpen()) {
             while (!status.isAllTileOpen() && playGame(firstPlayer)) {
-
+                recorder.save(Record.of(++turn, firstPlayer, status)); //status는 나중에 스냅샷으로 깊은 복사 저장
             }
 
             while (!status.isAllTileOpen() && playGame(secondPlayer)) {
-
+                recorder.save(Record.of(++turn, secondPlayer, status));
             }
         }
     }
@@ -73,45 +74,51 @@ public class GameManager {
     private boolean playGame(Player player) {
         Optional<Tile> drawTile = player.drawTile(status);
 
-        Tile selectTile = player.getSelectedTile();
-        status.saveSelectTile(selectTile.clone());
+        Tile selectedTile = player.getSelectedTile();
+        status.saveSelectTile(selectedTile.clone());
 
-        Tile guessTile = player.getGuessedTile();
-        status.saveGuessTile(guessTile.clone());
+        Tile guessedTile = player.getGuessedTile();
+        status.saveGuessTile(guessedTile.clone());
 
         //타입이 다르면 턴 종료
-        if (!selectTile.getTileType().equals(guessTile.getTileType())) {
-            status.saveResult(FAIL, player);
-            drawTile.ifPresent(tile -> {
-                tile.setOpen(true);
-                status.saveOpenTile(drawTile.get());
-            });
+        if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
+            saveFail(drawTile, player);
             return false;
         }
 
         //둘다 조커 타입
-        if (selectTile.isTileType(JOKER)) {
-            status.saveResult(MATCH, player);
-            selectTile.setOpen(true);
-            status.saveOpenTile(selectTile);
+        if (selectedTile.isTileType(JOKER)) {
+            saveMatch(selectedTile, player);
             return player.chooseToKeepTurn();
         }
 
         //숫자 타입(숫자까지 맞아야함)
-        int selectedTileNumber = ((NumberTile) selectTile).getNumber();
-        int guessedTileNumber = ((NumberTile) selectTile).getNumber();
+        int selectedTileNumber = getTileNumber(selectedTile);
+        int guessedTileNumber = getTileNumber(guessedTile);
         if (selectedTileNumber == guessedTileNumber) {
-            status.saveResult(MATCH, player);
-            selectTile.setOpen(true);
-            status.saveOpenTile(selectTile);
+            saveMatch(selectedTile, player);
             return player.chooseToKeepTurn();
         }
 
+        saveFail(drawTile, player);
+        return false;
+    }
+
+    private void saveMatch(Tile selectedTile, Player player) {
+        status.saveResult(MATCH, player);
+        selectedTile.setOpen(true);
+        status.saveOpenTile(selectedTile);
+    }
+
+    private void saveFail(Optional<Tile> drawTile, Player player) {
         status.saveResult(FAIL, player);
         drawTile.ifPresent(tile -> {
             tile.setOpen(true);
             status.saveOpenTile(drawTile.get());
         });
-        return false;
+    }
+
+    private int getTileNumber(Tile tile) {
+        return ((NumberTile) tile).getNumber();
     }
 }
