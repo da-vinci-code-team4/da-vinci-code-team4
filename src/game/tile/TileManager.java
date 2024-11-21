@@ -41,7 +41,7 @@ public class TileManager {
     public Optional<Tile> getTileFromDeck() {
         return deck.isEmpty() ?
                 Optional.empty() :
-                Optional.of(deck.removeFirst());
+                Optional.of(deck.remove(0));
     }
 
     /**
