@@ -53,12 +53,12 @@ public class GameManager {
     public void startGame() {
         tileManager.initGame(firstPlayer, secondPlayer);
 
-        while (!status.isAllTileOpened()) {
-            while (!status.isAllTileOpened() && playGame(firstPlayer)) {
+        while (!status.isAllTileOpen()) {
+            while (!status.isAllTileOpen() && playGame(firstPlayer)) {
                 recorder.save(Record.of(++turn, firstPlayer, status)); //status는 나중에 스냅샷으로 깊은 복사 저장
             }
 
-            while (!status.isAllTileOpened() && playGame(secondPlayer)) {
+            while (!status.isAllTileOpen() && playGame(secondPlayer)) {
                 recorder.save(Record.of(++turn, secondPlayer, status));
             }
         }
@@ -75,20 +75,20 @@ public class GameManager {
         Optional<Tile> drawTile = player.drawTile(status);
 
         Tile selectedTile = player.getSelectedTile();
-        status.saveSelectedTile(selectedTile.clone());
+        status.saveSelectTile(selectedTile.clone());
 
         Tile guessedTile = player.getGuessedTile();
-        status.saveGuessedTile(guessedTile.clone());
+        status.saveGuessTile(guessedTile.clone());
 
         //타입이 다르면 턴 종료
         if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
-            saveFailStatus(drawTile);
+            saveFail(drawTile, player);
             return false;
         }
 
         //둘다 조커 타입
         if (selectedTile.isTileType(JOKER)) {
-            saveMatchStatus(selectedTile);
+            saveMatch(selectedTile, player);
             return player.chooseToKeepTurn();
         }
 
@@ -96,26 +96,26 @@ public class GameManager {
         int selectedTileNumber = getTileNumber(selectedTile);
         int guessedTileNumber = getTileNumber(guessedTile);
         if (selectedTileNumber == guessedTileNumber) {
-            saveMatchStatus(selectedTile);
+            saveMatch(selectedTile, player);
             return player.chooseToKeepTurn();
         }
 
-        saveFailStatus(drawTile);
+        saveFail(drawTile, player);
         return false;
     }
 
-    private void saveFailStatus(Optional<Tile> drawTile) {
-        status.saveResult(FAIL);
-        drawTile.ifPresent(tile -> {
-            tile.setOpen(true);
-            status.saveOpenedTile(drawTile.get());
-        });
+    private void saveMatch(Tile selectedTile, Player player) {
+        status.saveResult(MATCH, player);
+        selectedTile.setOpen(true);
+        status.saveOpenTile(selectedTile);
     }
 
-    private void saveMatchStatus(Tile selectedTile) {
-        status.saveResult(MATCH);
-        selectedTile.setOpen(true);
-        status.saveOpenedTile(selectedTile);
+    private void saveFail(Optional<Tile> drawTile, Player player) {
+        status.saveResult(FAIL, player);
+        drawTile.ifPresent(tile -> {
+            tile.setOpen(true);
+            status.saveOpenTile(drawTile.get());
+        });
     }
 
     private int getTileNumber(Tile tile) {
