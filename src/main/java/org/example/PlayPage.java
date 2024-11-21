@@ -79,19 +79,54 @@ public class PlayPage extends JPanel {
 
 // Lớp tùy chỉnh JPanel để tạo Rectangle bo góc
 class RoundedPanel extends JPanel {
-    private int cornerRadius;
+    private Color backgroundColor;
+    private int cornerRadius = 20;
 
-    public RoundedPanel(int cornerRadius) {
-        this.cornerRadius = cornerRadius;
-        setOpaque(false); // Đảm bảo JPanel không che phủ toàn bộ
+    public RoundedPanel(LayoutManager layout, int radius) {
+        super(layout);
+        cornerRadius = radius;
+        setOpaque(false);
+    }
+
+    public RoundedPanel(int radius) {
+        super();
+        cornerRadius = radius;
+        setOpaque(false);
+    }
+
+    public RoundedPanel(LayoutManager layout, Color bgColor, int radius) {
+        super(layout);
+        backgroundColor = bgColor;
+        cornerRadius = radius;
+        setOpaque(false);
+    }
+
+    public RoundedPanel(Color bgColor, int radius) {
+        super();
+        backgroundColor = bgColor;
+        cornerRadius = radius;
+        setOpaque(false);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(getBackground());
-        g2d.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius); // Vẽ hình chữ nhật bo góc
+        Dimension arcs = new Dimension(cornerRadius, cornerRadius);
+        int width = getWidth();
+        int height = getHeight();
+        Graphics2D graphics = (Graphics2D) g;
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Vẽ nền bo tròn
+        if (backgroundColor != null) {
+            graphics.setColor(backgroundColor);
+        } else {
+            graphics.setColor(getBackground());
+        }
+        graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
+
+        // Vẽ viền
+        graphics.setColor(getForeground());
+        graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
     }
 }
