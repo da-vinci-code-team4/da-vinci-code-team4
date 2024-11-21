@@ -78,6 +78,10 @@ abstract public class Tile implements Comparable<Tile>{
         return tileColor;
     }
 
+    public boolean isOpened() {
+        return isOpened;
+    }
+
     public abstract Tile clone();
 
     public void setOpen(boolean opened) {

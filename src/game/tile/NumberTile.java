@@ -38,10 +38,9 @@ public class NumberTile extends Tile {
 
     @Override
     public Tile clone() {
-        return NumberTile.of(
-                this.getTileColor(),
-                this.number
-        );
+        Tile tile = NumberTile.of(this.getTileColor(), this.number);
+        tile.setOpen(this.isOpened());
+        return tile;
     }
 
     public int getNumber() {
