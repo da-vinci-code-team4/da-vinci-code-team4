@@ -85,16 +85,6 @@ public class LoginPage extends JPanel {
             }
         });
         rectanglePanel.add(loginButton);
-
-        // --------------------- Nút Back ---------------------
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
-        backButton.setBounds(1384, 30, 128, 86);
-        backButton.setBorderPainted(false);
-        backButton.setContentAreaFilled(false);
-        backButton.setFocusPainted(false);
-        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
-        background.add(backButton);
     }
 
     /**
