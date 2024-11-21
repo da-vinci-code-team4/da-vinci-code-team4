@@ -97,13 +97,13 @@ abstract public class Player {
      * 각 턴마다 타일을 덱에서 하나씩 가져올 때 사용하는 메서드다.
      * 만약 조커 타일을 뽑았다면 사용자가 원하는 위치에 조커 타일을 둔다.
      */
-    private void drawTileFromDeck(Status status) {
-        Optional<Tile> newTile = tileManager.getTileFromDeck();
-        if (newTile.isEmpty()) { //덱이 비어있으면 return
-            return;
+    public Optional<Tile> drawTile(Status status) {
+        Optional<Tile> drawTile = tileManager.getTileFromDeck();
+        if (drawTile.isEmpty()) { //덱이 비어있으면 return
+            return drawTile;
         }
 
-        Tile tile = newTile.get();
+        Tile tile = drawTile.get();
         if (tile.isTileType(JOKER)) {
             int position = inputJokerTilePosition(); //조커 타일이면 조커 타일 위치 선택
 
@@ -112,6 +112,7 @@ abstract public class Player {
 
         myTileDeck.add(tile);
         status.saveDrawTile(tile.clone());
+        return drawTile;
     }
 
     /**
