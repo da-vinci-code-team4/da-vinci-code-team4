@@ -35,4 +35,12 @@ public class NumberTile extends Tile {
     public static Tile of(TileColor tileColor, int number) {
         return new NumberTile(tileColor, number);
     }
+
+    @Override
+    public Tile clone() {
+        return NumberTile.of(
+                this.getTileColor(),
+                this.number
+        );
+    }
 }

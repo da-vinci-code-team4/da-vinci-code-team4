@@ -69,4 +69,10 @@ abstract public class Tile implements Comparable<Tile>{
     public int getWeight() {
         return weight;
     }
+
+    public TileColor getTileColor() {
+        return tileColor;
+    }
+
+    public abstract Tile clone();
 }

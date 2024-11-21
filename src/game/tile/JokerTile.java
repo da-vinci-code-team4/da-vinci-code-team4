@@ -22,4 +22,9 @@ public class JokerTile extends Tile {
     public static Tile of(TileColor tileColor) {
         return new JokerTile(tileColor);
     }
+
+    @Override
+    public Tile clone() {
+        return JokerTile.of(this.getTileColor());
+    }
 }
