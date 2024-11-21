@@ -21,7 +21,7 @@ test {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/']
+            srcDirs = ['src/','src/main/java']
         }
         resources {
             srcDirs = ['src/main/resources']
@@ -31,4 +31,13 @@ sourceSets {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:unchecked'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'main.view.MyPage'
+        )
+    }
 }
