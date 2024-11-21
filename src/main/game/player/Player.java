@@ -31,4 +31,14 @@ public abstract class Player {
         tile.setOpen(true);
     }
 
+    //deck 사이즈 반환
+    public int getDeckSize(){
+        return deck.size();
+    }
+
+    //deck의 특정 위치의 타일 반환
+    public Tile getTile(int index){
+        return deck.get(index);
+    }
+
 }
