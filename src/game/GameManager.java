@@ -9,7 +9,9 @@ import game.tile.TileManager;
 
 import java.util.Optional;
 
-import static game.tile.TileType.*;
+import static game.status.TurnResult.FAIL;
+import static game.status.TurnResult.MATCH;
+import static game.tile.TileType.JOKER;
 
 /**
  * 전체적인 게임 진행을 담당하는 클래스다.
@@ -79,7 +81,7 @@ public class GameManager {
 
         //타입이 다르면 턴 종료
         if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
-            status.saveResult(false);
+            status.saveResult(FAIL);
             drawTile.ifPresent(tile -> {
                 tile.setOpen(true);
                 status.saveOpenedTile(drawTile.get());
@@ -89,7 +91,7 @@ public class GameManager {
 
         //둘다 조커 타입
         if (selectedTile.isTileType(JOKER)) {
-            status.saveResult(true);
+            status.saveResult(MATCH);
             selectedTile.setOpen(true);
             status.saveOpenedTile(selectedTile);
             return player.chooseToKeepTurn();
@@ -99,13 +101,13 @@ public class GameManager {
         int selectedTileNumber = ((NumberTile) selectedTile).getNumber();
         int guessedTileNumber = ((NumberTile) selectedTile).getNumber();
         if (selectedTileNumber == guessedTileNumber) {
-            status.saveResult(true);
+            status.saveResult(MATCH);
             selectedTile.setOpen(true);
             status.saveOpenedTile(selectedTile);
             return player.chooseToKeepTurn();
         }
 
-        status.saveResult(false);
+        status.saveResult(FAIL);
         drawTile.ifPresent(tile -> {
             tile.setOpen(true);
             status.saveOpenedTile(drawTile.get());

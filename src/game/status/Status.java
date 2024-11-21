@@ -17,7 +17,7 @@ public class Status {
     public void saveGuessedTile(Tile clone) {
 
     }
-    public void saveResult(boolean b) {
+    public void saveResult(TurnResult turnResult) {
 
     }
 
