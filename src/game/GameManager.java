@@ -52,12 +52,12 @@ public class GameManager {
     public void startGame() {
         tileManager.initGame(firstPlayer, secondPlayer);
 
-        while (!status.isAllTileOpened()) {
-            while (!status.isAllTileOpened() && playGame(firstPlayer)) {
+        while (!status.isAllTileOpen()) {
+            while (!status.isAllTileOpen() && playGame(firstPlayer)) {
 
             }
 
-            while (!status.isAllTileOpened() && playGame(secondPlayer)) {
+            while (!status.isAllTileOpen() && playGame(secondPlayer)) {
 
             }
         }
@@ -73,44 +73,44 @@ public class GameManager {
     private boolean playGame(Player player) {
         Optional<Tile> drawTile = player.drawTile(status);
 
-        Tile selectedTile = player.getSelectedTile();
-        status.saveSelectedTile(selectedTile.clone());
+        Tile selectTile = player.getSelectedTile();
+        status.saveSelectTile(selectTile.clone());
 
-        Tile guessedTile = player.getGuessedTile();
-        status.saveGuessedTile(guessedTile.clone());
+        Tile guessTile = player.getGuessedTile();
+        status.saveGuessTile(guessTile.clone());
 
         //타입이 다르면 턴 종료
-        if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
-            status.saveResult(FAIL);
+        if (!selectTile.getTileType().equals(guessTile.getTileType())) {
+            status.saveResult(FAIL, player);
             drawTile.ifPresent(tile -> {
                 tile.setOpen(true);
-                status.saveOpenedTile(drawTile.get());
+                status.saveOpenTile(drawTile.get());
             });
             return false;
         }
 
         //둘다 조커 타입
-        if (selectedTile.isTileType(JOKER)) {
-            status.saveResult(MATCH);
-            selectedTile.setOpen(true);
-            status.saveOpenedTile(selectedTile);
+        if (selectTile.isTileType(JOKER)) {
+            status.saveResult(MATCH, player);
+            selectTile.setOpen(true);
+            status.saveOpenTile(selectTile);
             return player.chooseToKeepTurn();
         }
 
         //숫자 타입(숫자까지 맞아야함)
-        int selectedTileNumber = ((NumberTile) selectedTile).getNumber();
-        int guessedTileNumber = ((NumberTile) selectedTile).getNumber();
+        int selectedTileNumber = ((NumberTile) selectTile).getNumber();
+        int guessedTileNumber = ((NumberTile) selectTile).getNumber();
         if (selectedTileNumber == guessedTileNumber) {
-            status.saveResult(MATCH);
-            selectedTile.setOpen(true);
-            status.saveOpenedTile(selectedTile);
+            status.saveResult(MATCH, player);
+            selectTile.setOpen(true);
+            status.saveOpenTile(selectTile);
             return player.chooseToKeepTurn();
         }
 
-        status.saveResult(FAIL);
+        status.saveResult(FAIL, player);
         drawTile.ifPresent(tile -> {
             tile.setOpen(true);
-            status.saveOpenedTile(drawTile.get());
+            status.saveOpenTile(drawTile.get());
         });
         return false;
     }
