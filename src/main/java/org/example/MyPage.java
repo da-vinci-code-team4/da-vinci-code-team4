@@ -2,12 +2,20 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyPage extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
+    // Danh sách người dùng đã đăng ký, bao gồm cả các tài khoản mặc định
+    private List<User> userList = new ArrayList<>();
+
     public MyPage() {
+        // Khởi tạo các tài khoản mặc định
+        initializeDefaultUsers();
+
         // Cài đặt JFrame
         setTitle("Da Vinci Code");
         setSize(1502, 916);
@@ -25,6 +33,19 @@ public class MyPage extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Khởi tạo danh sách người dùng với các tài khoản mặc định.
+     */
+    private void initializeDefaultUsers() {
+        String defaultPassword = "12345678";
+        userList.add(new User("JiMin", defaultPassword, "JiMinUser", 25));
+        userList.add(new User("YoungBin", defaultPassword, "YoungBinUser", 28));
+        userList.add(new User("QuocAnh", defaultPassword, "QuocAnhUser", 22));
+        userList.add(new User("HyungJoon", defaultPassword, "HyungJoonUser", 30));
+        userList.add(new User("YeWon", defaultPassword, "YeWonUser", 27));
+        userList.add(new User("TaeHyun", defaultPassword, "TaeHyunUser", 24));
+    }
+
     private void addPages() {
         // Trang MyPage (trang chính)
         JPanel myPagePanel = createMyPage();
@@ -37,6 +58,12 @@ public class MyPage extends JFrame {
 
         // Trang InfoPage
         JPanel infoPagePanel = createInfoPage();
+
+        // Trang RegisterPage
+        JPanel registerPagePanel = new RegisterPage(mainPanel, cardLayout, userList);
+
+        // Trang LoginPage
+        JPanel loginPagePanel = new LoginPage(mainPanel, cardLayout, userList);
 
         // Trang ProfilePage
         JPanel profilePagePanel = new ProfilePage(mainPanel, cardLayout);
@@ -51,27 +78,30 @@ public class MyPage extends JFrame {
         JPanel correctionPagePanel = new CorrectionPage(mainPanel, cardLayout);
 
         // Trang LogoutPage
-        JPanel RegisterPagePanel = new RegisterPage(mainPanel, cardLayout);
+        // Nếu bạn vẫn muốn giữ LogoutPage, hãy đảm bảo rằng nó có chức năng phù hợp
 
         // Thêm các trang vào CardLayout
         mainPanel.add(myPagePanel, "MyPage");
         mainPanel.add(menuPagePanel, "MenuPage");
         mainPanel.add(playPagePanel, "PlayPage");
         mainPanel.add(infoPagePanel, "InfoPage");
+        mainPanel.add(registerPagePanel, "RegisterPage");
+        mainPanel.add(loginPagePanel, "LoginPage");
         mainPanel.add(profilePagePanel, "ProfilePage");
         mainPanel.add(rankingPagePanel, "RankingPage");
         mainPanel.add(historyPagePanel, "HistoryPage");
         mainPanel.add(correctionPagePanel, "CorrectionPage");
-        mainPanel.add(RegisterPagePanel, "RegisterPage");
     }
 
-
+    /**
+     * Phương thức tạo trang MyPage.
+     */
     private JPanel createMyPage() {
         JPanel myPagePanel = new JPanel(null); // Sử dụng layout null
         myPagePanel.setBackground(Color.WHITE);
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon("src/main/resources/img/background.png"));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         myPagePanel.add(background);
@@ -86,36 +116,38 @@ public class MyPage extends JFrame {
         int startY = (916 - totalHeight) / 2; // Vị trí Y bắt đầu để căn giữa
 
         // Button Menu
-        JButton menuButton = new JButton(new ImageIcon("src/main/resources/img/menu_button.png"));
+        JButton menuButton = new JButton(new ImageIcon(getClass().getResource("/img/menu_button.png")));
         menuButton.setBounds(leftMargin, startY, buttonSize, buttonSize);
         menuButton.setBorderPainted(false);
         menuButton.setContentAreaFilled(false);
         menuButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        menuButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         menuButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage"));
         background.add(menuButton);
 
         // Button Setting
-        JButton settingButton = new JButton(new ImageIcon("src/main/resources/img/setting_button.png"));
+        JButton settingButton = new JButton(new ImageIcon(getClass().getResource("/img/setting_button.png")));
         settingButton.setBounds(leftMargin, startY + buttonSize + buttonSpacing, buttonSize, buttonSize);
         settingButton.setBorderPainted(false);
         settingButton.setContentAreaFilled(false);
         settingButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        settingButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         settingButton.addActionListener(e -> System.out.println("Setting Button Clicked"));
         background.add(settingButton);
 
         // Button Info
-        JButton infoButton = new JButton(new ImageIcon("src/main/resources/img/info_button.png"));
+        JButton infoButton = new JButton(new ImageIcon(getClass().getResource("/img/info_button.png")));
         infoButton.setBounds(leftMargin, startY + 2 * (buttonSize + buttonSpacing), buttonSize, buttonSize);
         infoButton.setBorderPainted(false);
         infoButton.setContentAreaFilled(false);
         infoButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
-
+        infoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         // Chuyển trang sang InfoPage khi nhấn nút Info
         infoButton.addActionListener(e -> cardLayout.show(mainPanel, "InfoPage"));
         background.add(infoButton);
 
         // Button Play
-        ImageIcon playIcon = new ImageIcon("src/main/resources/img/play.png");
+        ImageIcon playIcon = new ImageIcon(getClass().getResource("/img/play.png"));
         JButton playButton = new JButton(playIcon);
 
         // Lấy kích thước của ảnh
@@ -128,6 +160,7 @@ public class MyPage extends JFrame {
         playButton.setBorderPainted(false);
         playButton.setContentAreaFilled(false);
         playButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        playButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Chuyển trang sang PlayPage khi nhấn nút Play
         playButton.addActionListener(e -> cardLayout.show(mainPanel, "PlayPage"));
@@ -136,6 +169,9 @@ public class MyPage extends JFrame {
         return myPagePanel;
     }
 
+    /**
+     * Phương thức tạo trang MenuPage.
+     */
     private JPanel createMenuPage() {
         JPanel menuPagePanel = new JPanel(null); // Layout null để tự định vị các nút
         menuPagePanel.setBackground(new Color(255, 255, 255, 0));
@@ -166,10 +202,10 @@ public class MyPage extends JFrame {
         correctionButton.addActionListener(e -> cardLayout.show(mainPanel, "CorrectionPage"));
         background.add(correctionButton);
 
-        // Nút Register
-        JButton logOutButton = createMenuButton("Log Out", 560, 668);
-        logOutButton.addActionListener(e -> cardLayout.show(mainPanel, "RegisterPage"));
-        background.add(logOutButton);
+        // Nút Log Out
+        JButton registerButton = createMenuButton("Log Out", 560, 668);
+        registerButton.addActionListener(e -> cardLayout.show(mainPanel, "RegisterPage"));
+        background.add(registerButton);
 
         // Nút Back
         JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
@@ -177,12 +213,16 @@ public class MyPage extends JFrame {
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
+        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
 
         return menuPagePanel;
     }
 
+    /**
+     * Phương thức tạo trang InfoPage.
+     */
     private JPanel createInfoPage() {
         JPanel infoPagePanel = new JPanel(null); // Sử dụng layout null
         infoPagePanel.setBackground(new Color(0, 0, 0, 0)); // Không nền
@@ -222,16 +262,25 @@ public class MyPage extends JFrame {
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
+        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
 
         return infoPagePanel;
     }
 
+    /**
+     * Phương thức tạo nút Menu.
+     *
+     * @param text Văn bản trên nút
+     * @param x    Vị trí X
+     * @param y    Vị trí Y
+     * @return JButton với các thuộc tính đã thiết lập
+     */
     private JButton createMenuButton(String text, int x, int y) {
         JButton button = new JButton(text);
         button.setBounds(x, y, 400, 200); // Kích thước nút
-        button.setIcon(new ImageIcon("src/main/resources/img/background_button.png"));
+        button.setIcon(new ImageIcon(getClass().getResource("/img/background_button.png")));
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.CENTER);
         button.setFont(new Font("Arial", Font.BOLD, 48));
@@ -239,6 +288,7 @@ public class MyPage extends JFrame {
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
     }
 

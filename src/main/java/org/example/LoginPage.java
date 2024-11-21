@@ -35,7 +35,7 @@ public class LoginPage extends JPanel {
 
         // Tạo hình chữ nhật bo góc cho Login
         RoundedPanel rectanglePanel = new RoundedPanel(10); // Bo góc 10px
-        rectanglePanel.setBounds(465, 269, 572, 599); // Vị trí và kích thước của hình chữ nhật
+        rectanglePanel.setBounds(430, 250, 670, 350);  // Vị trí và kích thước của hình chữ nhật
         rectanglePanel.setBackground(new Color(0, 0, 0, 180)); // Màu đen với độ trong suốt 71%
         rectanglePanel.setLayout(null); // Sử dụng layout null cho nội dung bên trong
         background.add(rectanglePanel); // Thêm Rectangle trước
@@ -74,9 +74,10 @@ public class LoginPage extends JPanel {
         passwordField.setFont(new Font("Arial", Font.PLAIN, 24));
         rectanglePanel.add(passwordField);
 
+
         // --------------------- Nút Login ---------------------
         JButton loginButton = createRoundedButton("Login", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
-        loginButton.setBounds(178 + 50, 500, 216, 50); // Vị trí và kích thước
+        loginButton.setBounds(178 + 50, 280, 216, 50); // Vị trí và kích thước
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
