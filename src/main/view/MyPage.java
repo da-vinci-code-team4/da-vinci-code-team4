@@ -141,7 +141,7 @@ public class MyPage extends JFrame {
         menuPagePanel.setBackground(new Color(255, 255, 255, 0));
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         menuPagePanel.add(background);
