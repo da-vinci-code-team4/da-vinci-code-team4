@@ -43,4 +43,8 @@ public class NumberTile extends Tile {
                 this.number
         );
     }
+
+    public int getNumber() {
+        return number;
+    }
 }
