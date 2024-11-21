@@ -1,10 +1,15 @@
 package game;
 
 import game.player.Player;
-import game.save.Record;
 import game.save.Recorder;
 import game.status.Status;
+import game.tile.NumberTile;
+import game.tile.Tile;
 import game.tile.TileManager;
+
+import java.util.Optional;
+
+import static game.tile.TileType.*;
 
 /**
  * 전체적인 게임 진행을 담당하는 클래스다.
@@ -45,17 +50,13 @@ public class GameManager {
     public void startGame() {
         tileManager.initGame(firstPlayer, secondPlayer);
 
-        while (true) {
-            playGame(firstPlayer);
-            if (status.isAllTileOpened()) {
+        while (!status.isAllTileOpened()) {
+            while (!status.isAllTileOpened() && playGame(firstPlayer)) {
 
-                break;
             }
 
-            playGame(secondPlayer);
-            if (status.isAllTileOpened()) {
+            while (!status.isAllTileOpened() && playGame(secondPlayer)) {
 
-                break;
             }
         }
     }
@@ -67,15 +68,48 @@ public class GameManager {
      *
      * @param player 현재 턴을 시작하는 플레이어다
      * */
-    private void playGame(Player player) {
-        boolean keepTurn = true;
-        while (keepTurn) {
-            keepTurn = player.turnStart(status);
+    private boolean playGame(Player player) {
+        Optional<Tile> drawTile = player.drawTile(status);
 
-            Record record = Record.of(++turn, player, status);
-            recorder.save(record);
+        Tile selectedTile = player.selectTileFromOpponent();
+        status.saveSelectedTile(selectedTile.clone());
 
-            if (status.isAllTileOpened()) return;
+        Tile guessedTile = player.getGuessedTile();
+        status.saveGuessedTile(guessedTile.clone());
+
+        //타입이 다르면 턴 종료
+        if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
+            status.saveResult(false);
+            drawTile.ifPresent(tile -> {
+                tile.setOpen(true);
+                status.saveOpenedTile(drawTile.get());
+            });
+            return false;
         }
+
+        //둘다 조커 타입
+        if (selectedTile.isTileType(JOKER)) {
+            status.saveResult(true);
+            selectedTile.setOpen(true);
+            status.saveOpenedTile(selectedTile);
+            return player.chooseToKeepTurn();
+        }
+
+        //숫자 타입(숫자까지 맞아야함)
+        int selectedTileNumber = ((NumberTile) selectedTile).getNumber();
+        int guessedTileNumber = ((NumberTile) selectedTile).getNumber();
+        if (selectedTileNumber == guessedTileNumber) {
+            status.saveResult(true);
+            selectedTile.setOpen(true);
+            status.saveOpenedTile(selectedTile);
+            return player.chooseToKeepTurn();
+        }
+
+        status.saveResult(false);
+        drawTile.ifPresent(tile -> {
+            tile.setOpen(true);
+            status.saveOpenedTile(drawTile.get());
+        });
+        return false;
     }
 }
