@@ -6,7 +6,7 @@ public class Tile implements Comparable<Tile>{
     public static final int MAX_TILE_NUMBER = 11;
     public static final int NUMBER_OF_INIT_TILE = 4;
     
-    private Boolean isOpen;
+    private boolean isOpen;
     private int weight; //정렬 때 사용할 가중치(가중치 기준 오름차순으로 정렬됨)
     private final TileType tileType;
     private final TileColor tileColor;
@@ -30,17 +30,17 @@ public class Tile implements Comparable<Tile>{
     }
 
     //타일 타입 비교
-    public Boolean compareTileType(TileType tileType) {
+    public boolean compareTileType(TileType tileType) {
         return this.tileType.equals(tileType);
     }
 
     //타일 공개
-    public void setOpen(Boolean bool){
+    public void setOpen(boolean bool){
         this.isOpen = bool;
     }
 
     // return isOpen
-    public Boolean getOpen(){
+    public boolean getOpen(){
         return this.isOpen;
     }
 

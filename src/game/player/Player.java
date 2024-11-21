@@ -1,15 +1,15 @@
 package game.player;
 
-import game.save.Record;
-import game.tile.Tile;
-import game.tile.TileManager;
+import static game.tile.TileType.JOKER;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.TreeSet;
 
-import static game.tile.TileType.JOKER;
+import game.save.Record;
+import game.tile.Tile;
+import game.tile.TileManager;
 
 /**
  * 각 플레이어의 정보가 저장되어 있다.
@@ -32,12 +32,6 @@ abstract public class Player {
     private TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
     Scanner scanner = new Scanner(System.in);
 
-    /**
-     * @param tileManager 전체 덱을 관리하는 타일 메니져를 입력 받는다
-     * @param name 플레이어의 이름을 입력 받는다
-     * @param rank 플레이어의 랭킹을 입력 받는다
-     * @param score 플레이어의 점수를 입력 받는다
-     */
     public Player(TileManager tileManager, String name, int rank, int score) {
         this.tileManager = tileManager;
         this.name = name;
