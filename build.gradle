@@ -21,7 +21,7 @@ test {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/','src/main/java']
+            srcDirs = ['src/']
         }
         resources {
             srcDirs = ['src/main/resources']
@@ -31,6 +31,7 @@ sourceSets {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+    //TO debug
     options.compilerArgs << '-Xlint:unchecked'
 }
 
