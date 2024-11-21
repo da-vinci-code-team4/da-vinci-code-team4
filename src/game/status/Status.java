@@ -1,6 +1,14 @@
 package game.status;
 
+import game.tile.Tile;
+
 public class Status {
+
+    private Tile drawTile;
+
+    public void saveDrawTile(Tile tile) {
+        drawTile = tile;
+    }
 
     int cntRemain;
     int cntOpponentCorrectTile;
