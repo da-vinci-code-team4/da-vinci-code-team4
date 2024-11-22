@@ -8,10 +8,10 @@
 /build/
 out/
 target/
+bin/
 
 # Gradle wrapper files
 .gradle/
-*.gradle
 
 # IDE 관련 파일
 # IntelliJ IDEA
@@ -48,8 +48,3 @@ lib/
 *.swo
 *.orig
 *.tmp
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build
