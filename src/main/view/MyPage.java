@@ -141,7 +141,7 @@ public class MyPage extends JFrame {
         menuPagePanel.setBackground(new Color(255, 255, 255, 0));
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/Background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("./img/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         menuPagePanel.add(background);
@@ -172,7 +172,7 @@ public class MyPage extends JFrame {
         background.add(logOutButton);
 
         // Nút Back
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
+        JButton backButton = new JButton(new ImageIcon(getClass().getResource("./img/back.png")));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
@@ -186,20 +186,20 @@ public class MyPage extends JFrame {
     private JPanel createInfoPage() {
         JPanel infoPagePanel = new JPanel(null); // Sử dụng layout null
         infoPagePanel.setBackground(new Color(0, 0, 0, 0)); // Không nền
-
+    
         // Cài đặt background
         JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         infoPagePanel.add(background);
-
+    
         // Tạo hình chữ nhật bo góc bán trong suốt
         RoundedPanel rectanglePanel = new RoundedPanel(20); // Bo góc 20px
         rectanglePanel.setBounds(179, 150, 1200, 644); // Vị trí và kích thước của hình chữ nhật
         rectanglePanel.setBackground(new Color(0, 0, 0, 180)); // Màu đen với độ trong suốt 71%
         rectanglePanel.setLayout(null); // Sử dụng layout null cho nội dung bên trong
         background.add(rectanglePanel); // Thêm Rectangle trước
-
+    
         // Văn bản chính
         JLabel mainText = new JLabel("경기대학교 24년도 객체프로그래밍 금123 4조");
         mainText.setFont(new Font("Arial", Font.BOLD, 64));
@@ -207,7 +207,7 @@ public class MyPage extends JFrame {
         mainText.setHorizontalAlignment(SwingConstants.CENTER);
         mainText.setBounds(0, 250, 1200, 97); // Căn giữa trong rectanglePanel
         rectanglePanel.add(mainText);
-
+    
         // Văn bản phiên bản
         JLabel versionText = new JLabel("version 0.0.0.1");
         versionText.setFont(new Font("Arial", Font.ITALIC, 42));
@@ -215,7 +215,7 @@ public class MyPage extends JFrame {
         versionText.setHorizontalAlignment(SwingConstants.CENTER);
         versionText.setBounds(0, 360, 1200, 40); // Bên dưới mainText
         rectanglePanel.add(versionText);
-
+    
         // Nút Back
         JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
         backButton.setBounds(1384, 30, 128, 86);
@@ -224,7 +224,7 @@ public class MyPage extends JFrame {
         backButton.setFocusPainted(false);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
-
+    
         return infoPagePanel;
     }
 
