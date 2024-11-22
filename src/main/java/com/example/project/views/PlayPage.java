@@ -1,4 +1,6 @@
-package org.example;
+package com.example.project.views;
+
+import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
 import java.awt.*;

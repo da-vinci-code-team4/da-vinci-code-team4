@@ -1,4 +1,4 @@
-package org.example;
+package com.example.project.models;
 
 /**
  * Lớp User để lưu trữ thông tin người dùng.

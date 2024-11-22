@@ -1,20 +1,20 @@
-package org.example;
+package com.example.project.views;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class HistoryPage extends JPanel {
+public class ProfilePage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
-    public HistoryPage(JPanel mainPanel, CardLayout cardLayout) {
+    public ProfilePage(JPanel mainPanel, CardLayout cardLayout) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
         setLayout(null);
         setBackground(Color.WHITE);
 
         // Cài đặt background hoặc các thành phần khác
-        JLabel label = new JLabel("Trang History");
+        JLabel label = new JLabel("Trang Profile");
         label.setFont(new Font("Arial", Font.BOLD, 50));
         label.setBounds(500, 300, 500, 100);
         add(label);

@@ -1,4 +1,6 @@
-package org.example;
+package com.example.project.controllers;
+
+import com.example.project.views.Tile;
 
 import java.awt.Color;
 import java.util.ArrayList;

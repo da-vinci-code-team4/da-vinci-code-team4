@@ -1,20 +1,20 @@
-package org.example;
+package com.example.project.views;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ProfilePage extends JPanel {
+public class CorrectionPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
-    public ProfilePage(JPanel mainPanel, CardLayout cardLayout) {
+    public CorrectionPage(JPanel mainPanel, CardLayout cardLayout) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
         setLayout(null);
         setBackground(Color.WHITE);
 
         // Cài đặt background hoặc các thành phần khác
-        JLabel label = new JLabel("Trang Profile");
+        JLabel label = new JLabel("Trang Correction");
         label.setFont(new Font("Arial", Font.BOLD, 50));
         label.setBounds(500, 300, 500, 100);
         add(label);

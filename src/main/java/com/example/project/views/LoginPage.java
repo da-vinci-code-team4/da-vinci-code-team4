@@ -1,8 +1,10 @@
-package org.example;
+package com.example.project.views;
+
+import com.example.project.models.User;
+import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.List;
 
 /**
