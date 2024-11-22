@@ -2,6 +2,11 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.util.Objects;
+
 
 public class PlayPage extends JPanel {
     public PlayPage(JPanel mainPanel, CardLayout cardLayout) {
@@ -81,19 +86,9 @@ public class PlayPage extends JPanel {
 class RoundedPanel extends JPanel {
     private Color backgroundColor;
     private int cornerRadius = 20;
+    private BufferedImage backgroundImage;
 
-    public RoundedPanel(LayoutManager layout, int radius) {
-        super(layout);
-        cornerRadius = radius;
-        setOpaque(false);
-    }
-
-    public RoundedPanel(int radius) {
-        super();
-        cornerRadius = radius;
-        setOpaque(false);
-    }
-
+    // Constructor 1: LayoutManager, Color, int
     public RoundedPanel(LayoutManager layout, Color bgColor, int radius) {
         super(layout);
         backgroundColor = bgColor;
@@ -101,11 +96,72 @@ class RoundedPanel extends JPanel {
         setOpaque(false);
     }
 
+    // Constructor 2: Color, int
     public RoundedPanel(Color bgColor, int radius) {
         super();
         backgroundColor = bgColor;
         cornerRadius = radius;
         setOpaque(false);
+    }
+
+    // Constructor 3: LayoutManager, Color, int, String (imagePath)
+    public RoundedPanel(LayoutManager layout, Color bgColor, int radius, String imagePath) {
+        super(layout);
+        backgroundColor = bgColor;
+        cornerRadius = radius;
+        setOpaque(false);
+        setBackgroundImage(imagePath);
+    }
+
+    // Constructor 4: Color, int, String (imagePath)
+    public RoundedPanel(Color bgColor, int radius, String imagePath) {
+        super();
+        backgroundColor = bgColor;
+        cornerRadius = radius;
+        setOpaque(false);
+        setBackgroundImage(imagePath);
+    }
+
+    // **Constructor Mới Thêm: Không Có Tham Số**
+    public RoundedPanel() {
+        super();
+        this.backgroundColor = new Color(0xD9D9D9); // Màu nền mặc định
+        this.cornerRadius = 20; // Giá trị mặc định
+        setOpaque(false);
+        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Cài đặt layout mặc định nếu cần
+    }
+
+    // **Constructor Mới Thêm: Nhận Chỉ Bán Kính Bo Góc**
+    public RoundedPanel(int radius) {
+        super();
+        this.backgroundColor = new Color(0xD9D9D9); // Màu nền mặc định
+        this.cornerRadius = radius;
+        setOpaque(false);
+        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Cài đặt layout mặc định nếu cần
+    }
+
+    /**
+     * Đặt hình nền cho RoundedPanel từ đường dẫn ảnh.
+     *
+     * @param imagePath Đường dẫn tới ảnh (relative path trong src/main/resources/img/Card/)
+     */
+    public void setBackgroundImage(String imagePath) {
+        try {
+            backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/img/Card/" + imagePath)));
+        } catch (IOException | IllegalArgumentException e) {
+            e.printStackTrace();
+            backgroundImage = null;
+        }
+    }
+
+    /**
+     * Thay đổi hình nền.
+     *
+     * @param imagePath Đường dẫn tới ảnh mới
+     */
+    public void changeBackgroundImage(String imagePath) {
+        setBackgroundImage(imagePath);
+        repaint();
     }
 
     @Override
@@ -118,15 +174,19 @@ class RoundedPanel extends JPanel {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Vẽ nền bo tròn
-        if (backgroundColor != null) {
+        if (backgroundImage != null) {
+            // Vẽ hình ảnh sao cho vừa với panel
+            graphics.drawImage(backgroundImage, 0, 0, width, height, this);
+        } else if (backgroundColor != null) {
             graphics.setColor(backgroundColor);
+            graphics.fillRoundRect(0, 0, width - 1, height - 1, arcs.width, arcs.height);
         } else {
             graphics.setColor(getBackground());
+            graphics.fillRoundRect(0, 0, width - 1, height - 1, arcs.width, arcs.height);
         }
-        graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
 
-        // Vẽ viền
-        graphics.setColor(getForeground());
-        graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
+        // Không vẽ viền
+        // graphics.setColor(getForeground());
+        // graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);
     }
 }
