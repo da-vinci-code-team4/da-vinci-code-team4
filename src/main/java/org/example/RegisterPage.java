@@ -2,9 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
+
 /**
  * Trang RegisterPage cho ứng dụng.
  */
@@ -109,24 +108,13 @@ public class RegisterPage extends JPanel {
         // --------------------- Nút Register ---------------------
         JButton registerButton = createRoundedButton("Register", 390, 70, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.BOLD, 40));
         registerButton.setBounds(95 + 50, 500, 390, 70); // Vị trí và kích thước
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleRegister();
-            }
-        });
+        registerButton.addActionListener(e -> handleRegister());
         rectanglePanel.add(registerButton);
 
         // --------------------- Nút Login ---------------------
         JButton loginButton = createRoundedButton("Login", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
         loginButton.setBounds(178 + 50, 580, 216, 50); // Vị trí và kích thước
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Chuyển sang LoginPage khi nhấn nút Login
-                cardLayout.show(mainPanel, "LoginPage");
-            }
-        });
+        loginButton.addActionListener(e -> cardLayout.show(mainPanel, "LoginPage"));
         rectanglePanel.add(loginButton);
 
         // --------------------- Nút Back ---------------------

@@ -79,9 +79,6 @@ public class MyPage extends JFrame {
         // Trang CorrectionPage
         JPanel correctionPagePanel = new CorrectionPage(mainPanel, cardLayout);
 
-        // Trang LogoutPage
-        // Nếu bạn vẫn muốn giữ LogoutPage, hãy đảm bảo rằng nó có chức năng phù hợp
-
         // Thêm các trang vào CardLayout
         mainPanel.add(myPagePanel, "MyPage");
         mainPanel.add(menuPagePanel, "MenuPage");
