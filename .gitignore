@@ -8,6 +8,7 @@
 /build/
 out/
 target/
+bin/
 
 # IDE 관련 파일
 # IntelliJ IDEA
@@ -44,3 +45,5 @@ lib/
 *.swo
 *.orig
 *.tmp
+
+.gradle/
