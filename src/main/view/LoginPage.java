@@ -1,9 +1,8 @@
-package main.view;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -31,12 +30,13 @@ public class LoginPage extends JPanel {
         JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
+        background.setOpaque(false); // Đảm bảo JLabel không opaque để hỗ trợ độ trong suốt
         add(background);
 
         // Tạo hình chữ nhật bo góc cho Login
         RoundedPanel rectanglePanel = new RoundedPanel(10); // Bo góc 10px
-        rectanglePanel.setBounds(465, 269, 572, 599); // Vị trí và kích thước của hình chữ nhật
-        rectanglePanel.setBackground(new Color(0, 0, 0, 180)); // Màu đen với độ trong suốt 71%
+        rectanglePanel.setBounds(430, 250, 670, 350);  // Vị trí và kích thước của hình chữ nhật
+        rectanglePanel.setBackground(new Color(0, 0, 0, 180)); // Màu đen với độ trong suốt 180
         rectanglePanel.setLayout(null); // Sử dụng layout null cho nội dung bên trong
         background.add(rectanglePanel); // Thêm Rectangle trước
 
@@ -74,36 +74,22 @@ public class LoginPage extends JPanel {
         passwordField.setFont(new Font("Arial", Font.PLAIN, 24));
         rectanglePanel.add(passwordField);
 
+
         // --------------------- Nút Login ---------------------
         JButton loginButton = createRoundedButton("Login", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
-        loginButton.setBounds(178 + 50, 500, 216, 50); // Vị trí và kích thước
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleLogin();
-            }
-        });
+        loginButton.setBounds(178 + 50, 280, 216, 50); // Vị trí và kích thước
+        loginButton.addActionListener(e -> handleLogin());
         rectanglePanel.add(loginButton);
-
-        // --------------------- Nút Back ---------------------
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
-        backButton.setBounds(1384, 30, 128, 86);
-        backButton.setBorderPainted(false);
-        backButton.setContentAreaFilled(false);
-        backButton.setFocusPainted(false);
-        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
-        background.add(backButton);
     }
 
     /**
-     * Tạo một nút có góc bo tròn.
+     * Tạo một nút có góc bo tròn và hỗ trợ độ trong suốt.
      *
      * @param text          Văn bản trên nút
      * @param width         Chiều rộng của nút
      * @param height        Chiều cao của nút
      * @param cornerRadius  Bán kính bo góc
-     * @param bgColor       Màu nền của nút
+     * @param bgColor       Màu nền của nút (có alpha)
      * @param fgColor       Màu chữ của nút
      * @param font          Font chữ của nút
      * @return JButton với các thuộc tính đã thiết lập
@@ -112,7 +98,7 @@ public class LoginPage extends JPanel {
         JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
-                // Vẽ nút với góc bo tròn
+                // Vẽ nút với góc bo tròn và độ trong suốt
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(getBackground());
@@ -132,7 +118,7 @@ public class LoginPage extends JPanel {
         button.setFocusPainted(false);
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
-        button.setOpaque(false);
+        button.setOpaque(false); // Thiết lập không opaque để hỗ trợ độ trong suốt
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
     }

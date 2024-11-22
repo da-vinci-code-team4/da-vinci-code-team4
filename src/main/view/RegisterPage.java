@@ -1,10 +1,12 @@
-package main.view;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 
+/**
+ * Trang RegisterPage cho ứng dụng.
+ */
 public class RegisterPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
@@ -15,9 +17,13 @@ public class RegisterPage extends JPanel {
     private JTextField usernameField;
     private JSpinner ageSpinner;
 
-    public RegisterPage(JPanel mainPanel, CardLayout cardLayout) {
+    // Danh sách người dùng để lưu trữ thông tin đăng ký
+    private List<User> userList;
+
+    public RegisterPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
+        this.userList = userList;
         setLayout(null); // Sử dụng layout null để tự định vị các thành phần
         setBackground(Color.WHITE); // Màu nền của trang RegisterPage
 
@@ -48,7 +54,7 @@ public class RegisterPage extends JPanel {
 
         // Text Field ID
         idField = new JTextField();
-        idField.setBounds(265, 30, 292 + 50, 59); // Vị trí và kích thước input
+        idField.setBounds(265, 30, 342, 59); // Vị trí và kích thước input
         idField.setBackground(new Color(0xD9D9D9));
         idField.setFont(new Font("Arial", Font.PLAIN, 24));
         rectanglePanel.add(idField);
@@ -63,7 +69,7 @@ public class RegisterPage extends JPanel {
 
         // Password Field
         passwordField = new JPasswordField();
-        passwordField.setBounds(265, 30 + groupHeight + groupSpacing, 292+50, 59);
+        passwordField.setBounds(265, 30 + groupHeight + groupSpacing, 342, 59);
         passwordField.setBackground(new Color(0xD9D9D9));
         passwordField.setFont(new Font("Arial", Font.PLAIN, 24));
         rectanglePanel.add(passwordField);
@@ -78,7 +84,7 @@ public class RegisterPage extends JPanel {
 
         // Text Field Username
         usernameField = new JTextField();
-        usernameField.setBounds(265, 30 + 2 * (groupHeight + groupSpacing), 292+50, 59);
+        usernameField.setBounds(265, 30 + 2 * (groupHeight + groupSpacing), 342, 59);
         usernameField.setBackground(new Color(0xD9D9D9));
         usernameField.setFont(new Font("Arial", Font.PLAIN, 24));
         rectanglePanel.add(usernameField);
@@ -94,32 +100,21 @@ public class RegisterPage extends JPanel {
         // Spinner Age
         SpinnerNumberModel ageModel = new SpinnerNumberModel(18, 1, 120, 1); // Default=18, Min=1, Max=120, Step=1
         ageSpinner = new JSpinner(ageModel);
-        ageSpinner.setBounds(265, 30 + 3 * (groupHeight + groupSpacing), 292+50, 59);
+        ageSpinner.setBounds(265, 30 + 3 * (groupHeight + groupSpacing), 342, 59);
         ageSpinner.setBackground(new Color(0xD9D9D9));
         ageSpinner.setFont(new Font("Arial", Font.PLAIN, 24));
         rectanglePanel.add(ageSpinner);
 
         // --------------------- Nút Register ---------------------
         JButton registerButton = createRoundedButton("Register", 390, 70, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.BOLD, 40));
-        registerButton.setBounds(95+50, 500, 390, 70); // Vị trí và kích thước
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleRegister();
-            }
-        });
+        registerButton.setBounds(95 + 50, 500, 390, 70); // Vị trí và kích thước
+        registerButton.addActionListener(e -> handleRegister());
         rectanglePanel.add(registerButton);
 
         // --------------------- Nút Login ---------------------
         JButton loginButton = createRoundedButton("Login", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
-        loginButton.setBounds(178+50, 580, 216, 50); // Vị trí và kích thước
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Chuyển về MyPage hoặc trang Login nếu có
-                cardLayout.show(mainPanel, "MyPage");
-            }
-        });
+        loginButton.setBounds(178 + 50, 580, 216, 50); // Vị trí và kích thước
+        loginButton.addActionListener(e -> cardLayout.show(mainPanel, "LoginPage"));
         rectanglePanel.add(loginButton);
 
         // --------------------- Nút Back ---------------------
@@ -133,6 +128,18 @@ public class RegisterPage extends JPanel {
         background.add(backButton);
     }
 
+    /**
+     * Tạo một nút có góc bo tròn.
+     *
+     * @param text          Văn bản trên nút
+     * @param width         Chiều rộng của nút
+     * @param height        Chiều cao của nút
+     * @param cornerRadius  Bán kính bo góc
+     * @param bgColor       Màu nền của nút
+     * @param fgColor       Màu chữ của nút
+     * @param font          Font chữ của nút
+     * @return JButton với các thuộc tính đã thiết lập
+     */
     private JButton createRoundedButton(String text, int width, int height, int cornerRadius, Color bgColor, Color fgColor, Font font) {
         JButton button = new JButton(text) {
             @Override
@@ -164,7 +171,7 @@ public class RegisterPage extends JPanel {
 
     /**
      * Xử lý khi nhấn nút Register.
-     * Kiểm tra thông tin nhập và chuyển trang nếu hợp lệ.
+     * Kiểm tra thông tin nhập và thêm người dùng vào danh sách nếu hợp lệ.
      */
     private void handleRegister() {
         String id = idField.getText().trim();
@@ -178,16 +185,21 @@ public class RegisterPage extends JPanel {
             return;
         }
 
-        // Lưu thông tin đăng ký
-        // Ở đây bạn có thể thêm mã để lưu thông tin vào cơ sở dữ liệu hoặc một nơi lưu trữ nào đó
-        // Ví dụ: In thông tin ra console
-        System.out.println("Đăng ký thành công!");
-        System.out.println("ID: " + id);
-        System.out.println("Password: " + password);
-        System.out.println("Username: " + username);
-        System.out.println("Age: " + age);
+        // Kiểm tra xem ID đã tồn tại chưa
+        for (User user : userList) {
+            if (user.getId().equals(id)) {
+                JOptionPane.showMessageDialog(this, "ID đã tồn tại. Vui lòng chọn ID khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
 
-        // Chuyển trang về MyPage
+        // Tạo đối tượng User mới và thêm vào danh sách
+        User newUser = new User(id, password, username, age);
+        userList.add(newUser);
+
+        JOptionPane.showMessageDialog(this, "Đăng ký thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+        // Chuyển trang sang MyPage sau khi đăng ký thành công
         cardLayout.show(mainPanel, "MyPage");
     }
 }

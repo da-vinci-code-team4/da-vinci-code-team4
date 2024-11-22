@@ -1,5 +1,4 @@
-package main.view;
-
+package view;
 /**
  * Lớp User để lưu trữ thông tin người dùng.
  */
