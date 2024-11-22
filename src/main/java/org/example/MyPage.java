@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MyPage extends JFrame {
     private CardLayout cardLayout;
@@ -70,15 +71,13 @@ public class MyPage extends JFrame {
 
         // Trang RankingPage
         JPanel rankingPagePanel = new RankingPage(mainPanel, cardLayout);
+        mainPanel.add(rankingPagePanel, "RankingPage");
 
         // Trang HistoryPage
         JPanel historyPagePanel = new HistoryPage(mainPanel, cardLayout);
 
         // Trang CorrectionPage
         JPanel correctionPagePanel = new CorrectionPage(mainPanel, cardLayout);
-
-        // Trang LogoutPage
-        // Nếu bạn vẫn muốn giữ LogoutPage, hãy đảm bảo rằng nó có chức năng phù hợp
 
         // Thêm các trang vào CardLayout
         mainPanel.add(myPagePanel, "MyPage");
@@ -101,7 +100,7 @@ public class MyPage extends JFrame {
         myPagePanel.setBackground(Color.WHITE);
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/background.png"))));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         myPagePanel.add(background);
@@ -116,7 +115,7 @@ public class MyPage extends JFrame {
         int startY = (916 - totalHeight) / 2; // Vị trí Y bắt đầu để căn giữa
 
         // Button Menu
-        JButton menuButton = new JButton(new ImageIcon(getClass().getResource("/img/menu_button.png")));
+        JButton menuButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/menu_button.png"))));
         menuButton.setBounds(leftMargin, startY, buttonSize, buttonSize);
         menuButton.setBorderPainted(false);
         menuButton.setContentAreaFilled(false);
@@ -126,7 +125,7 @@ public class MyPage extends JFrame {
         background.add(menuButton);
 
         // Button Setting
-        JButton settingButton = new JButton(new ImageIcon(getClass().getResource("/img/setting_button.png")));
+        JButton settingButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/setting_button.png"))));
         settingButton.setBounds(leftMargin, startY + buttonSize + buttonSpacing, buttonSize, buttonSize);
         settingButton.setBorderPainted(false);
         settingButton.setContentAreaFilled(false);
@@ -136,7 +135,7 @@ public class MyPage extends JFrame {
         background.add(settingButton);
 
         // Button Info
-        JButton infoButton = new JButton(new ImageIcon(getClass().getResource("/img/info_button.png")));
+        JButton infoButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/info_button.png"))));
         infoButton.setBounds(leftMargin, startY + 2 * (buttonSize + buttonSpacing), buttonSize, buttonSize);
         infoButton.setBorderPainted(false);
         infoButton.setContentAreaFilled(false);
@@ -147,7 +146,7 @@ public class MyPage extends JFrame {
         background.add(infoButton);
 
         // Button Play
-        ImageIcon playIcon = new ImageIcon(getClass().getResource("/img/play.png"));
+        ImageIcon playIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/play.png")));
         JButton playButton = new JButton(playIcon);
 
         // Lấy kích thước của ảnh
@@ -177,7 +176,7 @@ public class MyPage extends JFrame {
         menuPagePanel.setBackground(new Color(255, 255, 255, 0));
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/background.png"))));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         menuPagePanel.add(background);
@@ -208,7 +207,7 @@ public class MyPage extends JFrame {
         background.add(registerButton);
 
         // Nút Back
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
+        JButton backButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/back.png"))));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
@@ -228,7 +227,7 @@ public class MyPage extends JFrame {
         infoPagePanel.setBackground(new Color(0, 0, 0, 0)); // Không nền
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/background.png"))));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         infoPagePanel.add(background);
@@ -257,7 +256,7 @@ public class MyPage extends JFrame {
         rectanglePanel.add(versionText);
 
         // Nút Back
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
+        JButton backButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/back.png"))));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
@@ -280,7 +279,7 @@ public class MyPage extends JFrame {
     private JButton createMenuButton(String text, int x, int y) {
         JButton button = new JButton(text);
         button.setBounds(x, y, 400, 200); // Kích thước nút
-        button.setIcon(new ImageIcon(getClass().getResource("/img/background_button.png")));
+        button.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/background_button.png"))));
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.CENTER);
         button.setFont(new Font("Arial", Font.BOLD, 48));
