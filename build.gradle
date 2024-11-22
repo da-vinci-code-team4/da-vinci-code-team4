@@ -94,6 +94,18 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+// Tài nguyên
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java'] // Thư mục mã nguồn Java
+        }
+        resources {
+            srcDirs = ['src/main/resources'] // Thư mục chứa tài nguyên
+        }
+    }
+}
+
 // Tạo JAR file chạy độc lập
 jar {
     manifest {
