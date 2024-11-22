@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    //TO debug
+    options.compilerArgs << '-Xlint:unchecked'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'main.view.MyPage'
+        )
+    }
+    from('src/main/resources') {
+        into('resources')
+    }
+}
