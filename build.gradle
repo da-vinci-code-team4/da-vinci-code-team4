@@ -1,35 +1,104 @@
+//=================================================== 한국어 ===================================================
+
+// plugins 설정
 plugins {
-    id 'java'
+    id 'java'                    // Java 프로젝트를 위한 플러그인
+    id 'application'             // 실행 가능한 애플리케이션을 위한 플러그인
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+// 프로젝트 정보 설정
+group = 'com.example.project'    // 그룹 ID (패키지 이름)
+version = '1.0.0'                // 프로젝트 버전
 
+// 애플리케이션 실행 설정
+application {
+    mainClass = 'com.example.project.main.Main' // 애플리케이션의 메인 클래스
+}
+
+// 의존성 관리를 위한 저장소 설정
 repositories {
-    mavenCentral()
+    mavenCentral()               // Maven 중앙 저장소를 사용
 }
 
+// 의존성 추가
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'com.google.guava:guava:31.1-jre' // Guava 라이브러리 추가
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3' // JUnit 5 (테스트 라이브러리)
 }
 
-test {
-    useJUnitPlatform()
+// Java 버전 설정
+java {
+    sourceCompatibility = JavaVersion.VERSION_17 // 소스 코드 Java 17 버전 사용
+    targetCompatibility = JavaVersion.VERSION_17 // 타겟 Java 17 버전
 }
 
+// 소스셋 설정
 sourceSets {
     main {
+        java {
+            srcDirs = ['src/main/java'] // Java 소스 코드 디렉토리
+        }
         resources {
-            srcDirs = ['src/main/resources']
+            srcDirs = ['src/main/resources'] // 리소스 파일 디렉토리
         }
     }
 }
 
+// JAR 파일 생성 설정
 jar {
     manifest {
         attributes(
-                'Main-Class': 'com.example.swing.MainApp' // Tên lớp Main
+                'Main-Class': 'com.example.project.main.Main' // 메인 클래스 정의
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE // 중복된 파일 제외
+}
+
+//=================================================== 베트남어 ===================================================
+
+// plugins 설정
+/*
+plugins {
+    id 'java'                    // Plugin để hỗ trợ Java
+    id 'application'             // Plugin để chạy ứng dụng
+}
+
+group = 'com.example.project'    // Tên nhóm (package)
+version = '1.0.0'                // Phiên bản ứng dụng
+
+// Lớp chính (Main class) của ứng dụng
+application {
+    mainClass = 'com.example.project.main.Main' // Đường dẫn đến lớp Main
+}
+
+// Repositories để tải thư viện
+repositories {
+    mavenCentral()               // Sử dụng Maven Central để quản lý dependencies
+}
+
+// Dependencies (các thư viện cần thiết)
+dependencies {
+    // Thư viện Java tiêu chuẩn
+    implementation 'com.google.guava:guava:31.1-jre' // Ví dụ thư viện (Guava)
+
+    // Thư viện kiểm thử (JUnit 5)
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+}
+
+// Tùy chỉnh phiên bản Java
+java {
+    sourceCompatibility = JavaVersion.VERSION_17 // Chỉ định Java 17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// Tạo JAR file chạy độc lập
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'com.example.project.main.Main' // Lớp chính
         )
     }
     from {
@@ -37,3 +106,4 @@ jar {
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+*/
