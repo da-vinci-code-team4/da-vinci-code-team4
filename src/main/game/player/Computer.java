@@ -5,8 +5,8 @@ import main.game.tile.TileManager;
 import java.util.Random;
 
 public class Computer extends Player{
-    public Computer(TileManager tileManager, String name, int rank, int score) {
-        super(tileManager, name, rank, score);
+    public Computer(String name, int rank, int score) {
+        super(name, rank, score);
     }
 
     @Override

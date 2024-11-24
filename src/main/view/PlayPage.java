@@ -2,6 +2,7 @@ package main.view;
 
 import javax.swing.*;
 import java.awt.*;
+import main.controller.Controller;
 
 public class PlayPage extends JPanel {
     private JPanel mainPanel;
@@ -48,7 +49,9 @@ public class PlayPage extends JPanel {
         // Button PC
         JButton pcButton = createButton("../resources/img/PC.png", "PC Button Clicked");
         pcButton.setBounds(startX, startY, buttonWidth, buttonHeight);
-        pcButton.addActionListener(e -> cardLayout.show(mainPanel, "PlayGameWithPC")); // Chuyển sang PlayGameWithPC
+        pcButton.addActionListener(e -> mainPanel.add(new PlayGameWithPC(), "PlayGameWithPC"));
+        pcButton.addActionListener(e -> cardLayout.show(mainPanel, "PlayGameWithPC"));
+        pcButton.addActionListener(e -> Controller.startGame());
         background.add(pcButton);
 
         // Button My Friend

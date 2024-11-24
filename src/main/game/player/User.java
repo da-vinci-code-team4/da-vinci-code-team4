@@ -11,8 +11,8 @@ import static main.game.tile.TileType.*;
 
 public class User extends Player {
 
-    public User(TileManager tileManager, String name, int rank, int score) {
-        super(tileManager, name, rank, score);
+    public User(String name, int rank, int score) {
+        super(name, rank, score);
     }
 
     @Override

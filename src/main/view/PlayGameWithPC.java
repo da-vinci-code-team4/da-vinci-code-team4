@@ -1,5 +1,6 @@
 package main.view;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -50,7 +51,7 @@ public class PlayGameWithPC extends JFrame {
         timer.start();
 
         // Nút thoát
-        JLabel exitIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/back.png"))));
+        JLabel exitIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../resources/img/back.png"))));
         exitIcon.setBounds(1396, 13, 127, 70);
         exitIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
         exitIcon.addMouseListener(new MouseAdapter() {
@@ -62,7 +63,7 @@ public class PlayGameWithPC extends JFrame {
         mainPanel.add(exitIcon);
 
         // Hình PC
-        JLabel pcIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/pc 2.png"))));
+        JLabel pcIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../resources/img/pc 2.png"))));
         pcIcon.setBounds(45, 133 - 65, 139, 179);
         pcIcon.setHorizontalAlignment(SwingConstants.CENTER);
         pcIcon.setVerticalAlignment(SwingConstants.TOP);
@@ -76,7 +77,7 @@ public class PlayGameWithPC extends JFrame {
         mainPanel.add(pcText);
 
         // Hình ảnh "Me"
-        JLabel meIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/me.png"))));
+        JLabel meIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../resources/img/me.png"))));
         meIcon.setBounds(1332, 709 - 55, 139, 186);
         meIcon.setHorizontalAlignment(SwingConstants.CENTER);
         meIcon.setVerticalAlignment(SwingConstants.TOP);
@@ -93,7 +94,7 @@ public class PlayGameWithPC extends JFrame {
         JPanel opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         opponentCards.setBounds(210, 81 - 65, 650, 261);
         opponentCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài đối thủ
             Color bgColor = new Color(0x61ADA8); // Màu xanh lá ban đầu
             Color hoverColor = new Color(0x81CFC8); // Màu xanh lá khi hover
@@ -106,7 +107,7 @@ public class PlayGameWithPC extends JFrame {
         myCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         myCards.setBounds(673, 682 - 65, 650, 261);
         myCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài người chơi
             Color bgColor = new Color(0x3C77D0); // Màu xanh dương ban đầu
             Color hoverColor = new Color(0x5C99F0); // Màu xanh dương khi hover
@@ -119,7 +120,7 @@ public class PlayGameWithPC extends JFrame {
         JPanel sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         sharedCards.setBounds(98, 373 - 65, 1313, 261);
         sharedCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 24; i++) {
             RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu ứng hover
             sharedCards.add(card);
         }
@@ -143,7 +144,7 @@ public class PlayGameWithPC extends JFrame {
         mainPanel.add(chatUnderline);
 
         // Biểu tượng chat
-        JLabel chatIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/chat_icon.png"))));
+        JLabel chatIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../resources/img/chat_icon.png"))));
         chatIcon.setBounds(512, 210 - 10, 50, 50);
         chatPanel.add(chatIcon);
 
@@ -187,7 +188,7 @@ public class PlayGameWithPC extends JFrame {
      */
     public void addCardToMyCards(RoundedPanel card, String imageName) {
         // Tạo một JLabel với hình ảnh của thẻ bài
-        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/" + imageName))));
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("../resources/img/tiles/" + imageName))));
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setVerticalAlignment(SwingConstants.CENTER);
 
@@ -210,7 +211,4 @@ public class PlayGameWithPC extends JFrame {
         timeLabel.setText(timeString);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(PlayGameWithPC::new);
-    }
 }

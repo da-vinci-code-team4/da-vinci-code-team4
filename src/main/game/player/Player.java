@@ -19,7 +19,7 @@ abstract public class Player {
      */
     public static final int INSERTED_JOKER_TILE_WEIGHT_GAP = 2;
 
-    private final TileManager tileManager;
+    private TileManager tileManager;
     private final String name;
     private int rank;
     private int score;
@@ -31,18 +31,19 @@ abstract public class Player {
     Scanner scanner = new Scanner(System.in);
 
     /**
-     * @param tileManager 전체 덱을 관리하는 타일 메니져를 입력 받는다
      * @param name        플레이어의 이름을 입력 받는다
      * @param rank        플레이어의 랭킹을 입력 받는다
      * @param score       플레이어의 점수를 입력 받는다
      */
-    public Player(TileManager tileManager, String name, int rank, int score) {
-        this.tileManager = tileManager;
+    public Player(String name, int rank, int score) {
         this.name = name;
         this.rank = rank;
         this.score = score;
     }
 
+    public void makeTileManager(TileManager tileManager){
+        this.tileManager = tileManager;
+    }
     /**
      * 게임 시작 시 타일을 메니져에게 분배 받을 때 호출되는 메서드다.
      * 만약 조커 타일이 있다면 사용자가 원하는 위치에 조커 타일을 둔다.
