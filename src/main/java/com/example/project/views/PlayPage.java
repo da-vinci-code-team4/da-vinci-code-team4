@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PlayPage extends JPanel {
-    private JPanel mainPanel;
     private CardLayout cardLayout;
+    private JPanel mainPanel;
 
     public PlayPage(JPanel mainPanel, CardLayout cardLayout) {
         this.mainPanel = mainPanel;
@@ -15,13 +15,13 @@ public class PlayPage extends JPanel {
         setLayout(null);
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
 
         // Nút Back để quay lại MyPage
-        JButton backButton = createButton("/img/back.png", "Back Button");
+        JButton backButton = createButton("/img/ViewImage/back.png", "Back Button");
         backButton.setBounds(1384, 30, 128, 86);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
@@ -48,39 +48,53 @@ public class PlayPage extends JPanel {
         int startY = 300;
 
         // Button PC
-        JButton pcButton = createButton("/img/PC.png", "PC Button Clicked");
+        JButton pcButton = createButton("/img/ViewImage/PC.png", "PC Button Clicked");
         pcButton.setBounds(startX, startY, buttonWidth, buttonHeight);
-        pcButton.addActionListener(e -> cardLayout.show(mainPanel, "PlayGameWithPC")); // Chuyển sang PlayGameWithPC
+        pcButton.addActionListener(e -> {
+            // Tạo trang PlayGameWithPC và chuyển đến trang này
+            PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout);
+            mainPanel.add(playGameWithPC, "PlayGameWithPC");
+            cardLayout.show(mainPanel, "PlayGameWithPC");
+        });
         background.add(pcButton);
 
         // Button My Friend
-        JButton myFriendButton = createButton("/img/MyFriend.png", "My Friend Button Clicked");
+        JButton myFriendButton = createButton("/img/ViewImage/MyFriend.png", "My Friend Button Clicked");
         myFriendButton.setBounds(startX + buttonWidth + buttonSpacing, startY, buttonWidth, buttonHeight);
+        myFriendButton.addActionListener(e -> {
+            PlayGameWithFriend playGameWithFriend = new PlayGameWithFriend(mainPanel, cardLayout);
+            mainPanel.add(playGameWithFriend, "PlayGameWithFriend");
+            cardLayout.show(mainPanel, "PlayGameWithFriend");
+        });
         background.add(myFriendButton);
 
         // Button Random
-        JButton randomButton = createButton("/img/Random.png", "Random Button Clicked");
+        JButton randomButton = createButton("/img/ViewImage/Random.png", "Random Button Clicked");
         randomButton.setBounds(startX + 2 * (buttonWidth + buttonSpacing), startY, buttonWidth, buttonHeight);
+        randomButton.addActionListener(e -> {
+            PlayGameWithRandom playGameWithRandom = new PlayGameWithRandom(mainPanel, cardLayout);
+            mainPanel.add(playGameWithRandom, "PlayGameWithRandom");
+            cardLayout.show(mainPanel, "PlayGameWithRandom");
+        });
         background.add(randomButton);
-
-        setVisible(true);
     }
 
-    private JButton createButton(String iconPath, String message) {
-        JButton button = new JButton(new ImageIcon(getClass().getResource(iconPath)));
+    private JButton createButton(String imagePath, String tooltip) {
+        JButton button = new JButton(new ImageIcon(getClass().getResource(imagePath)));
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
+        button.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.addActionListener(e -> System.out.println(message));
+        button.setToolTipText(tooltip);
         return button;
     }
 
     private JLabel createGlowingLabel(String text) {
-        JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 128));
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 80));
         label.setForeground(Color.WHITE);
-        label.setOpaque(false);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        // Bạn có thể thêm hiệu ứng glow nếu muốn
         return label;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.RoundedPanel;
 
@@ -29,7 +30,7 @@ public class LoginPage extends JPanel {
         setBackground(Color.WHITE); // Màu nền của trang LoginPage
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         background.setOpaque(false); // Đảm bảo JLabel không opaque để hỗ trợ độ trong suốt
@@ -79,7 +80,7 @@ public class LoginPage extends JPanel {
 
         // --------------------- Nút Login ---------------------
         JButton loginButton = createRoundedButton("Login", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
-        loginButton.setBounds(178 + 50, 280, 216, 50); // Vị trí và kích thước
+        loginButton.setBounds(178 + 50, 250, 216, 50); // Vị trí và kích thước
         loginButton.addActionListener(e -> handleLogin());
         rectanglePanel.add(loginButton);
     }
@@ -141,14 +142,19 @@ public class LoginPage extends JPanel {
 
         // Kiểm tra thông tin đăng nhập
         boolean isAuthenticated = false;
+        User authenticatedUser = null; // Thêm biến để lưu trữ người dùng xác thực
         for (User user : userList) {
             if (user.getId().equals(id) && user.getPassword().equals(password)) {
                 isAuthenticated = true;
+                authenticatedUser = user; // Lưu trữ người dùng đã xác thực
                 break;
             }
         }
 
-        if (isAuthenticated) {
+        if (isAuthenticated && authenticatedUser != null) {
+            // Thiết lập người dùng hiện tại trong Session
+            Session.getInstance().setCurrentUser(authenticatedUser);
+
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             cardLayout.show(mainPanel, "MyPage");
         } else {

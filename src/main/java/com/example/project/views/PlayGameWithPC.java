@@ -7,7 +7,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 
-public class PlayGameWithPC extends JFrame {
+public class PlayGameWithPC extends JPanel {
+    private CardLayout cardLayout;
+    private JPanel mainPanel;
+
     private JLabel timeLabel;
     private Timer timer;
     private int seconds = 0;
@@ -15,24 +18,22 @@ public class PlayGameWithPC extends JFrame {
     // Biến thành viên cho khu vực bài của người chơi
     private JPanel myCards;
 
-    public PlayGameWithPC() {
-        // Thiết lập JFrame
-        setTitle("Play Game With PC");
-        setSize(1502, 916);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
+        this.mainPanel = mainPanel;
+        this.cardLayout = cardLayout;
         setLayout(null);
+        setBackground(Color.WHITE);
 
         // Panel chính
-        JPanel mainPanel = new JPanel(null);
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBounds(0, 0, 1502, 916);
-        add(mainPanel);
+        JPanel mainContent = new JPanel(null);
+        mainContent.setBackground(Color.WHITE);
+        mainContent.setBounds(0, 0, 1502, 916);
+        add(mainContent);
 
         // Thời gian hiển thị trong RoundedPanel
         RoundedPanel timePanel = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20);
         timePanel.setBounds(1058, 13, 244, 70);
-        mainPanel.add(timePanel);
+        mainContent.add(timePanel);
 
         timeLabel = new JLabel("00 : 00");
         timeLabel.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
@@ -52,44 +53,45 @@ public class PlayGameWithPC extends JFrame {
         timer.start();
 
         // Nút thoát
-        JLabel exitIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/back.png"))));
+        JLabel exitIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/back.png")));
         exitIcon.setBounds(1396, 13, 127, 70);
         exitIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
         exitIcon.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 timer.stop(); // Dừng đồng hồ khi thoát
-                dispose(); // Đóng cửa sổ trò chơi
+                // Quay lại PlayPage
+                cardLayout.show(mainPanel, "PlayPage");
             }
         });
-        mainPanel.add(exitIcon);
+        mainContent.add(exitIcon);
 
         // Hình PC
-        JLabel pcIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/pc 2.png"))));
+        JLabel pcIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/pc2.png")));
         pcIcon.setBounds(45, 133 - 65, 139, 179);
         pcIcon.setHorizontalAlignment(SwingConstants.CENTER);
         pcIcon.setVerticalAlignment(SwingConstants.TOP);
-        mainPanel.add(pcIcon);
+        mainContent.add(pcIcon);
 
         // Dòng chữ "PC"
         JLabel pcText = new JLabel("PC");
         pcText.setBounds(45, 133 + 128 - 65, 139, 50);
         pcText.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
         pcText.setHorizontalAlignment(SwingConstants.CENTER);
-        mainPanel.add(pcText);
+        mainContent.add(pcText);
 
         // Hình ảnh "Me"
-        JLabel meIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/me.png"))));
+        JLabel meIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/me.png")));
         meIcon.setBounds(1332, 709 - 55, 139, 186);
         meIcon.setHorizontalAlignment(SwingConstants.CENTER);
         meIcon.setVerticalAlignment(SwingConstants.TOP);
-        mainPanel.add(meIcon);
+        mainContent.add(meIcon);
 
         // Dòng chữ "Me"
         JLabel meText = new JLabel("Me");
         meText.setBounds(1342, 709 + 136 - 55, 139, 50);
         meText.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
         meText.setHorizontalAlignment(SwingConstants.CENTER);
-        mainPanel.add(meText);
+        mainContent.add(meText);
 
         // Khu vực bài đối thủ
         JPanel opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
@@ -102,7 +104,7 @@ public class PlayGameWithPC extends JFrame {
             RoundedPanel card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20);
             opponentCards.add(card);
         }
-        mainPanel.add(opponentCards);
+        mainContent.add(opponentCards);
 
         // Khu vực bài của người chơi
         myCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
@@ -115,7 +117,7 @@ public class PlayGameWithPC extends JFrame {
             RoundedPanel card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20);
             myCards.add(card);
         }
-        mainPanel.add(myCards);
+        mainContent.add(myCards);
 
         // Khu vực bài chung
         JPanel sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
@@ -125,31 +127,29 @@ public class PlayGameWithPC extends JFrame {
             RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu ứng hover
             sharedCards.add(card);
         }
-        mainPanel.add(sharedCards);
+        mainContent.add(sharedCards);
 
         // Khu vực chat
         JPanel chatPanel = new RoundedPanel(null, new Color(0xD9D9D9), 20);
         chatPanel.setBounds(78, 679 - 65, 571, 264);
-        mainPanel.add(chatPanel);
+        mainContent.add(chatPanel);
 
         // Khung nhập chat
         RoundedPanel chatInput = new RoundedPanel(null, new Color(0xD9D9D9), 20);
         chatInput.setBounds(78, 893 - 65, 490, 38);
-        mainPanel.add(chatInput);
+        mainContent.add(chatInput);
 
         // Gạch dưới trong khung chat
         JLabel chatUnderline = new JLabel();
         chatUnderline.setBounds(97, 914 - 65, 471, 1);
         chatUnderline.setBackground(Color.BLACK);
         chatUnderline.setOpaque(true);
-        mainPanel.add(chatUnderline);
+        mainContent.add(chatUnderline);
 
         // Biểu tượng chat
-        JLabel chatIcon = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/chat_icon.png"))));
+        JLabel chatIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/chat_icon.png")));
         chatIcon.setBounds(512, 210 - 10, 50, 50);
         chatPanel.add(chatIcon);
-
-        setVisible(true);
     }
 
     /**
@@ -210,9 +210,5 @@ public class PlayGameWithPC extends JFrame {
         int secs = seconds % 60;
         String timeString = String.format("%02d : %02d", minutes, secs);
         timeLabel.setText(timeString);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(PlayGameWithPC::new);
     }
 }

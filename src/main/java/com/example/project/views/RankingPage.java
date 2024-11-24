@@ -24,7 +24,7 @@ public class RankingPage extends JPanel {
         setBackground(new Color(0, 0, 0, 0)); // Không nền
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/background.png"))));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
@@ -33,7 +33,7 @@ public class RankingPage extends JPanel {
         createHeader(background);
 
         // Đọc dữ liệu từ ranking.txt
-        rankingData = readRankingData("src/main/resources/ranking.txt");
+        rankingData = readRankingData("src/main/resources/texts/ranking.txt");
 
         // Sắp xếp rankingData theo "Core" từ cao xuống thấp
         rankingData.sort((a, b) -> {
@@ -85,7 +85,7 @@ public class RankingPage extends JPanel {
         updateDataPanel();
 
         // Nút Back để quay lại MenuPage
-        JButton backButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/back.png"))));
+        JButton backButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/ViewImage/back.png"))));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
@@ -199,19 +199,19 @@ public class RankingPage extends JPanel {
     private void updateNavigationButtons() {
         // Nút Rejoin
         if (currentPage > 0) {
-            rejoinButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/rejon1.png"))));
+            rejoinButton.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/rejon1.png")));
             rejoinButton.setEnabled(true);
         } else {
-            rejoinButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/rejon.png"))));
+            rejoinButton.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/rejon.png")));
             rejoinButton.setEnabled(false);
         }
 
         // Nút Continue
         if ((currentPage + 1) * ROWS_PER_PAGE < rankingData.size()) {
-            continueButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/continue1.png"))));
+            continueButton.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/continue1.png")));
             continueButton.setEnabled(true);
         } else {
-            continueButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/continue.png"))));
+            continueButton.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/continue.png")));
             continueButton.setEnabled(false);
         }
     }
