@@ -98,7 +98,7 @@ public class PlayGameWithPC extends JFrame {
         opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         opponentCards.setBounds(210, 81 - 65, 650, 261);
         opponentCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài đối thủ
             Color bgColor = new Color(0x61ADA8); // Màu xanh lá ban đầu
             Color hoverColor = new Color(0x81CFC8); // Màu xanh lá khi hover
@@ -111,7 +111,7 @@ public class PlayGameWithPC extends JFrame {
         myCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         myCards.setBounds(673, 682 - 65, 650, 261);
         myCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài người chơi
             Color bgColor = new Color(0x3C77D0); // Màu xanh dương ban đầu
             Color hoverColor = new Color(0x5C99F0); // Màu xanh dương khi hover
@@ -124,7 +124,7 @@ public class PlayGameWithPC extends JFrame {
         sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         sharedCards.setBounds(98, 373 - 65, 1313, 261);
         sharedCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 26; i++) {
             RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu ứng hover
             sharedCards.add(card);
         }
