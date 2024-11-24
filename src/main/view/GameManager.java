@@ -1,4 +1,4 @@
-package view;
+package main.view;
 
 import java.awt.Color;
 import java.util.ArrayList;

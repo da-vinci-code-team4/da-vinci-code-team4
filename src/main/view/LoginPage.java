@@ -1,5 +1,4 @@
-package view;
-
+package main.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,7 +26,7 @@ public class LoginPage extends JPanel {
         setBackground(Color.WHITE); // Màu nền của trang LoginPage
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("../resources/img/background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         background.setOpaque(false); // Đảm bảo JLabel không opaque để hỗ trợ độ trong suốt

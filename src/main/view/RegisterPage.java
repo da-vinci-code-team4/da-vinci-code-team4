@@ -1,4 +1,4 @@
-package view;
+package main.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +28,7 @@ public class RegisterPage extends JPanel {
         setBackground(Color.WHITE); // Màu nền của trang RegisterPage
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("../resources/img/background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
@@ -118,7 +118,7 @@ public class RegisterPage extends JPanel {
         rectanglePanel.add(loginButton);
 
         // --------------------- Nút Back ---------------------
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
+        JButton backButton = new JButton(new ImageIcon(getClass().getResource("../resources/img/back.png")));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);

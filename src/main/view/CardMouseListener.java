@@ -1,8 +1,7 @@
-package view;
+package main.view;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import org.example.RoundedPanel;
 
 public class CardMouseListener extends MouseAdapter {
     private PlayGameWithPC parentFrame;

@@ -1,4 +1,4 @@
-package view;
+package main.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +13,13 @@ public class PlayPage extends JPanel {
         setLayout(null);
 
         // Cài đặt background
-        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/background.png")));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("../resources/img/background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
 
         // Nút Back để quay lại MyPage
-        JButton backButton = createButton("/img/back.png", "Back Button");
+        JButton backButton = createButton("../resources/img/back.png", "Back Button");
         backButton.setBounds(1384, 30, 128, 86);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
@@ -46,18 +46,18 @@ public class PlayPage extends JPanel {
         int startY = 300;
 
         // Button PC
-        JButton pcButton = createButton("/img/PC.png", "PC Button Clicked");
+        JButton pcButton = createButton("../resources/img/PC.png", "PC Button Clicked");
         pcButton.setBounds(startX, startY, buttonWidth, buttonHeight);
         pcButton.addActionListener(e -> cardLayout.show(mainPanel, "PlayGameWithPC")); // Chuyển sang PlayGameWithPC
         background.add(pcButton);
 
         // Button My Friend
-        JButton myFriendButton = createButton("/img/MyFriend.png", "My Friend Button Clicked");
+        JButton myFriendButton = createButton("../resources/img/MyFriend.png", "My Friend Button Clicked");
         myFriendButton.setBounds(startX + buttonWidth + buttonSpacing, startY, buttonWidth, buttonHeight);
         background.add(myFriendButton);
 
         // Button Random
-        JButton randomButton = createButton("/img/Random.png", "Random Button Clicked");
+        JButton randomButton = createButton("../resources/img/Random.png", "Random Button Clicked");
         randomButton.setBounds(startX + 2 * (buttonWidth + buttonSpacing), startY, buttonWidth, buttonHeight);
         background.add(randomButton);
 

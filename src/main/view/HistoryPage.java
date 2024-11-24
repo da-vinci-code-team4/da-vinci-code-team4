@@ -1,4 +1,4 @@
-package view;
+package main.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class HistoryPage extends JPanel {
         add(label);
 
         // Nút Back
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/back.png")));
+        JButton backButton = new JButton(new ImageIcon(getClass().getResource("../resources/img/back.png")));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
