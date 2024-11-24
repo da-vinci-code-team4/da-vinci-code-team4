@@ -23,13 +23,7 @@ public class TileManager {
         this.secondPlayer = secondPlayer;
     }
 
-    /**
-     * 게임 시작 전 초기화를 하는 메서드다.
-     *
-     * @param firstPlayer  선공 플레이어를 입력 받는다
-     * @param secondPlayer 후공 플레이어를 입력 받는다
-     */
-    public void initGame(Player firstPlayer, Player secondPlayer) {
+    public void initGame() {
         generateTile();
         shuffle();
         distributeTile();

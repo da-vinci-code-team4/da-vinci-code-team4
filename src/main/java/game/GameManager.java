@@ -51,7 +51,7 @@ public class GameManager {
      * 게임 진행을 관리하는 메서드다.
      * */
     public void startGame() {
-        tileManager.initGame(firstPlayer, secondPlayer);
+        tileManager.initGame();
         firstPlayer.makeTileManager(tileManager);
         secondPlayer.makeTileManager(tileManager);
         while (!status.isAllTileOpen()) {
