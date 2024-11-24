@@ -95,4 +95,8 @@ public class TileManager {
     public boolean isEqual(Tile selectedOpponentTile, Tile guessedOpponentTile) {
         return false;
     }
+
+    public int getDeckSize(){
+        return deck.size();
+    }
 }
