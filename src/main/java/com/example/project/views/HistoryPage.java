@@ -48,12 +48,13 @@ public class HistoryPage extends JPanel {
 
         // Khởi tạo Rejoin Button (Nút Trở Về Trang Trước)
         rejoinButton = new JButton();
-        BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejoin4.png");
-        BufferedImage rejoinImg = loadImage("/img/ViewImage/rejoin3.png");
+        BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon1.png");
+        BufferedImage rejoinImg = loadImage("/img/ViewImage/rejon.png");
         if (rejoin1Img != null) {
             rejoinButton.setIcon(new ImageIcon(rejoin1Img));
         } else {
-            System.err.println("rejoin1.png không được tìm thấy!");
+            System.err.println("rejoin4.png không được tìm thấy!");
+            rejoinButton.setText("Rejoin"); // Thêm văn bản thay thế
         }
         rejoinButton.setBounds(33, 450, 80, 120);
         rejoinButton.setBorderPainted(false);
@@ -76,6 +77,7 @@ public class HistoryPage extends JPanel {
             continueButton.setIcon(new ImageIcon(continue1Img));
         } else {
             System.err.println("continue1.png không được tìm thấy!");
+            continueButton.setText("Continue"); // Thêm văn bản thay thế
         }
         continueButton.setBounds(1396, 450, 80, 120);
         continueButton.setBorderPainted(false);
@@ -103,6 +105,7 @@ public class HistoryPage extends JPanel {
             backButton.setIcon(new ImageIcon(backImg));
         } else {
             System.err.println("back.png không được tìm thấy!");
+            backButton.setText("Back"); // Thêm văn bản thay thế nếu hình ảnh không tìm thấy
         }
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
@@ -262,20 +265,20 @@ public class HistoryPage extends JPanel {
     private void updateNavigationButtons() {
         // Cập nhật Rejoin Button (Trở về Trang Trước)
         if (currentPage > 0) {
-            BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon4.png");
+            BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon1.png"); // Đã sửa lỗi chính tả
             if (rejoin1Img != null) {
                 rejoinButton.setIcon(new ImageIcon(rejoin1Img));
                 rejoinButton.setEnabled(true);
             } else {
-                System.err.println("rejoin1.png không được tìm thấy!");
+                System.err.println("rejoin4.png không được tìm thấy!");
                 rejoinButton.setEnabled(false);
             }
         } else {
-            BufferedImage rejoinImg = loadImage("/img/ViewImage/rejoin3.png");
+            BufferedImage rejoinImg = loadImage("/img/ViewImage/rejon.png");
             if (rejoinImg != null) {
                 rejoinButton.setIcon(new ImageIcon(rejoinImg));
             } else {
-                System.err.println("rejoin.png không được tìm thấy!");
+                System.err.println("rejoin3.png không được tìm thấy!");
             }
             rejoinButton.setEnabled(false);
         }
