@@ -17,6 +17,6 @@ public class CardMouseListener extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         // Gọi phương thức addCardToMyCards trong PlayGameWithPC
-        parentFrame.addCardToMyCards(card, imageName);
+        parentFrame.addTileToMyTiles(card, imageName);
     }
 }

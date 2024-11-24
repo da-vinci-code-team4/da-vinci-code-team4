@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controller;
 import view.RoundedPanel;
 
 import javax.swing.*;
@@ -14,6 +15,8 @@ public class PlayGameWithPC extends JFrame {
 
     // Biến thành viên cho khu vực bài của người chơi
     private JPanel myCards;
+    private JPanel sharedCards;
+    private JPanel opponentCards;
 
     public PlayGameWithPC() {
         // Thiết lập JFrame
@@ -92,7 +95,7 @@ public class PlayGameWithPC extends JFrame {
         mainPanel.add(meText);
 
         // Khu vực bài đối thủ
-        JPanel opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         opponentCards.setBounds(210, 81 - 65, 650, 261);
         opponentCards.setBackground(Color.WHITE);
         for (int i = 0; i < 12; i++) {
@@ -118,7 +121,7 @@ public class PlayGameWithPC extends JFrame {
         mainPanel.add(myCards);
 
         // Khu vực bài chung
-        JPanel sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         sharedCards.setBounds(98, 373 - 65, 1313, 261);
         sharedCards.setBackground(Color.WHITE);
         for (int i = 0; i < 24; i++) {
@@ -150,6 +153,8 @@ public class PlayGameWithPC extends JFrame {
         chatPanel.add(chatIcon);
 
         setVisible(true);
+
+        updateTiles();
     }
 
     /**
@@ -187,19 +192,53 @@ public class PlayGameWithPC extends JFrame {
      * @param card      Thẻ bài được thêm (RoundedPanel)
      * @param imageName Tên tệp hình ảnh của thẻ bài
      */
-    public void addCardToMyCards(RoundedPanel card, String imageName) {
+    public void addTileToMyTiles(RoundedPanel card, String imageName) {
         // Tạo một JLabel với hình ảnh của thẻ bài
-        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/tiles/" + imageName))));
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/tiles/" + imageName + ".png"))));
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setVerticalAlignment(SwingConstants.CENTER);
 
         // Thêm JLabel vào RoundedPanel
         card.add(cardLabel);
-
+        card.revalidate();
+        card.repaint();
         // Cập nhật khu vực bài của người chơi
-        myCards.add(card);
+
         myCards.revalidate();
         myCards.repaint();
+    }
+
+    public void addTileToOpponentTiles(RoundedPanel card, String imageName) {
+        // Tạo một JLabel với hình ảnh của thẻ bài
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/tiles/" + imageName + ".png"))));
+        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Thêm JLabel vào RoundedPanel
+        card.add(cardLabel);
+        card.revalidate();
+        card.repaint();
+        // Cập nhật khu vực bài của người chơi
+
+        opponentCards.revalidate();
+        opponentCards.repaint();
+    }
+
+    public void addTileToTiles(RoundedPanel card, String imageName) {
+        // Tạo một JLabel với hình ảnh của thẻ bài
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/tiles/" + imageName + ".png"))));
+        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Thêm JLabel vào RoundedPanel
+        card.add(cardLabel);
+        card.revalidate();
+        card.repaint();
+
+        // Cập nhật khu vực bài của người chơi
+
+        sharedCards.revalidate();
+        sharedCards.repaint();
     }
 
     /**
@@ -210,6 +249,20 @@ public class PlayGameWithPC extends JFrame {
         int secs = seconds % 60;
         String timeString = String.format("%02d : %02d", minutes, secs);
         timeLabel.setText(timeString);
+    }
+
+    public void updateTiles() {
+        for(int i = 0; i < Controller.getTileManagerSize(); i++) {
+            addTileToTiles((RoundedPanel)sharedCards.getComponent(i), Controller.placeTileManagerTiles(i));
+        }
+
+        for(int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
+            addTileToOpponentTiles((RoundedPanel)opponentCards.getComponent(i), Controller.placeSecondPlayerTiles(i));
+        }
+
+        for(int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
+            addTileToMyTiles((RoundedPanel)myCards.getComponent(i), Controller.placeFirstPlayerTiles(i));
+        }
     }
 
 }

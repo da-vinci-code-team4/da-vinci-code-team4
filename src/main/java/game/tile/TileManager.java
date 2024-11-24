@@ -99,4 +99,8 @@ public class TileManager {
     public int getDeckSize(){
         return deck.size();
     }
+
+    public Tile getTile(int number){
+        return deck.get(number);
+    }
 }

@@ -145,4 +145,9 @@ abstract public class Player {
     public Tile getGuessedTile() {
         return null;
     }
+
+    public Tile getTile(int number){
+        List<Tile> list = new ArrayList<>(myTileDeck);
+        return list.get(number);
+    }
 }

@@ -69,7 +69,7 @@ public class RoundedPanel extends JPanel {
      */
     public void setBackgroundImage(String imagePath) {
         try {
-            backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/img/Card/" + imagePath)));
+            backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("img/tiles/" + imagePath)));
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
             backgroundImage = null;
@@ -98,7 +98,7 @@ public class RoundedPanel extends JPanel {
         // Vẽ nền bo tròn
         if (backgroundImage != null) {
             // Vẽ hình ảnh sao cho vừa với panel
-            graphics.drawImage(backgroundImage, 0, 0, width, height, this);
+            graphics.drawImage(backgroundImage, 10, 10, getWidth(), getHeight(), this);
         } else {
             graphics.setColor(getBackground());
             graphics.fillRoundRect(0, 0, width - 1, height - 1, arcs.width, arcs.height);
