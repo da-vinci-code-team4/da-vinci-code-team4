@@ -119,6 +119,10 @@ abstract public class Player {
         return prevTile.getWeight() + 4;
     }
 
+    public int getDeckSize() {
+        return myTileDeck.size();
+    }
+
     //상대 타일 맞추기
     abstract public Tile getSelectedTile();
 
