@@ -26,8 +26,8 @@ bin/
 .vscode/
 
 # OS 관련 파일
-.DS_Store            
-Thumbs.db            
+.DS_Store 
+Thumbs.db           
 
 # 로그 파일
 *.log
