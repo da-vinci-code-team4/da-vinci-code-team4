@@ -157,8 +157,26 @@ public class PlayGameWithPC extends JPanel {
         chatPanel.add(chatIcon);
 
 
-        Controller.startGame();
-        updateTiles();
+//        Controller.startGame();
+//        updateTiles();
+
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // 시간 걸리는 작업을 백그라운드 스레드에서 실행
+                System.out.println("게임 시작...");
+                Controller.startGame(); // 시간이 오래 걸리는 작업
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                // 게임 시작 후, UI 업데이트는 EDT에서 실행
+                System.out.println("타일 업데이트...");
+                updateTiles(); // UI 갱신 작업
+            }
+        };
+        worker.execute();
     }
 
     /**
