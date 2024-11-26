@@ -52,8 +52,9 @@ public class FileController {
         }
 
         //로그인한 유저도 랭킹에 추가
-        String[] parts = currentUser.getRecord().split(" - ");
-        int wins = Integer.parseInt(parts[0].replaceAll("[^0-9]", "")); // 숫자만 남기기
+        String[] parts = currentUser.getRecord().split("-"); // "99w"와 "122l"로 나누기
+        // "w"와 "l"을 제거하고 숫자만 추출
+        int wins = Integer.parseInt(parts[0].replaceAll("[^0-9]", "")); // "99w"에서 숫자만 남기기
         int losses = Integer.parseInt(parts[1].replaceAll("[^0-9]", "")); // 숫자만 남기기
         String userLine = (currentUser.getUsername() + " " +currentUser.getScore()+" "+ wins+ " "+ losses + " " + currentUser.getRecord());
         ranking.add(userLine.split("\\s+"));
