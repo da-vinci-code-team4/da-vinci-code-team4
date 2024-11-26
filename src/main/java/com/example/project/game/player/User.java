@@ -11,8 +11,8 @@ import com.example.project.game.tile.TileColor;
 
 public class User extends Player {
 
-    public User(String name, int rank, int score) {
-        super(name, rank, score);
+    public User(String name, int rank, int score, int winCnt, int lossCnt) {
+        super(name, rank, score, winCnt, lossCnt);
     }
 
     @Override
