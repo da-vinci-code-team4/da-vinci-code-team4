@@ -28,7 +28,14 @@ public class FileController {
     }
 
     public static void readRankingData() {
-
+        try (BufferedReader br = new BufferedReader(new FileReader(rankingPath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                ranking.add(line.split("\\s+")); // Tách dữ liệu theo khoảng trắng
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
