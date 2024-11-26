@@ -1,5 +1,7 @@
 package com.example.project.controller;
 
+import com.example.project.models.Session;
+import com.example.project.models.User;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -16,6 +18,12 @@ public class FileController {
     private static List<String[]> history = new ArrayList<>();
     private static List<String[]> ranking = new ArrayList<>();
 
+    private static User currentUser;
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
     public static void readHistoryData() {
         try (BufferedReader br = new BufferedReader(new FileReader(historyPath))) {
             String line;
@@ -31,11 +39,18 @@ public class FileController {
         try (BufferedReader br = new BufferedReader(new FileReader(rankingPath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                ranking.add(line.split("\\s+")); // Tách dữ liệu theo khoảng trắng
+                ranking.add(line.split("\\s+"));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //로그인한 유저도 랭킹에 추가
+        String[] parts = currentUser.getRecord().split(" - ");
+        int wins = Integer.parseInt(parts[0].replaceAll("[^0-9]", "")); // 숫자만 남기기
+        int losses = Integer.parseInt(parts[1].replaceAll("[^0-9]", "")); // 숫자만 남기기
+        String userLine = (currentUser.getUsername() + " " +currentUser.getScore()+" "+ wins+ " "+ losses + " " + currentUser.getRecord());
+        ranking.add(userLine.split("\\s+"));
     }
 
 
@@ -59,7 +74,8 @@ public class FileController {
         }
     }
 
-    public static void updateRankingData() {
+    public static void updateRankingData(int score) {
+        currentUser.setScore(currentUser.getScore()+score);
 
     }
 
