@@ -1,6 +1,7 @@
 package com.example.project.views;
 
 import com.example.project.controller.Controller;
+import com.example.project.main.SwingMain;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -17,9 +18,9 @@ public class PlayGameWithPC extends JPanel {
     private int seconds = 0;
 
     // Biến thành viên cho khu vực bài của người chơi
-    private JPanel myCards;
-    private JPanel sharedCards;
-    private JPanel opponentCards;
+    private static JPanel myCards;
+    private static JPanel sharedCards;
+    private static JPanel computerCards;
 
     public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
         this.mainPanel = mainPanel;
@@ -97,17 +98,17 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(meText);
 
         // Khu vực bài đối thủ
-        opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
-        opponentCards.setBounds(210, 81 - 65, 650, 261);
-        opponentCards.setBackground(Color.WHITE);
+        computerCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        computerCards.setBounds(210, 81 - 65, 650, 261);
+        computerCards.setBackground(Color.WHITE);
         for (int i = 0; i < 13; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài đối thủ
             Color bgColor = new Color(0x61ADA8); // Màu xanh lá ban đầu
             Color hoverColor = new Color(0x81CFC8); // Màu xanh lá khi hover
             RoundedPanel card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20);
-            opponentCards.add(card);
+            computerCards.add(card);
         }
-        mainContent.add(opponentCards);
+        mainContent.add(computerCards);
 
         // Khu vực bài của người chơi
         myCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
@@ -129,6 +130,7 @@ public class PlayGameWithPC extends JPanel {
         for (int i = 0; i < 26; i++) {
             RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu ứng hover
             sharedCards.add(card);
+//            card.addMouseListener(new SwingPopupInput(card)); //각 타일에 마우스 클릭 이벤트 add.
         }
         mainContent.add(sharedCards);
 
@@ -153,6 +155,8 @@ public class PlayGameWithPC extends JPanel {
         JLabel chatIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/chat_icon.png")));
         chatIcon.setBounds(512, 210 - 10, 50, 50);
         chatPanel.add(chatIcon);
+
+
         Controller.startGame();
         updateTiles();
     }
@@ -221,8 +225,8 @@ public class PlayGameWithPC extends JPanel {
         card.repaint();
         // Cập nhật khu vực bài của người chơi
 
-        opponentCards.revalidate();
-        opponentCards.repaint();
+        computerCards.revalidate();
+        computerCards.repaint();
     }
 
     public void addTileToTiles(RoundedPanel card, String imageName) {
@@ -258,11 +262,15 @@ public class PlayGameWithPC extends JPanel {
         }
 
         for(int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
-            addTileToOpponentTiles((RoundedPanel)opponentCards.getComponent(i), Controller.placeSecondPlayerTiles(i));
+            addTileToOpponentTiles((RoundedPanel) computerCards.getComponent(i), Controller.placeSecondPlayerTiles(i));
         }
 
         for(int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
             addTileToMyTiles((RoundedPanel)myCards.getComponent(i), Controller.placeFirstPlayerTiles(i));
         }
+    }
+
+    public static JPanel getComputerCards() {
+        return computerCards;
     }
 }

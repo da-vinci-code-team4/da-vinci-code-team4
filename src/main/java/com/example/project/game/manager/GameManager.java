@@ -5,10 +5,13 @@ import static com.example.project.game.status.TurnResult.MATCH;
 import static com.example.project.game.tile.TileType.JOKER;
 
 import com.example.project.game.player.Player;
+import com.example.project.game.popup.SelectTile;
 import com.example.project.game.save.Recorder;
 import com.example.project.game.status.Status;
 import com.example.project.game.tile.NumberTile;
 import com.example.project.game.tile.Tile;
+import com.example.project.main.SwingMain;
+
 import java.util.Optional;
 
 /**
@@ -28,7 +31,6 @@ public class GameManager {
     private final TileManager tileManager;
     private final Player firstPlayer; //선공
     private final Player secondPlayer; //후공
-    private final Recorder recorder = new Recorder(); //게임 기록
     private final Status status = new Status(); //턴 상황 기록
 
     private int turn = 0; //게임 턴 명시
@@ -49,16 +51,13 @@ public class GameManager {
      * */
     public void startGame() {
         tileManager.initGame();
-        firstPlayer.makeTileManager(tileManager);
-        secondPlayer.makeTileManager(tileManager);
-        while (!status.isAllTileOpen()) {
-            while (!status.isAllTileOpen() && playGame(firstPlayer)) {
-//                recorder.save(Record.of(++turn, firstPlayer, status)); //status는 나중에 스냅샷으로 깊은 복사 저장
-            }
-
-            while (!status.isAllTileOpen() && playGame(secondPlayer)) {
-//                recorder.save(Record.of(++turn, secondPlayer, status));
-            }
+        System.out.println("init end");
+        firstPlayer.makeTileManager(tileManager); //user
+        secondPlayer.makeTileManager(tileManager); //pc
+        System.out.println("호출");
+        for (int turn = 1; turn <= 26; turn++) {
+            playGame(firstPlayer);
+//            playGame(secondPlayer);
         }
     }
 
@@ -70,35 +69,19 @@ public class GameManager {
      * @param player 현재 턴을 시작하는 플레이어다
      * */
     private boolean playGame(Player player) {
-        Optional<Tile> drawTile = player.drawTile(status);
+//        Optional<Tile> drawTile = player.drawTile(status);
 
-        Tile selectedTile = player.getSelectedTile();
-        status.saveSelectTile(selectedTile.clone());
+        SelectTile selectedTile = player.getSelectedTile(); //swing으로 팝업 띄우기
 
-        Tile guessedTile = player.getGuessedTile();
-        status.saveGuessTile(guessedTile.clone());
+        Tile tile = selectedTile.getTile();
+        String number = selectedTile.getInputNumber();
 
-        //타입이 다르면 턴 종료
-        if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
-            saveFail(drawTile, player);
-            return false;
+        if (tile.getTileType().equals(JOKER) && number.equals("조커")) {
+            return true;
         }
-
-        //둘다 조커 타입
-        if (selectedTile.isTileType(JOKER)) {
-            saveMatch(selectedTile, player);
-            return player.chooseToKeepTurn();
+        if (((NumberTile) tile).getNumber() == Integer.parseInt(number)) {
+            return true;
         }
-
-        //숫자 타입(숫자까지 맞아야함)
-        int selectedTileNumber = getTileNumber(selectedTile);
-        int guessedTileNumber = getTileNumber(guessedTile);
-        if (selectedTileNumber == guessedTileNumber) {
-            saveMatch(selectedTile, player);
-            return player.chooseToKeepTurn();
-        }
-
-        saveFail(drawTile, player);
         return false;
     }
 

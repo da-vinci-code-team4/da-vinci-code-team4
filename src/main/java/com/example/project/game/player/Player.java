@@ -2,6 +2,7 @@ package com.example.project.game.player;
 
 import static com.example.project.game.tile.TileType.JOKER;
 
+import com.example.project.game.popup.SelectTile;
 import com.example.project.game.status.Status;
 import com.example.project.game.tile.Tile;
 import com.example.project.game.manager.TileManager;
@@ -53,7 +54,7 @@ abstract public class Player {
         List<Tile> jokerTile = new ArrayList<>();
         for (Tile tile : tiles) {
             if (tile.isTileType(JOKER)) { //조커 타일이면 숫자 타일 먼저 배치
-                jokerTile.add(tile);
+//                jokerTile.add(tile);
                 continue;
             }
             myTileDeck.add(tile);
@@ -123,7 +124,7 @@ abstract public class Player {
     }
 
     //상대 타일 맞추기
-    abstract public Tile getSelectedTile();
+    abstract public SelectTile getSelectedTile();
 
     /**
      * 조커 타일의 위치를 사용자가 선택한다.

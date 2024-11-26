@@ -1,5 +1,6 @@
 package com.example.project.game.player;
 
+import com.example.project.game.popup.SelectTile;
 import com.example.project.game.tile.Tile;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ public class Computer extends Player {
     }
 
     @Override
-    public Tile getSelectedTile() {
+    public SelectTile getSelectedTile() {
         return null;
     }
 

@@ -7,6 +7,7 @@ import com.example.project.game.tile.TileColor;
 import com.example.project.game.tile.TileType;
 import com.example.project.game.manager.GameManager;
 import com.example.project.game.manager.TileManager;
+import com.example.project.main.SwingMain;
 
 public class Controller {
     private static TileManager tileManager;
@@ -21,7 +22,7 @@ public class Controller {
         tileManager = new TileManager(firstPlayer, secondPlayer);
 
         GameManager game = new GameManager(tileManager, firstPlayer, secondPlayer);
-
+        System.out.println("before call startGame");
         game.startGame();
     }
 
@@ -75,5 +76,9 @@ public class Controller {
 
     public static int getTileManagerSize() {
         return tileManager.getDeckSize();
+    }
+
+    public static Tile getSecondPlayerTileAt(int tileIndex) {
+        return secondPlayer.getTile(tileIndex + 1);
     }
 }

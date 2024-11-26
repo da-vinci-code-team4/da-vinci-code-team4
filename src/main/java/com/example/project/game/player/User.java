@@ -1,13 +1,14 @@
 package com.example.project.game.player;
 
 
-import static com.example.project.game.tile.TileColor.BLACK;
-import static com.example.project.game.tile.TileColor.WHITE;
-
-import com.example.project.game.tile.JokerTile;
-import com.example.project.game.tile.NumberTile;
+import com.example.project.controller.Controller;
+import com.example.project.game.popup.SelectTile;
+import com.example.project.game.popup.SwingPopUpInput;
 import com.example.project.game.tile.Tile;
-import com.example.project.game.tile.TileColor;
+import com.example.project.utils.RoundedPanel;
+import com.example.project.views.PlayGameWithPC;
+
+import java.awt.*;
 
 public class User extends Player {
 
@@ -16,28 +17,42 @@ public class User extends Player {
     }
 
     @Override
-    public Tile getSelectedTile() {
-        TileColor color;
+    public SelectTile getSelectedTile() {
+        Component[] components = PlayGameWithPC.getComputerCards().getComponents();
+        addPopUpListener(components);
 
-        String colorInp = scanner.next();
-        String typeInp = scanner.next();
-        int typeNum = scanner.nextInt();
-
-        if (colorInp.equals("Black")){
-            color = BLACK;
-        }
-        else {
-            color = WHITE;
+        System.out.println("상대방 카드를 클릭하세요.");
+        String inputNumber = "";
+        while (inputNumber.equals("")) {
+            inputNumber = SwingPopUpInput.getInputNumber(); //예상 숫자 or 조커
         }
 
-        if(typeInp.equals("조커")) {
-            return JokerTile.of(color);
-        }
-        if(typeInp.equals("숫자")) {
-            return NumberTile.of(color, typeNum);
-        }
+        int tileIndex = findTileIndex(SwingPopUpInput.getClickedTile(), components);
+        Tile tile = Controller.getSecondPlayerTileAt(tileIndex);
 
-        return null;
+        removePopUpListener(components);
+        return new SelectTile(tile, inputNumber);
+    }
+
+    private void addPopUpListener(Component[] components) {
+        for (Component component : components) {
+            component.addMouseListener(new SwingPopUpInput((RoundedPanel) component));
+        }
+    }
+
+    private int findTileIndex(Component clickedTile, Component[] components) {
+        for (int i = 0; i < components.length; i++) {
+            if (components[i].equals(clickedTile)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void removePopUpListener(Component[] components) {
+        for (Component component : components) {
+            component.removeMouseListener(new SwingPopUpInput((RoundedPanel) component));
+        }
     }
 
     @Override
@@ -55,4 +70,5 @@ public class User extends Player {
         }
         return false;
     }
+
 }

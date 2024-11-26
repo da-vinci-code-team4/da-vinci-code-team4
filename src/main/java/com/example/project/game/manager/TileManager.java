@@ -28,9 +28,13 @@ public class TileManager {
     }
 
     public void initGame() {
+        System.out.println("init");
         generateTile();
+        System.out.println("gene end");
         shuffle();
+        System.out.println("shu end");
         distributeTile();
+        System.out.println("dis end");
     }
 
     /**

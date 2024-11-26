@@ -55,6 +55,9 @@ public class PlayPage extends JPanel {
             PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout);
             mainPanel.add(playGameWithPC, "PlayGameWithPC");
             cardLayout.show(mainPanel, "PlayGameWithPC");
+            mainPanel.revalidate();
+            mainPanel.repaint();
+
         });
         background.add(pcButton);
 
