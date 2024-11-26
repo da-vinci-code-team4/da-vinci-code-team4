@@ -50,6 +50,13 @@ public class FileController {
         } catch (IOException e) {
             System.out.println("파일 쓰기 오류: " + e.getMessage());
         }
+
+        if(result.equals("Defeat")){
+            Controller.updateUserScore(-score);
+        }
+        else{
+            Controller.updateUserScore(score);
+        }
     }
 
     public static void updateRankingData() {

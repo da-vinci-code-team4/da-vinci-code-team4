@@ -155,4 +155,8 @@ abstract public class Player {
         List<Tile> list = new ArrayList<>(myTileDeck);
         return list.get(number);
     }
+
+    public void updateScore(int number){
+        this.score = score + number;
+    }
 }
