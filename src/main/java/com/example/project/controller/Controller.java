@@ -34,6 +34,7 @@ public class Controller {
     }
 
     public static String placeTileManagerTiles(int number){
+        //System.out.println(makeFileName(tileManager.getTile(number),1));
         return makeFileName(tileManager.getTile(number),1);
     }
 

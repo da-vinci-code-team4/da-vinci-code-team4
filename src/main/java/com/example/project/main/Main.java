@@ -5,6 +5,10 @@ import com.example.project.models.User;
 import com.example.project.views.LoginPage;
 import com.example.project.views.RegisterPage;
 import com.example.project.views.MyPage;
+/**TO DEBUG*/
+import com.example.project.views.PlayGameWithPC;
+import com.example.project.views.PlayPage;
+/***/
 import com.example.project.views.ProfilePage;
 import com.example.project.views.CorrectionPage; // Thêm import CorrectionPage
 import com.example.project.ui.SplashScreenPanel; // Thêm import SplashScreenPanel
@@ -46,9 +50,17 @@ public class Main {
         // Thêm các trang vào mainPanel
         // mainPanel.add(registerPage, "RegisterPage");
         // mainPanel.add(loginPage, "LoginPage");
-        mainPanel.add(myPage, "MyPage");
-        mainPanel.add(profilePage, "ProfilePage"); // Thêm ProfilePage vào mainPanel
-        mainPanel.add(correctionPage, "CorrectionPage"); // Thêm CorrectionPage vào mainPanel
+        // mainPanel.add(myPage, "MyPage");
+        // mainPanel.add(profilePage, "ProfilePage"); // Thêm ProfilePage vào mainPanel
+        // mainPanel.add(correctionPage, "CorrectionPage"); // Thêm CorrectionPage vào mainPanel
+
+
+        /**
+         * TO DEBUG
+         */
+        PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout);
+        mainPanel.add(playGameWithPC, "PlayGameWithPC");
+        cardLayout.show(mainPanel, "PlayGameWithPC");
 
         // Tạo SplashScreenPanel
         SplashScreenPanel splashPanel = new SplashScreenPanel("/img/ViewImage/Background.png");

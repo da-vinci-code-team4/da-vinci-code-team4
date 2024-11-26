@@ -40,6 +40,7 @@ public class Main {
     void run() {
         SwingMain myPage = new SwingMain();
         myPage.main();
+        
     }
 
 }
