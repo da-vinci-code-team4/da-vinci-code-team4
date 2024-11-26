@@ -100,19 +100,13 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(meText);
 
         // 상대방 카드 영역
-        createOppentCards(mainContent, null);
+        opponentCards = createPlayerCards(opponentCards, mainContent, null);
+        opponentCards.setBounds(210, 81 - 65, 650, 261);
+        mainContent.add(opponentCards);
 
         // 플레이어 카드 영역
-        myCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        myCards = createPlayerCards(myCards, mainContent, null);
         myCards.setBounds(673, 682 - 65, 650, 261);
-        myCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 13; i++) {
-            // 플레이어 카드의 기본 색상과 호버 색상
-            Color bgColor = new Color(0x3C77D0); // 기본 파란색
-            Color hoverColor = new Color(0x5C99F0); // 호버 시 파란색
-            RoundedPanel card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20, null);
-            myCards.add(card);
-        }
         mainContent.add(myCards);
 
         // 공유 카드 영역
@@ -179,18 +173,27 @@ public class PlayGameWithPC extends JPanel {
         return card;
     }
 
-    private void createOppentCards(JPanel mainContent, String[] sharedCardImages){
-        opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
-        opponentCards.setBounds(210, 81 - 65, 650, 261);
-        opponentCards.setBackground(Color.WHITE);
+    private JPanel createPlayerCards(JPanel playerCards,JPanel mainContent, String[] sharedCardImages){
+        playerCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        playerCards.setBounds(210, 81 - 65, 650, 261);
+        playerCards.setBackground(Color.WHITE);
         for (int i = 0; i < 13; i++) {
             // 상대방 카드의 기본 색상과 호버 색상
             Color bgColor = new Color(0x61ADA8); // 기본 초록색
             Color hoverColor = new Color(0x81CFC8); // 호버 시 초록색
-            RoundedPanel card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20, null);
-            opponentCards.add(card);
+            
+            RoundedPanel card;
+            if(sharedCardImages != null){
+                card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20, sharedCardImages[i]);
+            }
+            else{
+                card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20, null);
+            }
+            
+            playerCards.add(card);
         }
-        mainContent.add(opponentCards);
+        
+        return playerCards;
     }
 
     private void createSharedCards(JPanel mainContent, String[] sharedCardImages) {
@@ -226,78 +229,23 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(sharedCards);
     }
 
+    private void recreateOpponentCards(JPanel mainContent, String[] opponentCardImages) {
+        mainContent.remove(opponentCards);
+        opponentCards = createPlayerCards(opponentCards, mainContent, opponentCardImages);
+        opponentCards.setBounds(210, 81 - 65, 650, 261);
+        mainContent.add(opponentCards);
+    }
+
+    private void reCreateMyCards(JPanel mainContent, String[] myCardImages) {
+        mainContent.remove(myCards);
+        myCards = createPlayerCards(myCards, mainContent, myCardImages);
+        myCards.setBounds(673, 682 - 65, 650, 261);
+        mainContent.add(myCards);
+    }
+
     private void reCreateSharedCards(JPanel mainContent, String[] sharedCardImages) {
         mainContent.remove(sharedCards);
         createSharedCards(mainContent, sharedCardImages);
-    }
-
-    /**
-     * 플레이어 카드 영역에 카드를 추가하는 메서드.
-     *
-     * @param card      추가할 카드 (RoundedPanel)
-     * @param imageName 카드 이미지 파일 이름
-     */
-    public void addTileToMyTiles(RoundedPanel card, String imageName) {
-        // 카드 이미지가 있는 JLabel 생성
-        JLabel cardLabel = new JLabel(
-                new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
-        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
-
-        // JLabel을 RoundedPanel에 추가
-        card.add(cardLabel);
-        card.revalidate();
-        card.repaint();
-        // 플레이어 카드 영역 업데이트
-
-        myCards.revalidate();
-        myCards.repaint();
-    }
-
-    /**
-     * 상대방 카드 영역에 카드를 추가하는 메서드.
-     *
-     * @param card      추가할 카드 (RoundedPanel)
-     * @param imageName 카드 이미지 파일 이름
-     */
-    public void addTileToOpponentTiles(RoundedPanel card, String imageName) {
-        // 카드 이미지가 있는 JLabel 생성
-        JLabel cardLabel = new JLabel(
-                new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
-        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
-
-        // JLabel을 RoundedPanel에 추가
-        card.add(cardLabel);
-        card.revalidate();
-        card.repaint();
-        // 상대방 카드 영역 업데이트
-
-        opponentCards.revalidate();
-        opponentCards.repaint();
-    }
-
-    /**
-     * 공유 카드 영역에 카드를 추가하는 메서드.
-     *
-     * @param card      추가할 카드 (RoundedPanel)
-     * @param imageName 카드 이미지 파일 이름
-     */
-    public void addTileToTiles(RoundedPanel card, String imageName) {
-        // 카드 이미지가 있는 JLabel 생성
-        JLabel cardLabel = new JLabel(
-                new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
-        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
-
-        // JLabel을 RoundedPanel에 추가
-        card.add(cardLabel);
-        card.revalidate();
-        card.repaint();
-
-        // 공유 카드 영역 업데이트
-        sharedCards.revalidate();
-        sharedCards.repaint();
     }
 
     /**
@@ -317,23 +265,21 @@ public class PlayGameWithPC extends JPanel {
 
         String[] sharedCardImages = new String[26];
         for (int i = 0; i < Controller.getTileManagerSize(); i++) {
-            RoundedPanel tilePanel = (RoundedPanel) sharedCards.getComponent(i);
             sharedCardImages[i] = Controller.placeTileManagerTiles(i);
             // System.out.println("타일: "+Controller.placeTileManagerTiles(i));
         }
         reCreateSharedCards(mainContent, sharedCardImages);
 
-        
-
+        String[] myCardImages = new String[13];
         for (int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
-            RoundedPanel tilePanel = (RoundedPanel) opponentCards.getComponent(i);
-            // System.out.println("플레이어: "+Controller.placeSecondPlayerTiles(i));
-            addTileToOpponentTiles(tilePanel, Controller.placeSecondPlayerTiles(i));
+            myCardImages[i] = Controller.placeSecondPlayerTiles(i);
         }
+        recreateOpponentCards(mainContent, myCardImages);
 
+        String[] opponentCardImages = new String[13];
         for (int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
-            RoundedPanel tilePanel = (RoundedPanel) myCards.getComponent(i);
-            addTileToMyTiles(tilePanel, Controller.placeFirstPlayerTiles(i));
+            opponentCardImages[i] = Controller.placeFirstPlayerTiles(i);
         }
+        reCreateMyCards(mainContent, opponentCardImages);
     }
 }
