@@ -1,9 +1,6 @@
 package com.example.project.views;
 
-<<<<<<< HEAD
-=======
 import com.example.project.controller.Controller;
->>>>>>> ecb44c101ec4f31b6614e261c10f2ddda3c82943
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -130,7 +127,8 @@ public class PlayGameWithPC extends JPanel {
         sharedCards.setBounds(98, 373 - 65, 1313, 261);
         sharedCards.setBackground(Color.WHITE);
         for (int i = 0; i < 26; i++) {
-            RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu ứng hover
+            RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu
+                                                                                             // ứng hover
             sharedCards.add(card);
         }
         mainContent.add(sharedCards);
@@ -156,20 +154,18 @@ public class PlayGameWithPC extends JPanel {
         JLabel chatIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/chat_icon.png")));
         chatIcon.setBounds(512, 210 - 10, 50, 50);
         chatPanel.add(chatIcon);
-<<<<<<< HEAD
-=======
+
         Controller.startGame();
         updateTiles();
->>>>>>> ecb44c101ec4f31b6614e261c10f2ddda3c82943
     }
 
     /**
      * Phương thức tạo một RoundedPanel với hiệu ứng hover.
      *
-     * @param layout      Layout manager của RoundedPanel
-     * @param bgColor     Màu nền ban đầu
-     * @param hoverColor  Màu nền khi hover
-     * @param radius      Bán kính bo góc
+     * @param layout     Layout manager của RoundedPanel
+     * @param bgColor    Màu nền ban đầu
+     * @param hoverColor Màu nền khi hover
+     * @param radius     Bán kính bo góc
      * @return RoundedPanel đã được cấu hình
      */
     private RoundedPanel createHoverableCard(LayoutManager layout, Color bgColor, Color hoverColor, int radius) {
@@ -201,7 +197,8 @@ public class PlayGameWithPC extends JPanel {
 
     public void addTileToMyTiles(RoundedPanel card, String imageName) {
         // Tạo một JLabel với hình ảnh của thẻ bài
-        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
+        JLabel cardLabel = new JLabel(
+                new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setVerticalAlignment(SwingConstants.CENTER);
 
@@ -217,7 +214,8 @@ public class PlayGameWithPC extends JPanel {
 
     public void addTileToOpponentTiles(RoundedPanel card, String imageName) {
         // Tạo một JLabel với hình ảnh của thẻ bài
-        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
+        JLabel cardLabel = new JLabel(
+                new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setVerticalAlignment(SwingConstants.CENTER);
 
@@ -233,7 +231,8 @@ public class PlayGameWithPC extends JPanel {
 
     public void addTileToTiles(RoundedPanel card, String imageName) {
         // Tạo một JLabel với hình ảnh của thẻ bài
-        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
+        JLabel cardLabel = new JLabel(
+                new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setVerticalAlignment(SwingConstants.CENTER);
 
@@ -257,21 +256,29 @@ public class PlayGameWithPC extends JPanel {
         String timeString = String.format("%02d : %02d", minutes, secs);
         timeLabel.setText(timeString);
     }
-<<<<<<< HEAD
-=======
 
+    /**
+     * 타일을 표시하는 메서드
+     */
     public void updateTiles() {
-        for(int i = 0; i < Controller.getTileManagerSize(); i++) {
-            addTileToTiles((RoundedPanel)sharedCards.getComponent(i), Controller.placeTileManagerTiles(i));
+        Dimension newSize = new Dimension(100, 100); 
+
+        for (int i = 0; i < Controller.getTileManagerSize(); i++) {
+            RoundedPanel tilePanel = (RoundedPanel) sharedCards.getComponent(i);
+            tilePanel.setPreferredSize(newSize);
+            addTileToTiles(tilePanel, Controller.placeTileManagerTiles(i));
         }
 
-        for(int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
-            addTileToOpponentTiles((RoundedPanel)opponentCards.getComponent(i), Controller.placeSecondPlayerTiles(i));
+        for (int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
+            RoundedPanel tilePanel = (RoundedPanel) opponentCards.getComponent(i);
+            tilePanel.setPreferredSize(newSize);
+            addTileToOpponentTiles(tilePanel, Controller.placeSecondPlayerTiles(i));
         }
 
-        for(int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
-            addTileToMyTiles((RoundedPanel)myCards.getComponent(i), Controller.placeFirstPlayerTiles(i));
+        for (int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
+            RoundedPanel tilePanel = (RoundedPanel) myCards.getComponent(i);
+            tilePanel.setPreferredSize(newSize);
+            addTileToMyTiles(tilePanel, Controller.placeFirstPlayerTiles(i));
         }
     }
->>>>>>> ecb44c101ec4f31b6614e261c10f2ddda3c82943
 }

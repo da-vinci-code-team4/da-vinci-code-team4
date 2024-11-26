@@ -44,8 +44,8 @@ public class Main {
         CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // Thêm CorrectionPage
 
         // Thêm các trang vào mainPanel
-        mainPanel.add(registerPage, "RegisterPage");
-        mainPanel.add(loginPage, "LoginPage");
+        // mainPanel.add(registerPage, "RegisterPage");
+        // mainPanel.add(loginPage, "LoginPage");
         mainPanel.add(myPage, "MyPage");
         mainPanel.add(profilePage, "ProfilePage"); // Thêm ProfilePage vào mainPanel
         mainPanel.add(correctionPage, "CorrectionPage"); // Thêm CorrectionPage vào mainPanel
