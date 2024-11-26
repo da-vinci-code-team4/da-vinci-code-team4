@@ -11,7 +11,6 @@ public class JokerTile extends Tile {
      */
     private JokerTile(TileColor tileColor) {
         super(TileType.JOKER, tileColor);
-        defineTileWeightTo(-1*10);
     }
 
     /**

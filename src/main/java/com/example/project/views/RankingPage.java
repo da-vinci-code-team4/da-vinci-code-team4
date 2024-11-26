@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.controller.FileController;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -33,9 +34,9 @@ public class RankingPage extends JPanel {
         createHeader(background);
 
         // Đọc dữ liệu từ ranking.txt
-        rankingData = readRankingData("src/main/resources/texts/ranking.txt");
+        rankingData = FileController.getRanking();
 
-        // Sắp xếp rankingData theo "Core" từ cao xuống thấp
+        // 랭킹 내림차순 정렬 해주는 메소드
         rankingData.sort((a, b) -> {
             try {
                 int coreA = Integer.parseInt(a[1]); // Trường "Core" ở vị trí index 1
@@ -116,18 +117,18 @@ public class RankingPage extends JPanel {
         background.add(headerPanel);
     }
 
-    private List<String[]> readRankingData(String filePath) {
-        List<String[]> data = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                data.add(line.split("\\s+")); // Tách dữ liệu theo khoảng trắng
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return data;
-    }
+//    private List<String[]> readRankingData(String filePath) {
+//        List<String[]> data = new ArrayList<>();
+//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                data.add(line.split("\\s+")); // Tách dữ liệu theo khoảng trắng
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return data;
+//    }
 
     private void updateDataPanel() {
         dataPanel.removeAll();

@@ -10,6 +10,9 @@ out/
 target/
 bin/
 
+# Gradle wrapper files
+.gradle/
+
 # IDE 관련 파일
 # IntelliJ IDEA
 .idea/
@@ -26,8 +29,8 @@ bin/
 .vscode/
 
 # OS 관련 파일
-.DS_Store 
-Thumbs.db           
+.DS_Store            # macOS
+Thumbs.db            # Windows
 
 # 로그 파일
 *.log
@@ -45,5 +48,3 @@ lib/
 *.swo
 *.orig
 *.tmp
-
-.gradle/
