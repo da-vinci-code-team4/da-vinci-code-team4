@@ -1,5 +1,9 @@
 package com.example.project.views;
 
+<<<<<<< HEAD
+=======
+import com.example.project.controller.Controller;
+>>>>>>> ecb44c101ec4f31b6614e261c10f2ddda3c82943
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -17,6 +21,8 @@ public class PlayGameWithPC extends JPanel {
 
     // Biến thành viên cho khu vực bài của người chơi
     private JPanel myCards;
+    private JPanel sharedCards;
+    private JPanel opponentCards;
 
     public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
         this.mainPanel = mainPanel;
@@ -94,10 +100,10 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(meText);
 
         // Khu vực bài đối thủ
-        JPanel opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        opponentCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         opponentCards.setBounds(210, 81 - 65, 650, 261);
         opponentCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 13; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài đối thủ
             Color bgColor = new Color(0x61ADA8); // Màu xanh lá ban đầu
             Color hoverColor = new Color(0x81CFC8); // Màu xanh lá khi hover
@@ -110,7 +116,7 @@ public class PlayGameWithPC extends JPanel {
         myCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         myCards.setBounds(673, 682 - 65, 650, 261);
         myCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 13; i++) {
             // Màu ban đầu và màu khi hover cho thẻ bài người chơi
             Color bgColor = new Color(0x3C77D0); // Màu xanh dương ban đầu
             Color hoverColor = new Color(0x5C99F0); // Màu xanh dương khi hover
@@ -120,10 +126,10 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(myCards);
 
         // Khu vực bài chung
-        JPanel sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
+        sharedCards = new RoundedPanel(new GridLayout(2, 5, 10, 10), new Color(0xFFFFFF), 20);
         sharedCards.setBounds(98, 373 - 65, 1313, 261);
         sharedCards.setBackground(Color.WHITE);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 26; i++) {
             RoundedPanel card = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20); // Màu xám không có hiệu ứng hover
             sharedCards.add(card);
         }
@@ -150,6 +156,11 @@ public class PlayGameWithPC extends JPanel {
         JLabel chatIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/chat_icon.png")));
         chatIcon.setBounds(512, 210 - 10, 50, 50);
         chatPanel.add(chatIcon);
+<<<<<<< HEAD
+=======
+        Controller.startGame();
+        updateTiles();
+>>>>>>> ecb44c101ec4f31b6614e261c10f2ddda3c82943
     }
 
     /**
@@ -187,19 +198,54 @@ public class PlayGameWithPC extends JPanel {
      * @param card      Thẻ bài được thêm (RoundedPanel)
      * @param imageName Tên tệp hình ảnh của thẻ bài
      */
-    public void addCardToMyCards(RoundedPanel card, String imageName) {
+
+    public void addTileToMyTiles(RoundedPanel card, String imageName) {
         // Tạo một JLabel với hình ảnh của thẻ bài
-        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/" + imageName))));
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setVerticalAlignment(SwingConstants.CENTER);
 
         // Thêm JLabel vào RoundedPanel
         card.add(cardLabel);
-
+        card.revalidate();
+        card.repaint();
         // Cập nhật khu vực bài của người chơi
-        myCards.add(card);
+
         myCards.revalidate();
         myCards.repaint();
+    }
+
+    public void addTileToOpponentTiles(RoundedPanel card, String imageName) {
+        // Tạo một JLabel với hình ảnh của thẻ bài
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
+        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Thêm JLabel vào RoundedPanel
+        card.add(cardLabel);
+        card.revalidate();
+        card.repaint();
+        // Cập nhật khu vực bài của người chơi
+
+        opponentCards.revalidate();
+        opponentCards.repaint();
+    }
+
+    public void addTileToTiles(RoundedPanel card, String imageName) {
+        // Tạo một JLabel với hình ảnh của thẻ bài
+        JLabel cardLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Card/" + imageName + ".png"))));
+        cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        cardLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Thêm JLabel vào RoundedPanel
+        card.add(cardLabel);
+        card.revalidate();
+        card.repaint();
+
+        // Cập nhật khu vực bài của người chơi
+
+        sharedCards.revalidate();
+        sharedCards.repaint();
     }
 
     /**
@@ -211,4 +257,21 @@ public class PlayGameWithPC extends JPanel {
         String timeString = String.format("%02d : %02d", minutes, secs);
         timeLabel.setText(timeString);
     }
+<<<<<<< HEAD
+=======
+
+    public void updateTiles() {
+        for(int i = 0; i < Controller.getTileManagerSize(); i++) {
+            addTileToTiles((RoundedPanel)sharedCards.getComponent(i), Controller.placeTileManagerTiles(i));
+        }
+
+        for(int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
+            addTileToOpponentTiles((RoundedPanel)opponentCards.getComponent(i), Controller.placeSecondPlayerTiles(i));
+        }
+
+        for(int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
+            addTileToMyTiles((RoundedPanel)myCards.getComponent(i), Controller.placeFirstPlayerTiles(i));
+        }
+    }
+>>>>>>> ecb44c101ec4f31b6614e261c10f2ddda3c82943
 }
