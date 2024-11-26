@@ -9,6 +9,8 @@ import com.example.project.game.tile.JokerTile;
 import com.example.project.game.tile.NumberTile;
 import com.example.project.game.tile.Tile;
 import com.example.project.game.tile.TileColor;
+import com.example.project.game.tile.TileType;
+
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -87,13 +89,12 @@ public class TileManager {
      * 이후 나눠준 타일은 덱에서 삭제한다.
      */
     private void distributeTile() {
+        //컴퓨터에게 타일을 먼저 나눠준다.
+        //computer.giveTileToPlayerAtStart(deck.subList(0, NUMBER_OF_INIT_TILE));
+
         List<Tile> firstTile = deck.subList(0, NUMBER_OF_INIT_TILE);
         firstPlayer.giveTileToPlayerAtStart(firstTile);
         firstTile.clear();
-
-        List<Tile> secondTile = deck.subList(0, NUMBER_OF_INIT_TILE);
-        secondPlayer.giveTileToPlayerAtStart(secondTile);
-        secondTile.clear();
     }
 
     public boolean isEqual(Tile selectedOpponentTile, Tile guessedOpponentTile) {
@@ -102,6 +103,36 @@ public class TileManager {
 
     public int getDeckSize(){
         return deck.size();
+    }
+
+    public Tile getTile(String color,String number){
+        TileColor tileColor;
+        // for (Tile tile : deck) {
+        //     System.out.println("color : "+tile.getTileColor() + " number : "+tile.getWeight()+" Type : "+tile.getTileType());
+        // }
+
+            if(color.equals("WHITE")){
+                tileColor = TileColor.WHITE;
+            }
+            else{
+                tileColor = TileColor.BLACK;
+            }
+        // System.out.println("color : "+tileColor + " number : "+number);
+
+        if(number.equals("joker")){
+            return deck.stream()
+                    .filter(tile -> tile.getTileColor() == tileColor)
+                    .filter(tile -> tile.getTileType().equals(TileType.JOKER))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("해당하는 타일이 없습니다."));
+        }
+        else{
+            return deck.stream()
+                    .filter(tile -> tile.getTileColor() == tileColor)
+                    .filter(tile -> tile.getWeight() == Integer.parseInt(number)*10)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("해당하는 타일이 없습니다."));
+        }
     }
 
     public Tile getTile(int number){

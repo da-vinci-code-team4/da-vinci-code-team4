@@ -5,6 +5,7 @@ import com.example.project.game.player.User;
 import com.example.project.game.tile.Tile;
 import com.example.project.game.tile.TileColor;
 import com.example.project.game.tile.TileType;
+
 import com.example.project.game.manager.GameManager;
 import com.example.project.game.manager.TileManager;
 
@@ -25,45 +26,58 @@ public class Controller {
         game.startGame();
     }
 
-    public static String placeFirstPlayerTiles(int number){
+    public static String[] placeFirstPlayerTiles(int number){
         return makeFileName(firstPlayer.getTile(number));
     }
 
-    public static String placeSecondPlayerTiles(int number){
+    public static String[] placeSecondPlayerTiles(int number){
         return makeFileName(secondPlayer.getTile(number));
     }
 
-    public static String placeTileManagerTiles(int number){
+    public static Tile placeTileManagerTiles(int number){
         //System.out.println(makeFileName(tileManager.getTile(number),1));
-        return makeFileName(tileManager.getTile(number),1);
+        // return makeFileName(tileManager.getTile(number));
+        return tileManager.getTile(number);
     }
 
-    public static String makeFileName(Tile tile) {
+    //0번 : 파일 이름, 1번 : 타일 숫자
+    public static String[] makeFileName(Tile tile) {
+        String[] result = new String[2];
+
         if(tile.getTileType()== TileType.JOKER){
             if(tile.getTileColor() == TileColor.BLACK){
-                return "bjoker";
+                result[0] = "BLACK";
             }
             else{
-                return "wjoker";
+                result[0] = "WHITE";
             }
+            result[1] = "joker";
         }
         else{
             if(tile.getTileColor() == TileColor.BLACK){
-                return "b" + tile.getWeight()/10;
+                result[0] = "BLACK";
+                result[1] = String.valueOf(tile.getWeight()/10);
             }
             else{
-                return "w" + tile.getWeight()/10;
+                result[0] = "WHITE";
+                result[1] = String.valueOf(tile.getWeight()/10);
             }
         }
+        return result;
     }
 
-    public static String makeFileName(Tile tile, int number) {
+    public static String[] makeFileName(Tile tile, int number) {
+        String[] result = new String[2];
+
         if(tile.getTileColor() == TileColor.BLACK){
-            return "black";
+            result[0] = "black";
         }
         else{
-            return "white";
+            result[0] = "white";
         }
+        result[1] = String.valueOf(number);
+
+        return result;
     }
 
     public static int getFirstPlayerDeckSize() {
@@ -77,4 +91,9 @@ public class Controller {
     public static int getTileManagerSize() {
         return tileManager.getDeckSize();
     }
+
+    public static TileManager getTileManager() {
+        return tileManager;
+    }
+
 }

@@ -78,6 +78,14 @@ abstract public class Tile implements Comparable<Tile>{
         return tileColor;
     }
 
+    public String getColor() {
+        return tileColor.toString();
+    }
+
+    public String getIndex() {
+        return String.valueOf(weight / 10);
+    }
+
     public boolean isOpened() {
         return isOpened;
     }
