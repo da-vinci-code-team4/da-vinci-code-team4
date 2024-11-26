@@ -14,16 +14,22 @@ import java.util.List;
 public class FileController {
     private static final String historyPath = "src/main/resources/texts/history.txt";
     private static final String rankingPath = "src/main/resources/texts/ranking.txt";
+    private static final String userPath = "src/main/resources/texts/user.txt";
 
     private static List<String[]> history = new ArrayList<>();
     private static List<String[]> ranking = new ArrayList<>();
+    private static List<User> users = new ArrayList<>();
 
     private static User currentUser;
 
     public static void setCurrentUser(User user) {
         currentUser = user;
     }
-
+    public static void setUserList(List<User> userList) {
+        for (User user : userList) {
+            users.add(user);
+        }
+    }
     public static void readHistoryData() {
         try (BufferedReader br = new BufferedReader(new FileReader(historyPath))) {
             String line;
@@ -57,6 +63,7 @@ public class FileController {
     public static void updateHistoryData(String result, int score, String playTime) {
         String time = LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String newData = time + " " + result + " " + score + " " + playTime;
+        int[] winData = new int[2];
         history.add(newData.split("\\s+"));
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("history.txt", true))) {
@@ -68,15 +75,15 @@ public class FileController {
 
         if(result.equals("Defeat")){
             Controller.updateUserScore(-score);
+            Controller.updateWin(-1);
         }
         else{
             Controller.updateUserScore(score);
+            winData= Controller.updateWin(1);
         }
-    }
 
-    public static void updateRankingData(int score) {
         currentUser.setScore(currentUser.getScore()+score);
-
+        currentUser.setRecord(winData[0] + " " + winData[1]);
     }
 
     public static List<String[]> getHistory() {
@@ -87,5 +94,23 @@ public class FileController {
         return ranking;
     }
 
+    public static void updateUserFile() {
+        for (User user : users) {
+            if(user.getUsername().equals(currentUser.getUsername())){
+                user.setScore(currentUser.getScore());
+                user.setRecord(currentUser.getRecord());
+            }
+        }
 
+        try (FileWriter writer = new FileWriter(userPath)) {
+            // 1. 파일을 지운 후 새로운 내용으로 덮어쓰기
+            for (User user : users) {
+                String newContent = user.getId() + " " + user.getPassword() + " " + user.getUsername() + " " +
+                    user.getAge() + " " + user.getRecord() + " " + user.getScore() + " " + user.getRatio(); // 새로 쓸 내용
+                writer.write(newContent); // 새 내용을 파일에 씁니다.
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

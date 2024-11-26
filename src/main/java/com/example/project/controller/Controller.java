@@ -80,4 +80,9 @@ public class Controller {
     public static void updateUserScore(int score){
         user.updateScore(score);
     }
+
+    public static int[] updateWin(int number){
+        int[] data = user.updateWin(number);
+        return data;
+    }
 }

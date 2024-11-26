@@ -1,5 +1,6 @@
 package com.example.project.main;
 
+import com.example.project.controller.FileController;
 import com.example.project.models.Session; // Thêm import này
 import com.example.project.models.User;
 import com.example.project.views.LoginPage;
@@ -10,6 +11,7 @@ import com.example.project.views.CorrectionPage; // Thêm import CorrectionPage
 import com.example.project.ui.SplashScreenPanel; // Thêm import SplashScreenPanel
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.*;
@@ -109,6 +111,8 @@ public class SwingMain {
                 String[] data = line.split("\\s+");
                 userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]),data[4],Integer.parseInt(data[5]),Double.parseDouble(data[6]))); // 나눠진 데이터를 List에 추가
             }
+
+            FileController.setUserList(userList);
         } catch (IOException e) {
             e.printStackTrace();
         }

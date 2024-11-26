@@ -159,4 +159,9 @@ abstract public class Player {
     public void updateScore(int number){
         this.score = score + number;
     }
+    public int[] updateWin(int number) {
+        this.winCnt = winCnt + number;
+        this.lossCnt = lossCnt - number;
+        return new int[]{winCnt, lossCnt};
+    }
 }
