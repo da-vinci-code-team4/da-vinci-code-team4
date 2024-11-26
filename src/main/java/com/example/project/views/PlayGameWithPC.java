@@ -17,18 +17,23 @@ import java.util.Objects;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.m;
+import org.checkerframework.checker.units.qual.min;
 import org.checkerframework.checker.units.qual.s;
 
 import com.example.project.controller.Controller;
 import com.example.project.game.manager.TileManager;
 import com.example.project.game.tile.Tile;
 import com.example.project.listener.CardMouseListener;
+import com.example.project.listener.DrawButtonListener;
 import com.example.project.utils.RoundedPanel;
 
 public class PlayGameWithPC extends JPanel {
@@ -54,6 +59,7 @@ public class PlayGameWithPC extends JPanel {
 
         // 메인 패널
         JPanel mainContent = new JPanel(null);
+        mainPanel.setName("MainPanel");
         mainContent.setBackground(Color.white);
         mainContent.setBounds(0, 0, 1502, 916);
         add(mainContent);
@@ -92,6 +98,14 @@ public class PlayGameWithPC extends JPanel {
             }
         });
         mainContent.add(exitIcon);
+
+        // 가져오기 버튼
+        JButton drawButton = new JButton("가져오기");
+        drawButton.setBounds(1000, 130, 200, 70);
+        drawButton.setFont(new Font("Capriola-Regular", Font.PLAIN, 24));
+        drawButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        drawButton.addActionListener(new DrawButtonListener(this));
+        mainContent.add(drawButton);
 
         // PC 이미지
         JLabel pcIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/pc2.png")));
@@ -257,7 +271,7 @@ public class PlayGameWithPC extends JPanel {
             
             playerCards.add(card);
         }
-        
+
         return playerCards;
     }
 
@@ -299,6 +313,7 @@ public class PlayGameWithPC extends JPanel {
             sharedCards.add(card);
         }
         mainContent.add(sharedCards);
+        mainContent.repaint();
     }
 
     /**
@@ -350,29 +365,38 @@ public class PlayGameWithPC extends JPanel {
      * 타일을 표시하는 메서드
      */
     public void updateTiles(JPanel mainContent) {
+        SwingUtilities.invokeLater(() -> {
+            System.out.println("updateTiles");
 
-        String[][] sharedCardImages = new String[26][2];
-        Tile[] sharedTile = new Tile[26];
-        for (int i = 0; i < Controller.getTileManagerSize(); i++) {
-            sharedTile[i] = Controller.placeTileManagerTiles(i);
-        }
-        reCreateSharedCards(mainContent, sharedCardImages, sharedTile);
+            // myCards.removeAll();
+            // sharedCards.removeAll();
+            // opponentCards.removeAll();
 
+            System.out.println("mainContent components : "+mainContent.getComponentCount());
+            String[][] sharedCardImages = new String[26][2];
+            Tile[] sharedTile = new Tile[26];
+            for (int i = 0; i < Controller.getTileManagerSize(); i++) {
+                sharedTile[i] = Controller.placeTileManagerTiles(i);
+            }
+            reCreateSharedCards(mainContent, sharedCardImages, sharedTile);
 
-        String[][] myCardImages = new String[13][2];
-        Tile[] myTile = new Tile[13];
-        for (int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
-            myTile[i] = Controller.placeTileManagerTiles(i);
-        }
-        recreateOpponentCards(mainContent, myCardImages,myTile);
+            String[][] myCardImages = new String[13][2];
+            Tile[] myTile = new Tile[13];
+            for (int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
+                myTile[i] = Controller.placeTileManagerTiles(i);
+            }
+            recreateOpponentCards(mainContent, myCardImages, myTile);
 
-        String[][] opponentCardImages = new String[13][2];
-        Tile[] opponentTile = new Tile[13];
-        for (int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
-            opponentTile[i] = Controller.placeTileManagerTiles(i);
-        }
-        reCreateMyCards(mainContent, opponentCardImages,opponentTile);
-        
+            String[][] opponentCardImages = new String[13][2];
+            Tile[] opponentTile = new Tile[13];
+            for (int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
+                opponentTile[i] = Controller.placeTileManagerTiles(i);
+            }
+            reCreateMyCards(mainContent, opponentCardImages, opponentTile);
+
+            System.out.println("mainContent components : "+mainContent.getComponentCount());
+                      
+        });
     }
 
     /**
@@ -473,5 +497,10 @@ public class PlayGameWithPC extends JPanel {
      */
     public ArrayList<Tile> getSelectedTiles() {
         return selectedTiles;
+    }
+
+    public JPanel getMainPanel() {
+        // System.out.println("main panel : "+mainPanel.getName());
+        return mainPanel;
     }
 }

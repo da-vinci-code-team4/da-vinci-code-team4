@@ -32,7 +32,6 @@ public class TileManager {
     public void initGame() {
         generateTile();
         shuffle();
-        distributeTile();
     }
 
     /**
@@ -40,7 +39,7 @@ public class TileManager {
      *
      * @return 덱에 타일이 남아 있다면 타일을 하나 반환하며 만약 없다면 Optional.empty()를 반환한다
      */
-    public Optional<Tile> getTileFromDeck() {
+    public Optional<Tile> getTileFromDeck(Tile tile) {
         return deck.isEmpty() ?
                 Optional.empty() :
                 Optional.of(deck.remove(0));
@@ -88,13 +87,16 @@ public class TileManager {
      * 덱에 생성되어 있는 타일을 NUMBER_OF_INIT_TILE만큼 각 플레이어에게 분배한다.
      * 이후 나눠준 타일은 덱에서 삭제한다.
      */
-    private void distributeTile() {
+    public void distributeTile(ArrayList<Tile> tiles) {
         //컴퓨터에게 타일을 먼저 나눠준다.
         //computer.giveTileToPlayerAtStart(deck.subList(0, NUMBER_OF_INIT_TILE));
+        System.out.println( getDeckSize());
+        firstPlayer.giveTileToPlayerAtStart(tiles);
+        for (Tile t: tiles) {
+            deck.remove(t);
+        }
+        System.out.println( getDeckSize());
 
-        List<Tile> firstTile = deck.subList(0, NUMBER_OF_INIT_TILE);
-        firstPlayer.giveTileToPlayerAtStart(firstTile);
-        firstTile.clear();
     }
 
     public boolean isEqual(Tile selectedOpponentTile, Tile guessedOpponentTile) {
@@ -138,4 +140,9 @@ public class TileManager {
     public Tile getTile(int number){
         return deck.get(number);
     }
+
+    public Player getFirstPlayer() {
+        return firstPlayer;
+    }
+
 }
