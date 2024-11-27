@@ -70,7 +70,7 @@ public class GameManager {
      * @param player 현재 턴을 시작하는 플레이어다
      * */
     private boolean playGame(Player player) {
-        Optional<Tile> drawTile = player.drawTile(status);
+//        Optional<Tile> drawTile = player.drawTile(status);
 
         Tile selectedTile = player.getSelectedTile();
         status.saveSelectTile(selectedTile.clone());
@@ -80,7 +80,7 @@ public class GameManager {
 
         //타입이 다르면 턴 종료
         if (!selectedTile.getTileType().equals(guessedTile.getTileType())) {
-            saveFail(drawTile, player);
+//            saveFail(drawTile, player);
             return false;
         }
 
@@ -98,7 +98,7 @@ public class GameManager {
             return player.chooseToKeepTurn();
         }
 
-        saveFail(drawTile, player);
+//        saveFail(drawTile, player);
         return false;
     }
 

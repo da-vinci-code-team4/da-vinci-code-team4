@@ -24,8 +24,8 @@ public class Controller {
         tileManager = new TileManager(user, opponentPlayer);
 
         GameManager game = new GameManager(tileManager, user, opponentPlayer);
-        game.startGame();
         status = game.getStatus();
+        game.startGame();
     }
     public static String[] placeFirstPlayerTiles(int number){
         return makeFileName(user.getTile(number));
@@ -107,8 +107,7 @@ public class Controller {
     }
 
     public static int[] getStatus(){
-        int[] data = status.getStatus();
-        return data;
+        return status.getStatus();
     }
 }
 

@@ -104,7 +104,7 @@ public class SwingMain {
 //        userList.add(new User("HyungJoon", "12345678", "HyungJoon", 23, "85W - 15L", 1150,  85.0));
 //        userList.add(new User("YeWon", "12345678", "YeWon", 22, "95W - 5L", 1250,  95.0));
 //        userList.add(new User("TaeHyun", "12345678", "TaeHyun", 25, "65W - 35L", 950,  65.0));
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/user.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/texts/user.txt"))) {
             String line;
 
             while ((line = br.readLine()) != null) {

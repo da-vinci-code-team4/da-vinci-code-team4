@@ -49,7 +49,7 @@ public class PlayGameWithPC extends JPanel {
     private JPanel myCards;
     private JPanel sharedCards;
     private JPanel opponentCards;
-    RoundedPanel chatInput;
+    private JPanel chatPanel;
     private ArrayList<Tile> selectedTiles = new ArrayList<>();
 
     public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
@@ -57,6 +57,8 @@ public class PlayGameWithPC extends JPanel {
         this.cardLayout = cardLayout;
         setLayout(null);
         setBackground(Color.gray);
+
+
 
         // 메인 패널
         JPanel mainContent = new JPanel(null);
@@ -150,30 +152,31 @@ public class PlayGameWithPC extends JPanel {
         createSharedCards(mainContent,null, null);
 
         // 채팅 영역
-        JPanel chatPanel = new RoundedPanel(null, new Color(0xD9D9D9), 20);
+        chatPanel = new RoundedPanel(null, Color.white, 20);
         chatPanel.setBounds(78, 679 - 65, 571, 264);
         mainContent.add(chatPanel);
 
-        // 채팅 입력 창
-        chatInput = new RoundedPanel(null, new Color(0xD9D9D9), 20);
-        chatInput.setBounds(78, 893 - 65, 490, 38);
-        updateStatus();
-        mainContent.add(chatInput);
+//        // 채팅 입력 창
+//        chatInput = new RoundedPanel(null, new Color(0xD9D9D9), 20);
+//        chatInput.setBounds(78, 893 - 65, 490, 38);
+//        mainContent.add(chatInput);
+
 
         // 채팅 입력 창의 밑줄
-        JLabel chatUnderline = new JLabel();
-        chatUnderline.setBounds(97, 914 - 65, 471, 1);
-        chatUnderline.setBackground(Color.BLACK);
-        chatUnderline.setOpaque(true);
-        mainContent.add(chatUnderline);
-
-        // 채팅 아이콘
-        JLabel chatIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/chat_icon.png")));
-        chatIcon.setBounds(512, 210 - 10, 50, 50);
-        chatPanel.add(chatIcon);
+//        JLabel chatUnderline = new JLabel();
+//        chatUnderline.setBounds(97, 914 - 65, 471, 1);
+//        chatUnderline.setBackground(Color.BLACK);
+//        chatUnderline.setOpaque(true);
+//        mainContent.add(chatUnderline);
+//
+//        // 채팅 아이콘
+//        JLabel chatIcon = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/chat_icon.png")));
+//        chatIcon.setBounds(512, 210 - 10, 50, 50);
+//        chatPanel.add(chatIcon);
 
         Controller.startGame();
         updateTiles(mainContent);
+        updateStatus();
     }
 
     /**
@@ -511,10 +514,9 @@ public class PlayGameWithPC extends JPanel {
         for (int i = 0; i < 5; i++) {
             textFields[i] = new JTextField();
             textFields[i].setBounds(10, 10 + (i * 40), 470, 30);  // 각 텍스트 박스를 40px 간격으로 배치
-            textFields[i].setBackground(new Color(0xFFC4C4C4, true)); // 배경색 설정
+            textFields[i].setBackground(new Color(0xFFFF6262)); // 배경색 설정
             textFields[i].setForeground(Color.BLACK);  // 글자 색 설정
-            textFields[i].setBorder(BorderFactory.createEmptyBorder());  // 테두리 없애기
-            chatInput.add(textFields[i]);
+            chatPanel.add(textFields[i]);
         }
         int[] data = Controller.getStatus();
         textFields[0].setText("남은 전체 타일 : " + data[0]);  // 기본 텍스트 설정
