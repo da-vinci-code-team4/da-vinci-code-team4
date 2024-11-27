@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * PlayGameWithPC.java
  *
- * Giao diện người dùng cho trò chơi khi chơi với máy tính.
- * Xử lý các thành phần giao diện, tương tác người dùng và tích hợp với logic trò chơi.
+ * 컴퓨터와 플레이할 때 게임의 사용자 인터페이스입니다.
+ * UI 구성 요소, 사용자 상호 작용을 처리하고 게임 로직과 통합합니다.
  */
 public class PlayGameWithPC extends JPanel implements GameObserver {
     private CardLayout cardLayout;
@@ -52,13 +52,13 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
     private JLabel exitButton;
 
-    // Danh sách các nút trong khu vực trung tâm
+    // 중앙 영역의 버튼 목록
     private List<JButton> centralCardSlots;
 
-    // Các chỉ số thẻ bài được chọn trong giai đoạn chọn ban đầu
+    // 초기 선택 단계에서 선택된 카드의 인덱스
     private List<Integer> selectedTileIndices;
 
-    // Nút xác nhận
+    // 확인 버튼
     private JButton confirmButton;
 
     public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
@@ -67,36 +67,36 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         setLayout(null);
         setBackground(Color.WHITE);
 
-        // Khởi tạo bộ điều khiển trò chơi
+        // 게임 컨트롤러 초기화
         controller = new Controller(this);
         gameState = controller.getGameState();
         userPlayer = controller.getUser();
         computerPlayer = controller.getComputer();
 
-        // Khởi tạo danh sách centralCardSlots
+        // centralCardSlots 리스트 초기화
         centralCardSlots = new ArrayList<>();
         selectedTileIndices = new ArrayList<>();
 
-        // Khởi tạo các thành phần giao diện
+        // UI 구성 요소 초기화
         initializeUIComponents();
 
-        // Bắt đầu trò chơi sau khi delay 0,75s
+        // 0.75초 지연 후 게임 시작
         Timer initialDelayTimer = new Timer(750, e -> startGame());
         initialDelayTimer.setRepeats(false);
         initialDelayTimer.start();
     }
 
     /**
-     * Khởi tạo tất cả các thành phần giao diện người dùng.
+     * 모든 UI 구성 요소 초기화.
      */
     private void initializeUIComponents() {
-        // Panel nội dung chính
+        // 메인 콘텐츠 패널
         JPanel mainContent = new JPanel(null);
         mainContent.setBackground(Color.WHITE);
         mainContent.setBounds(0, 0, 1502, 916);
         add(mainContent);
 
-        // Panel hiển thị thời gian
+        // 시간 표시 패널
         RoundedPanel timePanel = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20);
         timePanel.setBounds(1058, 13, 244, 70);
         mainContent.add(timePanel);
@@ -105,23 +105,23 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         timeLabel.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
         timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeLabel.setVerticalAlignment(SwingConstants.CENTER);
-        timeLabel.setForeground(Color.BLACK); // Màu chữ
+        timeLabel.setForeground(Color.BLACK); // 글자 색상
         timePanel.add(timeLabel);
 
-        // Khởi tạo Swing Timer để cập nhật đồng hồ mỗi giây
+        // 매초 시계를 업데이트하기 위한 Swing Timer 초기화
         swingTimer = new Timer(1000, e -> {
             seconds++;
             updateClock(seconds);
         });
         swingTimer.start();
 
-        // Nút thoát
+        // 종료 버튼
         URL exitImageUrl = getClass().getResource("/img/ViewImage/back.png");
         ImageIcon exitIcon;
         if (exitImageUrl != null) {
             exitIcon = new ImageIcon(exitImageUrl);
         } else {
-            exitIcon = new ImageIcon(); // Biểu tượng rỗng hoặc placeholder
+            exitIcon = new ImageIcon(); // 빈 아이콘 또는 플레이스홀더
         }
         exitButton = new JLabel(exitIcon);
         exitButton.setBounds(1396, 13, 70, 70);
@@ -129,20 +129,20 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                swingTimer.stop(); // Dừng đồng hồ khi thoát
-                // Quay lại trang chơi
+                swingTimer.stop(); // 종료 시 시계 중지
+                // 플레이 페이지로 돌아가기
                 cardLayout.show(mainPanel, "PlayPage");
             }
         });
         mainContent.add(exitButton);
 
-        // Hình ảnh và nhãn của máy tính
+        // 컴퓨터의 이미지와 레이블
         URL pcImageUrl = getClass().getResource("/img/ViewImage/pc2.png");
         ImageIcon pcIconImage;
         if (pcImageUrl != null) {
             pcIconImage = new ImageIcon(pcImageUrl);
         } else {
-            pcIconImage = new ImageIcon(); // Biểu tượng rỗng hoặc placeholder
+            pcIconImage = new ImageIcon(); // 빈 아이콘 또는 플레이스홀더
         }
         JLabel pcIcon = new JLabel(pcIconImage);
         pcIcon.setBounds(45, 68, 139, 179);
@@ -156,13 +156,13 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         pcText.setHorizontalAlignment(SwingConstants.CENTER);
         mainContent.add(pcText);
 
-        // Hình ảnh và nhãn của người chơi
+        // 플레이어의 이미지와 레이블
         URL meImageUrl = getClass().getResource("/img/ViewImage/me.png");
         ImageIcon meIconImage;
         if (meImageUrl != null) {
             meIconImage = new ImageIcon(meImageUrl);
         } else {
-            meIconImage = new ImageIcon(); // Biểu tượng rỗng hoặc placeholder
+            meIconImage = new ImageIcon(); // 빈 아이콘 또는 플레이스홀더
         }
         JLabel meIcon = new JLabel(meIconImage);
         meIcon.setBounds(1332, 654, 139, 186);
@@ -171,33 +171,33 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         mainContent.add(meIcon);
 
         JLabel meText = new JLabel("Me");
-        meText.setBounds(1342, 815, 139, 50); // Chỉnh lại vị trí nếu cần
+        meText.setBounds(1342, 815, 139, 50); // 필요하면 위치 조정
         meText.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
         meText.setHorizontalAlignment(SwingConstants.CENTER);
         mainContent.add(meText);
 
-        // Khu vực trung tâm
+        // 중앙 영역
         centralPanel = new JPanel(new GridLayout(2, 12, 5, 5));
         centralPanel.setBounds(98, 308, 1313, 261);
         centralPanel.setBackground(Color.WHITE);
         mainContent.add(centralPanel);
 
-        // Khởi tạo danh sách các ô thẻ bài ở trung tâm
+        // 중앙의 카드 슬롯 목록 초기화
         initializeCentralTiles();
 
-        // Khu vực của người chơi
+        // 플레이어 영역
         userPanel = new JPanel(new GridLayout(2, 6, 5, 5));
         userPanel.setBounds(673, 617, 650, 261);
         userPanel.setBackground(Color.WHITE);
         mainContent.add(userPanel);
 
-        // Khu vực của máy tính
+        // 컴퓨터 영역
         computerPanel = new RoundedPanel(new GridLayout(2, 6, 10, 10), new Color(0xFFFFFF), 20);
-        computerPanel.setBounds(210, 16, 650, 261); // 81 - 65 = 16
+        computerPanel.setBounds(210, 16, 650, 261);
         computerPanel.setBackground(Color.WHITE);
         mainContent.add(computerPanel);
 
-        // Khởi tạo danh sách các ô thẻ bài của người chơi
+        // 플레이어의 카드 슬롯 목록 초기화
         userCardSlots = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             JButton slotButton = createRoundedButton();
@@ -207,23 +207,23 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             userCardSlots.add(slotButton);
         }
 
-        // Khởi tạo danh sách các ô thẻ bài của máy tính
+        // 컴퓨터의 카드 슬롯 목록 초기화
         computerCardSlots = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             JButton slotButton = createRoundedButton();
-            slotButton.setBackground(new Color(0x007B75)); // Màu xanh lá ban đầu
+            slotButton.setBackground(new Color(0x007B75)); // 원래의 녹색
             slotButton.setFocusable(false);
             computerPanel.add(slotButton);
             computerCardSlots.add(slotButton);
         }
 
-        // Game Info Panel (Thông tin trò chơi)
+        // 게임 정보 패널
         RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(0xD9D9D9), 20);
         gameInfoPanel.setBounds(78, 614, 571, 264);
         gameInfoPanel.setLayout(null);
         mainContent.add(gameInfoPanel);
 
-        // Sub-panels for opponent and user info (Thông tin đối thủ và người chơi)
+        // 상대 및 사용자 정보를 위한 서브 패널
         JPanel leftInfoPanel = new JPanel(null);
         leftInfoPanel.setBounds(10, 10, 275, 244);
         leftInfoPanel.setOpaque(false);
@@ -234,7 +234,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         rightInfoPanel.setOpaque(false);
         gameInfoPanel.add(rightInfoPanel);
 
-        // Opponent Info Labels (Thông tin đối thủ)
+        // 상대 정보 레이블
         opponentMatchedTilesLabel = new JLabel("맞춘 상대 타일 수 : 0");
         opponentMatchedTilesLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         opponentMatchedTilesLabel.setForeground(Color.BLACK);
@@ -253,7 +253,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         opponentRemainingTilesLabel.setBounds(20, 130, 235, 30);
         leftInfoPanel.add(opponentRemainingTilesLabel);
 
-        // User Info Labels (Thông tin người chơi)
+        // 사용자 정보 레이블
         remainingTilesLabel = new JLabel("중앙 타일 남은 수 : 0");
         remainingTilesLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         remainingTilesLabel.setForeground(Color.BLACK);
@@ -266,10 +266,10 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         myRemainingTilesLabel.setBounds(20, 80, 235, 30);
         rightInfoPanel.add(myRemainingTilesLabel);
 
-        // Nút xác nhận
+        // 확인 버튼
         confirmButton = new JButton("확인");
-        confirmButton.setBounds(700, 580, 100, 40); // Điều chỉnh vị trí cho phù hợp
-        confirmButton.setVisible(false); // Ban đầu ẩn
+        confirmButton.setBounds(700, 580, 100, 40); // 필요에 따라 위치 조정
+        confirmButton.setVisible(false); // 처음에는 숨김
         mainContent.add(confirmButton);
 
         confirmButton.addActionListener(e -> {
@@ -280,7 +280,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             }
         });
 
-        // Cập nhật giao diện ban đầu
+        // 초기 UI 업데이트
         updateCentralPanel();
         updateUserPanel();
         updateComputerPanel();
@@ -288,25 +288,25 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Khởi tạo 24 thẻ bài ở khu vực trung tâm (12 trắng và 12 đen) và xáo trộn chúng.
+     * 중앙 영역에 24장의 카드(흰색 12장, 검은색 12장)를 초기화하고 섞습니다.
      */
     private void initializeCentralTiles() {
         List<Tile> initialTiles = controller.getTileManager().getCentralTiles();
 
-        // Tạo 24 nút cho khu vực trung tâm
+        // 중앙 영역에 24개의 버튼 생성
         for (int i = 0; i < 24; i++) {
             JButton tileButton = createRoundedButton();
             Tile tile = initialTiles.get(i);
-            tileButton.setBackground(tile.getTileColor()); // Thiết lập màu nền theo loại thẻ bài
+            tileButton.setBackground(tile.getTileColor()); // 타일 유형에 따라 배경색 설정
             centralCardSlots.add(tileButton);
             centralPanel.add(tileButton);
         }
     }
 
     /**
-     * Tạo một JButton với góc bo tròn.
+     * 둥근 모서리를 가진 JButton 생성.
      *
-     * @return JButton đã được tùy chỉnh.
+     * @return 커스터마이즈된 JButton.
      */
     private JButton createRoundedButton() {
         JButton button = new RoundedButton(20);
@@ -317,19 +317,19 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Bắt đầu trò chơi.
+     * 게임 시작.
      */
     private void startGame() {
         controller.startGame();
 
-        // Hiển thị thông báo sau khi các khu vực đã được hiển thị
+        // 영역이 표시된 후 메시지 표시
         JOptionPane.showMessageDialog(this, "가져올 타일을 선택하세요(4개)");
     }
 
     /**
-     * Cập nhật đồng hồ hiển thị thời gian.
+     * 시계 디스플레이 업데이트.
      *
-     * @param seconds Tổng số giây đã trôi qua.
+     * @param seconds 경과된 총 초 수.
      */
     private void updateClock(int seconds) {
         int minutes = seconds / 60;
@@ -339,7 +339,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Cập nhật khu vực trung tâm.
+     * 중앙 영역 업데이트.
      */
     private void updateCentralPanel() {
         List<Tile> centralTiles = gameState.getCentralTiles();
@@ -348,7 +348,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         for (int i = 0; i < centralCardSlots.size(); i++) {
             JButton tileButton = centralCardSlots.get(i);
             if (i >= centralTiles.size()) {
-                // Nếu không có thẻ bài tại vị trí này, làm trống ô
+                // 이 위치에 타일이 없으면 슬롯을 비웁니다.
                 tileButton.setIcon(null);
                 tileButton.setEnabled(false);
                 tileButton.setBackground(Color.LIGHT_GRAY);
@@ -357,35 +357,35 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             Tile tile = centralTiles.get(i);
 
             if (tile.isOpened()) {
-                // Nếu thẻ bài đã được mở, đánh dấu là ô trống
+                // 타일이 열렸다면 빈 슬롯으로 표시
                 tileButton.setIcon(null);
                 tileButton.setEnabled(false);
                 tileButton.setBackground(Color.GRAY);
             } else if (tile.isSelected()) {
-                // Nếu thẻ bài được chọn, thay đổi màu sắc
+                // 타일이 선택되었다면 색상 변경
                 tileButton.setBackground(Color.YELLOW);
                 tileButton.setEnabled(true);
             } else {
-                // Thẻ bài có sẵn
+                // 타일 사용 가능
                 tileButton.setBackground(tile.getTileColor());
                 tileButton.setIcon(null);
                 tileButton.setEnabled(true);
             }
 
-            final int index = i; // Lưu vị trí của thẻ bài
+            final int index = i; // 타일 인덱스 저장
 
-            // Loại bỏ các ActionListener cũ để tránh bị trùng
+            // 중복을 피하기 위해 이전의 ActionListener 제거
             for (ActionListener al : tileButton.getActionListeners()) {
                 tileButton.removeActionListener(al);
             }
 
-            // Thêm ActionListener dựa trên giai đoạn trò chơi
+            // 게임 단계에 따라 ActionListener 추가
             if (phase == GamePhase.INITIAL_SELECTION) {
                 tileButton.addActionListener(e -> {
                     controller.playerSelectInitialTile(index);
                     updateCentralPanel();
                     updateGameInfo();
-                    // Hiển thị nút xác nhận nếu đã chọn đủ 4 thẻ
+                    // 4개의 타일이 선택되었다면 확인 버튼 표시
                     int selectedCount = 0;
                     for (Tile t : centralTiles) {
                         if (t.isSelected()) {
@@ -415,7 +415,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Cập nhật khu vực của người chơi.
+     * 플레이어 영역 업데이트.
      */
     private void updateUserPanel() {
         List<Tile> userTiles = userPlayer.getTiles();
@@ -425,7 +425,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             if (i < userTiles.size()) {
                 Tile tile = userTiles.get(i);
                 if (tile.isGuessedCorrectly()) {
-                    // Nếu đã đoán đúng, hiển thị hình ảnh mặt trước
+                    // 맞게 추측했다면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
@@ -435,7 +435,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     }
                     slotButton.setBackground(Color.WHITE);
                 } else if (tile.isOpened()) {
-                    // Nếu thẻ bài đã được mở, hiển thị hình ảnh mặt trước
+                    // 타일이 열렸다면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
@@ -445,12 +445,12 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     }
                     slotButton.setBackground(Color.WHITE);
                 } else {
-                    // Hiển thị mặt sau của thẻ bài hoặc ô trống
+                    // 타일의 뒷면 또는 빈 슬롯 표시
                     slotButton.setBackground(Color.BLUE);
                     slotButton.setIcon(null);
                 }
             } else {
-                // Ô trống
+                // 빈 슬롯
                 slotButton.setBackground(Color.BLUE);
                 slotButton.setIcon(null);
             }
@@ -461,7 +461,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Cập nhật khu vực của máy tính.
+     * 컴퓨터 영역 업데이트.
      */
     private void updateComputerPanel() {
         List<Tile> computerTiles = computerPlayer.getTiles();
@@ -471,7 +471,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             if (i < computerTiles.size()) {
                 Tile tile = computerTiles.get(i);
                 if (tile.isGuessedCorrectly()) {
-                    // Nếu đã đoán đúng, hiển thị hình ảnh mặt trước
+                    // 맞게 추측했다면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
@@ -481,19 +481,19 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     }
                     slotButton.setBackground(Color.WHITE);
                 } else {
-                    // Hiển thị mặt sau của thẻ bài
+                    // 타일의 뒷면 표시
                     slotButton.setBackground(Color.GREEN);
                     slotButton.setIcon(null);
                 }
 
-                final int index = i; // Lưu vị trí
+                final int index = i; // 위치 저장
 
-                // Loại bỏ các ActionListener cũ
+                // 이전의 ActionListener 제거
                 for (ActionListener al : slotButton.getActionListeners()) {
                     slotButton.removeActionListener(al);
                 }
 
-                // Thêm ActionListener trong giai đoạn người chơi đoán
+                // 플레이어의 추측 단계에서 ActionListener 추가
                 if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE && !tile.isGuessedCorrectly()) {
                     slotButton.addActionListener(e -> {
                         controller.playerGuessComputerTile(index);
@@ -517,14 +517,14 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Kiểm tra điều kiện kết thúc trò chơi.
+     * 게임 종료 조건 확인.
      */
     private void checkGameOver() {
         controller.checkGameOver();
     }
 
     /**
-     * Cập nhật thông tin trò chơi.
+     * 게임 정보 업데이트.
      */
     private void updateGameInfo() {
         remainingTilesLabel.setText("중앙 타일 남은 수 : " + controller.getTileManager().getDeckSize());
@@ -535,10 +535,10 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Lấy số lượng thẻ bài chưa mở của một người chơi.
+     * 플레이어의 열리지 않은 타일 수를 가져옵니다.
      *
-     * @param player Người chơi cần kiểm tra.
-     * @return Số lượng thẻ bài chưa mở.
+     * @param player 확인할 플레이어.
+     * @return 열리지 않은 타일의 수.
      */
     private int getUnopenedTilesCount(Player player) {
         int count = 0;
@@ -564,7 +564,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * Lớp JButton với góc bo tròn.
+     * 둥근 모서리를 가진 JButton 클래스.
      */
     private class RoundedButton extends JButton {
         private int radius;
