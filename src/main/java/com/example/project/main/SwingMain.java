@@ -96,7 +96,7 @@ public class SwingMain {
     }
 
     // Phương thức khởi tạo người dùng mặc định
-    private static void initializeDefaultUsers(List<User> userList) {
+    protected static void initializeDefaultUsers(List<User> userList) {
         // Thêm các thông tin bổ sung cho mỗi User với constructor đầy đủ
 //        userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90.0));
 //        userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 80.0));
