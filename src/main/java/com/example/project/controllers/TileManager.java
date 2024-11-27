@@ -11,10 +11,10 @@ import java.util.Random;
 /**
  * TileManager.java
  *
- * Quản lý các thẻ bài trong trò chơi, bao gồm việc khởi tạo và xáo trộn thẻ bài.
+ * 게임 내 타일을 관리하며, 타일의 초기화 및 섞기를 담당합니다.
  */
 public class TileManager {
-    private List<Tile> centralTiles; // Các thẻ bài ở khu vực trung tâm
+    private List<Tile> centralTiles; // 중앙 영역의 타일 목록
     private Random random;
 
     public TileManager() {
@@ -24,37 +24,37 @@ public class TileManager {
     }
 
     /**
-     * Khởi tạo và xáo trộn các thẻ bài.
+     * 타일을 초기화하고 섞습니다.
      */
     public void initializeTiles() {
         centralTiles.clear();
 
-        // Thêm 12 thẻ bài trắng
+        // 흰색 타일 12개 추가
         for (int i = 0; i < 12; i++) {
             centralTiles.add(new Tile(TileType.WHITE, i));
         }
 
-        // Thêm 12 thẻ bài đen
+        // 검정색 타일 12개 추가
         for (int i = 0; i < 12; i++) {
             centralTiles.add(new Tile(TileType.BLACK, i));
         }
 
-        // Xáo trộn thẻ bài
+        // 타일 섞기
         Collections.shuffle(centralTiles);
     }
 
     /**
-     * Khởi tạo lại trò chơi.
+     * 게임을 초기화합니다.
      */
     public void initGame() {
         initializeTiles();
     }
 
     /**
-     * Lấy một thẻ bài từ khu vực trung tâm tại vị trí index.
+     * 중앙 영역의 특정 인덱스에서 타일을 가져옵니다.
      *
-     * @param index Vị trí của thẻ bài trong danh sách (0-23)
-     * @return Thẻ bài được lấy
+     * @param index 중앙 영역 내 타일의 위치 (0-23)
+     * @return 가져온 타일 또는 null
      */
     public Tile drawTile(int index) {
         if (index >= 0 && index < centralTiles.size()) {
@@ -65,9 +65,9 @@ public class TileManager {
     }
 
     /**
-     * Lấy ngẫu nhiên thẻ bài chưa được chọn từ trung tâm.
+     * 중앙에서 열리지 않은 타일 중 하나를 무작위로 가져옵니다.
      *
-     * @return Thẻ bài chưa được chọn hoặc null nếu không còn thẻ bài nào
+     * @return 가져온 타일 또는 null
      */
     public Tile drawRandomCentralTile() {
         List<Tile> availableTiles = new ArrayList<>();
@@ -87,9 +87,9 @@ public class TileManager {
     }
 
     /**
-     * Lấy ngẫu nhiên chỉ số của một thẻ bài chưa được chọn.
+     * 열리지 않은 타일의 인덱스를 무작위로 가져옵니다.
      *
-     * @return Chỉ số ngẫu nhiên hoặc -1 nếu không còn thẻ bài nào
+     * @return 무작위 인덱스 또는 -1 (더 이상 타일이 없을 경우)
      */
     public int getRandomAvailableTileIndex() {
         List<Integer> availableIndices = new ArrayList<>();
@@ -107,9 +107,9 @@ public class TileManager {
     }
 
     /**
-     * Lấy số lượng thẻ bài còn lại trong bộ bài.
+     * 덱에 남아있는 타일의 수를 가져옵니다.
      *
-     * @return Số lượng thẻ bài còn lại
+     * @return 남은 타일의 수
      */
     public int getDeckSize() {
         int count = 0;
@@ -122,18 +122,18 @@ public class TileManager {
     }
 
     /**
-     * Lấy danh sách các thẻ bài ở trung tâm.
+     * 중앙 영역의 타일 목록을 가져옵니다.
      *
-     * @return Danh sách các thẻ bài
+     * @return 중앙 타일 목록
      */
     public List<Tile> getCentralTiles() {
         return centralTiles;
     }
 
     /**
-     * Kiểm tra xem còn thẻ bài ở trung tâm không.
+     * 중앙에 남아있는 타일이 있는지 확인합니다.
      *
-     * @return True nếu còn, False nếu hết
+     * @return 타일이 남아있으면 true, 아니면 false
      */
     public boolean hasTiles() {
         for (Tile tile : centralTiles) {
