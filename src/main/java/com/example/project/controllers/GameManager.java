@@ -1,98 +1,125 @@
+// src/main/java/com/example/project/controllers/GameManager.java
 package com.example.project.controllers;
 
+import com.example.project.models.Computer;
+import com.example.project.models.GameUser;
 import com.example.project.config.Tile;
+import javax.swing.JOptionPane;
+import java.util.Optional;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * GameManager.java
+ *
+ * Quản lý trạng thái và luồng của trò chơi.
+ */
 public class GameManager {
-    private List<Tile> deck; // Bộ bài chính
-    private List<Tile> playerHand; // Bài của người chơi
-    private List<Tile> opponentHand; // Bài của đối thủ
-    private List<Tile> sharedHand; // Bài chung trên bàn
+    private TileManager tileManager;
+    private GameUser user;
+    private Computer computer;
+    private GameState gameState;
+    private GameObserver observer;
 
-    public GameManager() {
-        deck = new ArrayList<>();
-        playerHand = new ArrayList<>();
-        opponentHand = new ArrayList<>();
-        sharedHand = new ArrayList<>();
-        initializeDeck();
-        shuffleDeck();
-        dealInitialTiles();
+    public GameManager(GameObserver observer) {
+        this.observer = observer;
+        tileManager = new TileManager();
+        tileManager.initializeTiles(); // Khởi tạo 24 thẻ bài (12 đen, 12 trắng) và xáo trộn
+        gameState = new GameState();
+        gameState.setCentralTiles(tileManager.getCentralTiles());
+        user = new GameUser("Người chơi");
+        computer = new Computer("Máy tính");
     }
 
-    // Khởi tạo bộ bài với 24 tile
-    private void initializeDeck() {
-        // Thêm tile số từ 0 đến 11 với màu đen và trắng
-        for (int i = 0; i < 12; i++) {
-            deck.add(new Tile(i, "-", Color.BLACK));
-            deck.add(new Tile(i, "-", Color.WHITE));
+    /**
+     * Bắt đầu trò chơi.
+     */
+    public void startGame() {
+        // Cập nhật trạng thái trò chơi
+        observer.onGameStateChanged(gameState);
+    }
+
+    /**
+     * Người chơi lấy một thẻ bài từ khu vực trung tâm tại vị trí index.
+     *
+     * @param index Vị trí thẻ bài trong khu vực trung tâm (0-23)
+     */
+    public void userDrawTile(int index) {
+        Tile tile = tileManager.drawTile(index);
+        if (tile != null && !tile.isOpened()) {
+            tile.setOpened(true); // Đánh dấu thẻ bài đã mở
+            user.addTile(tile);
+            // Thêm thông báo nếu cần
+            JOptionPane.showMessageDialog(null, "Bạn đã chọn thẻ bài thành công!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Thẻ bài đã được chọn trước đó!");
         }
-        // Thêm các tile Joker nếu cần (giả sử có 2 Joker)
-        deck.add(new Tile(-1, "J", Color.GRAY));
-        deck.add(new Tile(-1, "J", Color.GRAY));
+        observer.onGameStateChanged(gameState);
     }
 
-    // Trộn bộ bài
-    private void shuffleDeck() {
-        Collections.shuffle(deck);
+    /**
+     * Máy tính lấy 4 thẻ bài ban đầu từ khu vực trung tâm.
+     */
+    public void computerInitialDrawTiles() {
+        int tilesToDraw = 4;
+        for (int i = 0; i < tilesToDraw; i++) {
+            int index = tileManager.getRandomAvailableTileIndex();
+            if (index != -1) {
+                Tile computerTile = tileManager.drawTile(index);
+                if (computerTile != null && !computerTile.isOpened()) {
+                    computerTile.setOpened(true);
+                    computer.addTile(computerTile);
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Máy tính đã chọn 4 thẻ bài ban đầu.");
+        observer.onGameStateChanged(gameState);
     }
 
-    // Phân chia 4 tile cho mỗi người chơi
-    private void dealInitialTiles() {
-        for (int i = 0; i < 4; i++) {
-            playerHand.add(deck.remove(0));
-            opponentHand.add(deck.remove(0));
+    /**
+     * Máy tính tiến hành lượt đoán.
+     */
+    public void computerTurn() {
+        // Máy tính chọn một thẻ bài của người chơi để đoán
+        Tile userTile = user.getRandomUnopenedTile();
+        if (userTile != null) {
+            int guessedNumber = computer.guessNumber(userTile);
+            if (guessedNumber == userTile.getNumber()) {
+                JOptionPane.showMessageDialog(null, "Máy tính đã đoán đúng số trên thẻ bài!");
+                userTile.setOpened(true);
+                computer.increaseScore();
+            } else {
+                JOptionPane.showMessageDialog(null, "Máy tính đã đoán sai số trên thẻ bài!");
+                // Thêm logic xử lý khi máy tính đoán sai, ví dụ: chuyển lượt
+            }
+        }
+        observer.onGameStateChanged(gameState);
+    }
+
+    /**
+     * Kiểm tra điều kiện kết thúc trò chơi.
+     */
+    public void checkGameOver() {
+        if (user.getScore() >= 8) {
+            gameState.setGameOver(true);
+            observer.onGameStateChanged(gameState);
+        } else if (computer.getScore() >= 8) {
+            gameState.setGameOver(true);
+            observer.onGameStateChanged(gameState);
         }
     }
 
-    // Lấy bộ bài của người chơi
-    public List<Tile> getPlayerHand() {
-        return playerHand;
+    public GameUser getUser() {
+        return user;
     }
 
-    // Lấy bộ bài của đối thủ
-    public List<Tile> getOpponentHand() {
-        return opponentHand;
+    public Computer getComputer() {
+        return computer;
     }
 
-    // Lấy bộ bài chung
-    public List<Tile> getSharedHand() {
-        return sharedHand;
+    public GameState getGameState() {
+        return gameState;
     }
 
-    // Lấy tile từ bộ bài chung (nếu cần)
-    public Tile drawSharedTile() {
-        if (!deck.isEmpty()) {
-            Tile tile = deck.remove(0);
-            sharedHand.add(tile);
-            return tile;
-        }
-        return null;
-    }
-
-    // Kiểm tra điều kiện thắng
-    public boolean checkWinCondition() {
-        // Người chơi thắng nếu đã mở hết tile của đối thủ
-        boolean playerWins = opponentHand.stream().allMatch(Tile::isRevealed);
-        // Đối thủ thắng nếu đã mở hết tile của người chơi
-        boolean opponentWins = playerHand.stream().allMatch(Tile::isRevealed);
-        return playerWins || opponentWins;
-    }
-
-    // Xác định người thắng
-    public String getWinner() {
-        boolean playerWins = opponentHand.stream().allMatch(Tile::isRevealed);
-        boolean opponentWins = playerHand.stream().allMatch(Tile::isRevealed);
-        if (playerWins && opponentWins) {
-            return "Draw";
-        } else if (playerWins) {
-            return "Player";
-        } else if (opponentWins) {
-            return "Opponent";
-        }
-        return "None";
+    public TileManager getTileManager() {
+        return tileManager;
     }
 }
