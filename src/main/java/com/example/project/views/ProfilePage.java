@@ -84,7 +84,8 @@ public class ProfilePage extends JPanel {
         addInfoItem(infoContainer, "Name: " + currentUser.getUsername(), 0);
         addInfoItem(infoContainer, "Age: " + currentUser.getAge(), 80);
         addInfoItem(infoContainer, "Record: " + currentUser.getRecord(), 160);
-        addInfoItem(infoContainer, "Core: " + currentUser.getScore() + "P", 240);
+        addInfoItem(infoContainer, "Core: " + currentUser.getCore() + "P", 240);
+        addInfoItem(infoContainer, "Ranking: " + currentUser.getRanking(), 320);
         addInfoItem(infoContainer, "Ratio: " + currentUser.getRatio() + "%", 400);
 
         // Nút Back

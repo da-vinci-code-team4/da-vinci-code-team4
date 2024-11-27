@@ -9,25 +9,27 @@ public class User {
     private String username;
     private int age;
     private String record; // Ví dụ: "90 wins - 10 loses"
-    private int score; // Ví dụ: 1200
+    private int core; // Ví dụ: 1200
+    private int ranking; // Ví dụ: 1
     private double ratio; // Ví dụ: 90.0 (tỉ lệ thắng)
     private String userImage;
 
     // Constructor đầy đủ
-    public User(String id, String password, String username, int age, String record, int score, double ratio) {
+    public User(String id, String password, String username, int age, String record, int core, int ranking, double ratio) {
         this.id = id;
         this.password = password;
         this.username = username;
         this.age = age;
         this.record = record;
-        this.score = score;
+        this.core = core;
+        this.ranking = ranking;
         this.ratio = ratio;
         this.userImage = userImage;
     }
 
     // Constructor mới với 4 tham số, các trường còn lại được gán giá trị mặc định
     public User(String id, String password, String username, int age) {
-        this(id, password, username, age, "0W - 0L", 0, 0.0);
+        this(id, password, username, age, "0W - 0L", 0, 0, 0.0);
     }
 
     // Getters
@@ -51,8 +53,12 @@ public class User {
         return record;
     }
 
-    public int getScore() {
-        return score;
+    public int getCore() {
+        return core;
+    }
+
+    public int getRanking() {
+        return ranking;
     }
 
     public double getRatio() {
@@ -80,8 +86,12 @@ public class User {
         this.record = record;
     }
 
-    public void setScore(int core) {
-        this.score = score;
+    public void setCore(int core) {
+        this.core = core;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
     }
 
     public void setRatio(double ratio) {

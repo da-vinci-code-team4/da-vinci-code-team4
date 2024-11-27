@@ -1,6 +1,5 @@
 package com.example.project.views;
 
-import com.example.project.controller.FileController;
 import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.RoundedPanel;
@@ -155,9 +154,7 @@ public class LoginPage extends JPanel {
         if (isAuthenticated && authenticatedUser != null) {
             // Thiết lập người dùng hiện tại trong Session
             Session.getInstance().setCurrentUser(authenticatedUser);
-            FileController.setCurrentUser(authenticatedUser);
-            FileController.readHistoryData();
-            FileController.readRankingData();
+
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             cardLayout.show(mainPanel, "MyPage");
         } else {
