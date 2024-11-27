@@ -4,6 +4,7 @@ import static com.example.project.game.manager.GameManager.MAX_TILE_NUMBER;
 import static com.example.project.game.manager.GameManager.MIN_TILE_NUMBER;
 import static com.example.project.game.manager.GameManager.NUMBER_OF_INIT_TILE;
 
+import com.example.project.game.player.Computer;
 import com.example.project.game.player.Player;
 import com.example.project.game.tile.JokerTile;
 import com.example.project.game.tile.NumberTile;
@@ -14,15 +15,17 @@ import com.example.project.game.tile.TileType;
 import java.util.*;
 import java.util.stream.Stream;
 
+import org.checkerframework.checker.units.qual.A;
+
 
 /**
  * 타일 덱을 관리하는 클래스다.
  */
 public class TileManager {
 
-    private final List<Tile> deck = new ArrayList<>();
-    private final Player firstPlayer; //선공
-    private final Player secondPlayer; //후공
+    protected final List<Tile> deck = new ArrayList<>();
+    protected final Player firstPlayer; //선공
+    protected final Player secondPlayer; //후공
 
     public TileManager(Player firstPlayer, Player secondPlayer) {
         this.firstPlayer = firstPlayer;
@@ -30,8 +33,18 @@ public class TileManager {
     }
 
     public void initGame() {
+
         generateTile();
         shuffle();
+        //컴퓨터에게 타일을 먼저 나눠준다.
+        if (secondPlayer instanceof Computer) {
+            System.out.println("distributeTile To Computer");
+            ((Computer) secondPlayer).getInitTiles();
+        } else if (firstPlayer instanceof Computer) {
+            ((Computer) firstPlayer).getInitTiles();
+            System.out.println("firstPlayer is an instance of Computer");
+        }
+
     }
 
     /**
@@ -39,10 +52,14 @@ public class TileManager {
      *
      * @return 덱에 타일이 남아 있다면 타일을 하나 반환하며 만약 없다면 Optional.empty()를 반환한다
      */
-    public Optional<Tile> getTileFromDeck(Tile tile) {
-        return deck.isEmpty() ?
-                Optional.empty() :
-                Optional.of(deck.remove(0));
+    public Optional<Tile> getTileFromDeck() {
+        
+        Optional<Tile> tile = deck.isEmpty() ?
+                                Optional.empty() :
+                                Optional.of(deck.remove(0));
+        System.out.println("getTileFromDeck : "+ tile.get().getTileColor() + " " + tile.get().getWeight()/10);
+
+        return tile;
     }
 
     /**
@@ -77,7 +94,7 @@ public class TileManager {
     /**
      * 덱에 있는 타일을 무작위로 섞는 메서드다.
      */
-    private void shuffle() {
+    public void shuffle() {
         Collections.shuffle(deck);
     }
 
@@ -88,9 +105,7 @@ public class TileManager {
      * 이후 나눠준 타일은 덱에서 삭제한다.
      */
     public void distributeTile(ArrayList<Tile> tiles) {
-        //컴퓨터에게 타일을 먼저 나눠준다.
-        //computer.giveTileToPlayerAtStart(deck.subList(0, NUMBER_OF_INIT_TILE));
-        System.out.println( getDeckSize());
+        
         firstPlayer.giveTileToPlayerAtStart(tiles);
         for (Tile t: tiles) {
             deck.remove(t);
@@ -145,4 +160,27 @@ public class TileManager {
         return firstPlayer;
     }
 
+    public ArrayList<Tile> getOpponentDeck(Player player) {
+        if(player == firstPlayer){
+            return secondPlayer.getTileDeck();
+        }
+        else{
+            return firstPlayer.getTileDeck();
+        }
+    }
+
+    public String getTileOwner(Tile tile){
+        if(firstPlayer.getTileDeck().contains(tile)){
+            return "my";
+        }
+        else if (secondPlayer.getTileDeck().contains(tile)){
+            return "opponent";
+        }
+        else if (deck.contains(tile)){
+            return "shared";
+        }
+        
+        return "none";
+        
+    }
 }

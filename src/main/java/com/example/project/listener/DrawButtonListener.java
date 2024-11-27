@@ -15,7 +15,7 @@ public class DrawButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Draw button clicked"+parentPanel.getSelectedTiles());
+        // System.out.println("Draw button clicked"+parentPanel.getSelectedTiles());
         // System.out.println("Before tiles distributed"+Controller.getTileManager().getFirstPlayer().getDeckSize());
         Controller.getTileManager().distributeTile(parentPanel.getSelectedTiles());
         // System.out.println("After tiles distributed"+Controller.getTileManager().getFirstPlayer().getDeckSize());

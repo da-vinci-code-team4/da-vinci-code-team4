@@ -49,6 +49,10 @@ public class PlayGameWithPC extends JPanel {
     private JPanel sharedCards;
     private JPanel opponentCards;
 
+    private String opponentId = "opponent";
+    private String myId = "my";
+    private String sharedId = "shared";
+
     private ArrayList<Tile> selectedTiles = new ArrayList<>();
 
     public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
@@ -82,6 +86,7 @@ public class PlayGameWithPC extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 seconds++;
                 updateClock();
+                mainContent.repaint();
             }
         });
         timer.start();
@@ -136,17 +141,17 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(meText);
 
         // 상대방 카드 영역
-        opponentCards = createPlayerCards(opponentCards, mainContent, null, null);
+        opponentCards = createPlayerCards(opponentId,opponentCards, mainContent, null, null);
         opponentCards.setBounds(210, 81 - 65, 650, 261);
         mainContent.add(opponentCards);
 
         // 플레이어 카드 영역
-        myCards = createPlayerCards(myCards, mainContent, null, null);
+        myCards = createPlayerCards(myId, myCards, mainContent, null, null);
         myCards.setBounds(673, 682 - 65, 650, 261);
         mainContent.add(myCards);
 
         // 공유 카드 영역
-        createSharedCards(mainContent,null, null);
+        createSharedCards(sharedId,mainContent,null, null);
 
         // 채팅 영역
         JPanel chatPanel = new RoundedPanel(null, new Color(0xD9D9D9), 20);
@@ -183,7 +188,7 @@ public class PlayGameWithPC extends JPanel {
      * @param radius     모서리 반경
      * @return 구성된 RoundedPanel
      */
-    private RoundedPanel createHoverableCard(LayoutManager layout, Color bgColor, Color hoverColor, int radius, Tile tile) {
+    private RoundedPanel createHoverableCard(String id, LayoutManager layout, Color bgColor, Color hoverColor, int radius, Tile tile) {
         RoundedPanel card;
         String imageName;
     
@@ -205,7 +210,7 @@ public class PlayGameWithPC extends JPanel {
             imageName = "w" + index;
         }
         
-        card = new RoundedPanel(layout, bgColor, radius, imageName);
+        card = new RoundedPanel(id, layout, bgColor, radius, imageName);
         card.setTile(tile); // 타일 설정
         card.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 호버 시 커서 변경
     
@@ -214,7 +219,7 @@ public class PlayGameWithPC extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (!selectedTiles.contains(tile)) {
-                    card.setBorder(BorderFactory.createLineBorder(hoverColor, 3));
+                    card.setBorder(BorderFactory.createLineBorder(hoverColor, 6));
                 }
             }
     
@@ -227,13 +232,13 @@ public class PlayGameWithPC extends JPanel {
         });
     
         // 타일 클릭 이벤트를 처리하기 위한 CardMouseListener 추가
-        card.addMouseListener(new CardMouseListener(this, card, color, index));
+        card.addMouseListener(new CardMouseListener(this, card, color, index, tile));
     
         return card;
     }
 
     // 플레이어 카드 영역을 생성하는 메서드
-    private JPanel createPlayerCards(JPanel playerCards,JPanel mainContent, String[][] cardInfo, Tile[] tile) {
+    private JPanel createPlayerCards(String id, JPanel playerCards,JPanel mainContent, String[][] cardInfo, Tile[] tile) {
         
         // String[] color = new String[13];
         // String[] index = new String[13];
@@ -263,7 +268,7 @@ public class PlayGameWithPC extends JPanel {
             RoundedPanel card;
             if(tile != null){
                 // System.out.println(color+" "+i); // 디버깅용
-                card = createHoverableCard(new FlowLayout(), bgColor, hoverColor, 20, tile[i]);
+                card = createHoverableCard(id, new FlowLayout(), bgColor, hoverColor, 20, tile[i]);
             }
             else{
                 card = new RoundedPanel(new FlowLayout(), bgColor, 20);
@@ -276,7 +281,7 @@ public class PlayGameWithPC extends JPanel {
     }
 
     // 공유 카드 영역을 생성하는 메서드
-    private void createSharedCards(JPanel mainContent, String[][] cardInfo, Tile tile[]) {
+    private void createSharedCards(String id, JPanel mainContent, String[][] cardInfo, Tile tile[]) {
         // String[] color = new String[26];
         // String[] index = new String[26];
         
@@ -304,7 +309,7 @@ public class PlayGameWithPC extends JPanel {
             RoundedPanel card;
             
             if(tile != null){
-                card = createHoverableCard(new FlowLayout(), bgColor, hoverColor,20, tile[i]);
+                card = createHoverableCard(id ,new FlowLayout(), bgColor, hoverColor,20, tile[i]);
             }
             else{
                 card = new RoundedPanel(new FlowLayout(), bgColor, 20);
@@ -324,7 +329,7 @@ public class PlayGameWithPC extends JPanel {
      */
     private void recreateOpponentCards(JPanel mainContent, String[][] opponentCardInfo,Tile[] tile) {
         mainContent.remove(opponentCards);
-        opponentCards = createPlayerCards(opponentCards, mainContent, opponentCardInfo, tile);
+        opponentCards = createPlayerCards(opponentId, opponentCards, mainContent, opponentCardInfo, tile);
         opponentCards.setBounds(210, 81 - 65, 650, 261);
         mainContent.add(opponentCards);
     }
@@ -336,7 +341,7 @@ public class PlayGameWithPC extends JPanel {
      */
     private void reCreateMyCards(JPanel mainContent, String[][] myCardInfo,Tile[] tile) {
         mainContent.remove(myCards);
-        myCards = createPlayerCards(myCards, mainContent, myCardInfo, tile);
+        myCards = createPlayerCards(myId, myCards, mainContent, myCardInfo, tile);
         myCards.setBounds(673, 682 - 65, 650, 261);
         mainContent.add(myCards);
     }
@@ -348,7 +353,7 @@ public class PlayGameWithPC extends JPanel {
      */
     private void reCreateSharedCards(JPanel mainContent, String[][] cardInfo, Tile[] tile) {
         mainContent.remove(sharedCards);
-        createSharedCards(mainContent, cardInfo, tile);
+        createSharedCards(sharedId, mainContent, cardInfo, tile);
     }
 
     /**
@@ -372,29 +377,34 @@ public class PlayGameWithPC extends JPanel {
             // sharedCards.removeAll();
             // opponentCards.removeAll();
 
-            System.out.println("mainContent components : "+mainContent.getComponentCount());
+            // System.out.println("mainContent components : "+mainContent.getComponentCount());
             String[][] sharedCardImages = new String[26][2];
             Tile[] sharedTile = new Tile[26];
             for (int i = 0; i < Controller.getTileManagerSize(); i++) {
                 sharedTile[i] = Controller.placeTileManagerTiles(i);
+                System.out.println((i+1)+"shared : "+sharedTile[i].getTileColor()+" "+sharedTile[i].getWeight());
             }
             reCreateSharedCards(mainContent, sharedCardImages, sharedTile);
 
             String[][] myCardImages = new String[13][2];
             Tile[] myTile = new Tile[13];
-            for (int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
-                myTile[i] = Controller.placeTileManagerTiles(i);
+            for (int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
+                myTile[i] = Controller.placeFirstPlayerTiles(i);
+                System.out.println((i+1)+"my:"+myTile[i].getTileColor()+" "+myTile[i].getWeight());
             }
-            recreateOpponentCards(mainContent, myCardImages, myTile);
+            reCreateMyCards(mainContent, myCardImages, myTile);
+            
 
             String[][] opponentCardImages = new String[13][2];
             Tile[] opponentTile = new Tile[13];
-            for (int i = 0; i < Controller.getFirstPlayerDeckSize(); i++) {
-                opponentTile[i] = Controller.placeTileManagerTiles(i);
+            for (int i = 0; i < Controller.getSecondPlayerDeckSize(); i++) {
+                opponentTile[i] = Controller.placeSecondPlayerTiles(i);
+                System.out.println((i+1)+"op : "+opponentTile[i].getTileColor()+" "+opponentTile[i].getWeight());
             }
-            reCreateMyCards(mainContent, opponentCardImages, opponentTile);
+            recreateOpponentCards(mainContent, opponentCardImages, opponentTile);
+            
 
-            System.out.println("mainContent components : "+mainContent.getComponentCount());
+            // System.out.println("mainContent components : "+mainContent.getComponentCount());
                       
         });
     }
@@ -402,95 +412,138 @@ public class PlayGameWithPC extends JPanel {
     /**
      * (클릭시 호출) 선택된 타일을 저장하는 메서드
      * 클릭된 타일을 강조하기 위해 테두리를 변경한다.
-     * @param color
-     * @param index
+     * @param tile 선택된 타일
      */
-    public void selectTile(String color, String index) {
-        Tile tile = Controller.getTileManager().getTile(color,index);
-        
-        Tile selectedTile = tile;
-        Tile removedTile;
+    public void selectTile(Tile tile) {
+        SwingUtilities.invokeLater(() ->{
+            // RoundedPanel selectedTilePanel = findTilePanelById(Controller.getTileManager().getTileOwner(tile));
+            // if (selectedTilePanel == null) {
+            //     System.out.println("해당 ID의 타일을 찾을 수 없습니다: " + tile.getTileColor() + " " + tile.getWeight() / 10);
+            //     return;
+            // }
 
-        System.out.println("selected : "+selectedTile.getTileColor()+" "+selectedTile.getWeight() / 10);
-        RoundedPanel selectedTilePanel = findTilePanel(selectedTile);
-        System.out.println("selectedTilePanel : "+selectedTilePanel.getBackgroundImageName());
-        RoundedPanel removedTilePanel;
+            Tile selectedTile = tile;
+            // Tile removedTile;
 
-        if (selectedTiles.contains(tile)) {
-            selectedTile = selectedTiles.get(selectedTiles.indexOf(tile));
-            selectedTilePanel = findTilePanel(selectedTile);
-            selectedTilePanel.removeBorderColor();
-            selectedTiles.remove(tile);
-        } 
-        else {
-            if(selectedTiles.size() == 4){
-                removedTile = selectedTiles.get(0);
-                System.out.println("removed : "+removedTile.getTileColor()+" "+removedTile.getWeight());
-                removedTilePanel = findTilePanel(removedTile);
-                removedTilePanel.removeBorderColor();
-                selectedTiles.remove(0);
-            }
-
-            selectedTilePanel.setBorderColor(Color.YELLOW);
-            selectedTiles.add(tile);
+            System.out.println("selected : " + selectedTile.getTileColor() + " " + selectedTile.getWeight() / 10);
+            // System.out.println("selectedTilePanel : " + selectedTilePanel.getBackgroundImageName());
             
-            
-        }
+            if (selectedTiles.size() <= 3) {
+                if (selectedTiles.contains(tile)) {
+                    selectedTile = selectedTiles.get(selectedTiles.indexOf(tile));
+                    // selectedTilePanel = findTilePanelById(selectedTilePanel.getId());
+                    // selectedTilePanel.removeBorderColor();
+                    selectedTiles.remove(tile);
+                } 
+                else {            
+                    selectedTiles.add(tile);
+                }
+                // removedTile = selectedTiles.get(0);
+                // System.out.println("removed : " + removedTile.getTileColor() + " " + removedTile.getWeight()/10);
+                // RoundedPanel removedTilePanel = findTilePanelById(Controller.getTileManager().getTileOwner(removedTile));
+                // removedTilePanel.removeBorderColor();
+                
+                // selectedTilePanel.setBorderColor(Color.YELLOW);
+                // selectedTilePanel.revalidate();
+                // selectedTilePanel.repaint();
+            }
         
-        for(Tile t : selectedTiles){
-            System.out.println(t.getTileColor()+" "+t.getWeight());
-        }
-    }
-
-    /**
-     * 선택된 타일을 찾는 메서드
-     * @param color
-     * @param index
-     * @return 선택된 타일
-     */
-    private RoundedPanel findTilePanel(Tile tile) {
-        // // 플레이어 카드에서 타일 패널 찾기
-        // for (Component component : myCards.getComponents()) {
-        //     if (component instanceof RoundedPanel) {
-        //         RoundedPanel panel = (RoundedPanel) component;
-        //         if (panelMatchesTile(panel, tile)) {
-        //             return panel;
-        //         }
-        //     }
-        // }
-    
-        // 공유 카드에서 타일 패널 찾기
-        for (Component component : sharedCards.getComponents()) {
-            if (component instanceof RoundedPanel) {
-                RoundedPanel panel = (RoundedPanel) component;
-                if (panelMatchesTile(panel, tile)) {
-                    return panel;
-                }
+            for (Tile t : selectedTiles) {
+                System.out.println(t.getTileColor() + " " + t.getWeight()/10);
             }
-        }
-    
-        // 상대방 카드에서 타일 패널 찾기
-        for (Component component : opponentCards.getComponents()) {
-            if (component instanceof RoundedPanel) {
-                RoundedPanel panel = (RoundedPanel) component;
-                if (panelMatchesTile(panel, tile)) {
-                    return panel;
-                }
-            }
-        }
-    
-        // 타일 패널을 찾지 못한 경우 null 반환
-        System.out.println("해당 타일을 찾을 수 없습니다: " + tile.getColor() + " " + tile.getIndex());
-        return null;
+        });
     }
+
+    //  /**
+    //  * ID를 통해 타일 패널을 찾는 메서드
+    //  * @param id 패널 ID
+    //  * @return 선택된 타일 패널
+    //  */
+    // private RoundedPanel findTilePanelById(String id) {
+    //     // 플레이어 카드에서 타일 패널 찾기
+    //     System.out.println("id : "+id);
+    //     for (Component component : myCards.getComponents()) {
+    //         if (component instanceof RoundedPanel) {
+    //             RoundedPanel panel = (RoundedPanel) component;
+    //             if (id.equals(panel.getId())) {
+    //                 return panel;
+    //             }
+    //         }
+    //     }
+
+    //     // 공유 카드에서 타일 패널 찾기
+    //     for (Component component : sharedCards.getComponents()) {
+    //         if (component instanceof RoundedPanel) {
+    //             RoundedPanel panel = (RoundedPanel) component;
+    //             if (id.equals(panel.getId())) {
+    //                 return panel;
+    //             }
+    //         }
+    //     }
+
+    //     // 상대방 카드에서 타일 패널 찾기
+    //     for (Component component : opponentCards.getComponents()) {
+    //         if (component instanceof RoundedPanel) {
+    //             RoundedPanel panel = (RoundedPanel) component;
+    //             if (id.equals(panel.getId())) {
+    //                 return panel;
+    //             }
+    //         }
+    //     }
+
+    //     // 타일 패널을 찾지 못한 경우 null 반환
+    //     return null;
+    // }
+
+    // /**
+    //  * 선택된 타일을 찾는 메서드
+    //  * @param color
+    //  * @param index
+    //  * @return 선택된 타일
+    //  */
+    // private RoundedPanel findTilePanel(Tile tile) {
+    //     // // 플레이어 카드에서 타일 패널 찾기
+    //     // for (Component component : myCards.getComponents()) {
+    //     //     if (component instanceof RoundedPanel) {
+    //     //         RoundedPanel panel = (RoundedPanel) component;
+    //     //         if (panelMatchesTile(panel, tile)) {
+    //     //             return panel;
+    //     //         }
+    //     //     }
+    //     // }
     
-    // 타일 패널이 주어진 타일과 일치하는지 확인하는 메서드
-    private boolean panelMatchesTile(RoundedPanel panel, Tile tile) {
+    //     // 공유 카드에서 타일 패널 찾기
+    //     for (Component component : sharedCards.getComponents()) {
+    //         if (component instanceof RoundedPanel) {
+    //             RoundedPanel panel = (RoundedPanel) component;
+    //             if (panelMatchesTile(panel, tile)) {
+    //                 return panel;
+    //             }
+    //         }
+    //     }
+    
+    //     // 상대방 카드에서 타일 패널 찾기
+    //     for (Component component : opponentCards.getComponents()) {
+    //         if (component instanceof RoundedPanel) {
+    //             RoundedPanel panel = (RoundedPanel) component;
+    //             if (panelMatchesTile(panel, tile)) {
+    //                 return panel;
+    //             }
+    //         }
+    //     }
+    
+    //     // 타일 패널을 찾지 못한 경우 null 반환
+    //     System.out.println("해당 타일을 찾을 수 없습니다: " + tile.getColor() + " " + tile.getIndex());
+    //     return null;
+    // }
+    
+    // // 타일 패널이 주어진 타일과 일치하는지 확인하는 메서드
+    // private boolean panelMatchesTile(RoundedPanel panel, Tile tile) {
 
-        Tile panelTile = panel.getTile();
+    //     Tile panelTile = panel.getTile();
 
-        return Objects.equals(panelTile, tile);
-    }
+    //     return Objects.equals(panelTile, tile);
+    // }
 
     /**
      * @return 선택된 타일들을 반환하는 메서드

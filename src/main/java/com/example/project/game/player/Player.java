@@ -18,17 +18,17 @@ abstract public class Player {
      */
     public static final int INSERTED_JOKER_TILE_WEIGHT_GAP = 2;
 
-    private TileManager tileManager;
-    private final String name;
-    private int rank;
-    private int score;
-    private int winCnt;
-    private int lossCnt;
+    protected TileManager tileManager;
+    protected final String name;
+    protected int rank;
+    protected int score;
+    protected int winCnt;
+    protected int lossCnt;
 
     /**
      * 플레이어가 가진 타일을 저장한다.
      */
-    private TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
+    protected TreeSet<Tile> myTileDeck = new TreeSet<>(); //플레이어가 가진 타일덱
     Scanner scanner = new Scanner(System.in);
 
     /**
@@ -163,5 +163,9 @@ abstract public class Player {
         this.winCnt = winCnt + number;
         this.lossCnt = lossCnt - number;
         return new int[]{winCnt, lossCnt};
+    }
+
+    public ArrayList<Tile> getTileDeck(){
+        return new ArrayList<>(this.myTileDeck);
     }
 }
