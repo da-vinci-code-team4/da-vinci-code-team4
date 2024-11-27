@@ -2,6 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.game.player.Player;
 import com.example.project.game.player.User;
+import com.example.project.game.player.Computer;
 import com.example.project.game.tile.Tile;
 import com.example.project.game.tile.TileColor;
 import com.example.project.game.tile.TileType;
@@ -18,18 +19,22 @@ public class Controller {
         System.out.println("게임시작");
 
         user = new User("test1",100,100,1,1);
-        opponentPlayer = new User("test2",100,23991,1,1);
+        opponentPlayer = new Computer("test2",100,23991,1,1);
         tileManager = new TileManager(user, opponentPlayer);
 
         GameManager game = new GameManager(tileManager, user, opponentPlayer);
+        
+        user.makeTileManager(tileManager);
+        opponentPlayer.makeTileManager(tileManager);
+
         game.startGame();
     }
-    public static String[] placeFirstPlayerTiles(int number){
-        return makeFileName(user.getTile(number));
+    public static Tile placeFirstPlayerTiles(int number){
+        return user.getTile(number);
     }
 
-    public static String[] placeSecondPlayerTiles(int number){
-        return makeFileName(opponentPlayer.getTile(number));
+    public static Tile placeSecondPlayerTiles(int number){
+        return opponentPlayer.getTile(number);
     }
 
     public static Tile placeTileManagerTiles(int number){
@@ -38,31 +43,31 @@ public class Controller {
         return tileManager.getTile(number);
     }
 
-    //0번 : 파일 이름, 1번 : 타일 숫자
-    public static String[] makeFileName(Tile tile) {
-        String[] result = new String[2];
+    // //0번 : 파일 이름, 1번 : 타일 숫자
+    // public static String[] makeFileName(Tile tile) {
+    //     String[] result = new String[2];
 
-        if(tile.getTileType()== TileType.JOKER){
-            if(tile.getTileColor() == TileColor.BLACK){
-                result[0] = "BLACK";
-            }
-            else{
-                result[0] = "WHITE";
-            }
-            result[1] = "joker";
-        }
-        else{
-            if(tile.getTileColor() == TileColor.BLACK){
-                result[0] = "BLACK";
-                result[1] = String.valueOf(tile.getWeight()/10);
-            }
-            else{
-                result[0] = "WHITE";
-                result[1] = String.valueOf(tile.getWeight()/10);
-            }
-        }
-        return result;
-    }
+    //     if(tile.getTileType()== TileType.JOKER){
+    //         if(tile.getTileColor() == TileColor.BLACK){
+    //             result[0] = "BLACK";
+    //         }
+    //         else{
+    //             result[0] = "WHITE";
+    //         }
+    //         result[1] = "joker";
+    //     }
+    //     else{
+    //         if(tile.getTileColor() == TileColor.BLACK){
+    //             result[0] = "BLACK";
+    //             result[1] = String.valueOf(tile.getWeight()/10);
+    //         }
+    //         else{
+    //             result[0] = "WHITE";
+    //             result[1] = String.valueOf(tile.getWeight()/10);
+    //         }
+    //     }
+    //     return result;
+    // }
 
     public static String[] makeFileName(Tile tile, int number) {
         String[] result = new String[2];

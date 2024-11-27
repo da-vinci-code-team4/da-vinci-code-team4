@@ -20,6 +20,7 @@ import com.example.project.game.tile.Tile;
 
 // 모서리가 둥근 사각형을 생성하기 위한 사용자 정의 JPanel 클래스
 public class RoundedPanel extends JPanel {
+    private String id;
     private int cornerRadius = 20;
     private BufferedImage backgroundImage;
     private String backgroundImageName;
@@ -42,8 +43,9 @@ public class RoundedPanel extends JPanel {
     }
 
     // 생성자 3: LayoutManager, Color, int, String (imagePath)
-    public RoundedPanel(LayoutManager layout, Color bgColor, int radius, String imagePath) {
+    public RoundedPanel(String id, LayoutManager layout, Color bgColor, int radius, String imagePath) {
         super(layout);
+        this.id = id;
         cornerRadius = radius;
         setOpaque(false);
         setBackground(bgColor);
@@ -150,5 +152,9 @@ public class RoundedPanel extends JPanel {
 
     public Tile getTile() {
         return tile;
+    }
+
+    public String getId() {
+        return id;
     }
 }

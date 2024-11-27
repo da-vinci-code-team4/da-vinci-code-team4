@@ -49,8 +49,7 @@ public class GameManager {
      * */
     public void startGame() {
         tileManager.initGame();
-        firstPlayer.makeTileManager(tileManager);
-        secondPlayer.makeTileManager(tileManager);
+    
         while (!status.isAllTileOpen()) {
             while (!status.isAllTileOpen() && playGame(firstPlayer)) {
 //                recorder.save(Record.of(++turn, firstPlayer, status)); //status는 나중에 스냅샷으로 깊은 복사 저장

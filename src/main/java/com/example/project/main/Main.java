@@ -33,7 +33,7 @@ public class Main {
 
         // 사용자 목록 초기화
         userList = new ArrayList<>();
-        initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
+        SwingMain.initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
 
         // 현재 사용자 설정 (예: 사용자 목록의 첫 번째 사용자)
         currentUser = userList.get(0);

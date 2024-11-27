@@ -12,17 +12,19 @@ public class CardMouseListener extends MouseAdapter {
     private RoundedPanel card;
     private String color;
     private String index;
+    private Tile tile;
 
-    public CardMouseListener(PlayGameWithPC parentFrame, RoundedPanel card, String color, String index) {
+    public CardMouseListener(PlayGameWithPC parentFrame, RoundedPanel card, String color, String index, Tile tile) {
         this.parentFrame = parentFrame;
         this.card = card;
         this.color = color;
         this.index = index;
+        this.tile = tile;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println("타일이 클릭되었습니다: " + color + " " + index);
-        parentFrame.selectTile(color, index);
+        parentFrame.selectTile(tile);
     }
 }
