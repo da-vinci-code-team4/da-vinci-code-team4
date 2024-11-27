@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * GameState.java
  *
- * Lưu trữ trạng thái hiện tại của trò chơi.
+ * 현재 게임의 상태를 저장합니다.
  */
 public class GameState {
     private List<Tile> centralTiles;
@@ -47,9 +47,9 @@ public class GameState {
     }
 
     /**
-     * Đánh dấu thẻ bài ở khu vực máy tính tại vị trí index là đã được mở.
+     * 컴퓨터 영역에서 인덱스 위치의 타일이 열렸음을 표시합니다.
      *
-     * @param index Vị trí của thẻ bài trong khu vực máy tính
+     * @param index 컴퓨터 영역에서의 타일 위치
      */
     public void setTileOpenedInComputer(int index) {
         if (computerTiles != null && index >= 0 && index < computerTiles.size()) {
@@ -58,9 +58,9 @@ public class GameState {
     }
 
     /**
-     * Đánh dấu thẻ bài ở khu vực người chơi tại vị trí index là đã được mở.
+     * 사용자 영역에서 인덱스 위치의 타일이 열렸음을 표시합니다.
      *
-     * @param index Vị trí của thẻ bài trong khu vực người chơi
+     * @param index 사용자 영역에서의 타일 위치
      */
     public void setTileOpenedInUser(int index) {
         if (userTiles != null && index >= 0 && index < userTiles.size()) {
