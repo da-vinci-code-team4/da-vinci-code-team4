@@ -11,7 +11,7 @@ public class MyPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
-    // Danh sách người dùng đã đăng ký
+    // 등록된 사용자 목록
     private List<User> userList;
 
     public MyPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) {
@@ -19,38 +19,38 @@ public class MyPage extends JPanel {
         this.cardLayout = cardLayout;
         this.userList = userList;
 
-        setLayout(null); // Sử dụng layout null để tự định vị các thành phần
-        setBackground(Color.WHITE); // Màu nền của trang MyPage
+        setLayout(null); // 레이아웃을 null로 설정하여 컴포넌트의 위치를 직접 지정
+        setBackground(Color.WHITE); // MyPage 배경색 설정
 
-        // Tạo trang MyPage
+        // MyPage 화면 구성 생성
         createMyPage();
     }
 
     /**
-     * Phương thức tạo trang MyPage.
+     * MyPage 화면을 생성하는 메서드.
      */
     private void createMyPage() {
-        // Cài đặt background
+        // 배경 설정
         JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
 
-        // Group các button dọc bên trái
-        int buttonSize = 100; // Kích thước button hình vuông
-        int buttonSpacing = 35; // Khoảng cách giữa các button
-        int leftMargin = 50; // Khoảng cách từ viền trái
+        // 왼쪽에 버튼 그룹 배치
+        int buttonSize = 100; // 버튼 크기 (정사각형)
+        int buttonSpacing = 35; // 버튼 간 간격
+        int leftMargin = 50; // 왼쪽 여백
 
-        // Tính toán vị trí để căn giữa theo chiều dọc
-        int totalHeight = 3 * buttonSize + 2 * buttonSpacing; // Chiều cao của tất cả các button và khoảng cách
-        int startY = (916 - totalHeight) / 2; // Vị trí Y bắt đầu để căn giữa
+        // 세로 중앙 정렬을 위한 위치 계산
+        int totalHeight = 3 * buttonSize + 2 * buttonSpacing; // 버튼과 간격의 총 높이
+        int startY = (916 - totalHeight) / 2; // 시작 Y 위치 계산
 
-        // Button Menu
+        // 메뉴 버튼
         JButton menuButton = new JButton(new ImageIcon(getClass().getResource("/img/ViewImage/menu_button.png")));
         menuButton.setBounds(leftMargin, startY, buttonSize, buttonSize);
         menuButton.setBorderPainted(false);
         menuButton.setContentAreaFilled(false);
-        menuButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        menuButton.setFocusPainted(false); // 포커스 상태 비활성화
         menuButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         menuButton.addActionListener(e -> {
             MenuPage menuPage = new MenuPage(mainPanel, cardLayout, userList);
@@ -59,16 +59,16 @@ public class MyPage extends JPanel {
         });
         background.add(menuButton);
 
-        // Button Setting
+        // 설정 버튼
         JButton settingButton = new JButton(new ImageIcon(getClass().getResource("/img/ViewImage/setting_button.png")));
         settingButton.setBounds(leftMargin, startY + buttonSize + buttonSpacing, buttonSize, buttonSize);
         settingButton.setBorderPainted(false);
         settingButton.setContentAreaFilled(false);
-        settingButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        settingButton.setFocusPainted(false); // 포커스 상태 비활성화
         settingButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Chuyển trang sang AudioSettingPage khi nhấn nút Setting
+        // 설정 버튼 클릭 시 AudioSettingPage로 이동
         settingButton.addActionListener(e -> {
-            // Kiểm tra xem AudioSettingPage đã được thêm vào mainPanel chưa
+            // AudioSettingPage가 mainPanel에 추가되었는지 확인
             if (!isPageAdded("AudioSettingPage")) {
                 AudioSettingPage audioSettingPage = new AudioSettingPage(mainPanel, cardLayout);
                 mainPanel.add(audioSettingPage, "AudioSettingPage");
@@ -77,14 +77,14 @@ public class MyPage extends JPanel {
         });
         background.add(settingButton);
 
-        // Button Info
+        // 정보 버튼
         JButton infoButton = new JButton(new ImageIcon(getClass().getResource("/img/ViewImage/info_button.png")));
         infoButton.setBounds(leftMargin, startY + 2 * (buttonSize + buttonSpacing), buttonSize, buttonSize);
         infoButton.setBorderPainted(false);
         infoButton.setContentAreaFilled(false);
-        infoButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        infoButton.setFocusPainted(false); // 포커스 상태 비활성화
         infoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Chuyển trang sang InfoPage khi nhấn nút Info
+        // 정보 버튼 클릭 시 InfoPage로 이동
         infoButton.addActionListener(e -> {
             InfoPage infoPage = new InfoPage(mainPanel, cardLayout);
             mainPanel.add(infoPage, "InfoPage");
@@ -92,23 +92,23 @@ public class MyPage extends JPanel {
         });
         background.add(infoButton);
 
-        // Button Play
+        // 플레이 버튼
         ImageIcon playIcon = new ImageIcon(getClass().getResource("/img/ViewImage/play.png"));
         JButton playButton = new JButton(playIcon);
 
-        // Lấy kích thước của ảnh
+        // 이미지 크기 가져오기
         int playButtonWidth = playIcon.getIconWidth();
         int playButtonHeight = playIcon.getIconHeight();
-        int playButtonX = 1502 - playButtonWidth - 20; // Cách mép phải 20px
-        int playButtonY = 916 - playButtonHeight - 20; // Cách mép dưới 20px
+        int playButtonX = 1502 - playButtonWidth - 20; // 오른쪽에서 20px 간격
+        int playButtonY = 916 - playButtonHeight - 20; // 아래에서 20px 간격
 
         playButton.setBounds(playButtonX, playButtonY, playButtonWidth, playButtonHeight);
         playButton.setBorderPainted(false);
         playButton.setContentAreaFilled(false);
-        playButton.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
+        playButton.setFocusPainted(false); // 포커스 상태 비활성화
         playButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Chuyển trang sang PlayPage khi nhấn nút Play
+        // 플레이 버튼 클릭 시 PlayPage로 이동
         playButton.addActionListener(e -> {
             PlayPage playPage = new PlayPage(mainPanel, cardLayout);
             mainPanel.add(playPage, "PlayPage");
@@ -118,10 +118,10 @@ public class MyPage extends JPanel {
     }
 
     /**
-     * Kiểm tra xem trang đã được thêm vào mainPanel chưa để tránh thêm nhiều lần.
+     * 페이지가 mainPanel에 이미 추가되었는지 확인하여 중복 추가를 방지하는 메서드.
      *
-     * @param pageName Tên của trang cần kiểm tra.
-     * @return true nếu đã được thêm, false nếu chưa.
+     * @param pageName 확인할 페이지 이름.
+     * @return true면 이미 추가됨, false면 아직 추가되지 않음.
      */
     private boolean isPageAdded(String pageName) {
         for (Component comp : mainPanel.getComponents()) {

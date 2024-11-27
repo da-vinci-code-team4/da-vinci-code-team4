@@ -13,42 +13,42 @@ import java.util.List;
 import java.util.Objects;
 
 public class RankingPage extends JPanel {
-    private int currentPage = 0; // Trang hiện tại
-    private static final int ROWS_PER_PAGE = 6; // Số hàng hiển thị mỗi trang
-    private List<String[]> rankingData; // Dữ liệu từ ranking.txt
+    private int currentPage = 0; // 현재 페이지
+    private static final int ROWS_PER_PAGE = 6; // 페이지당 표시할 행 수
+    private List<String[]> rankingData; // ranking.txt에서 불러온 데이터
     private JPanel dataPanel;
     private JButton rejoinButton;
     private JButton continueButton;
 
     public RankingPage(JPanel mainPanel, CardLayout cardLayout) {
         setLayout(null);
-        setBackground(new Color(0, 0, 0, 0)); // Không nền
+        setBackground(new Color(0, 0, 0, 0)); // 배경 없음
 
-        // Cài đặt background
+        // 배경 설정
         JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
 
-        // Header cố định
+        // 고정된 헤더 생성
         createHeader(background);
 
-        // Đọc dữ liệu từ ranking.txt
+        // ranking.txt에서 데이터 읽기
         rankingData = FileController.getRanking();
 
-        // 랭킹 내림차순 정렬 해주는 메소드
+        // 랭킹 데이터를 내림차순으로 정렬
         rankingData.sort((a, b) -> {
             try {
-                int coreA = Integer.parseInt(a[1]); // Trường "Core" ở vị trí index 1
+                int coreA = Integer.parseInt(a[1]); // "Core" 필드 (인덱스 1 위치)
                 int coreB = Integer.parseInt(b[1]);
-                return Integer.compare(coreB, coreA); // Sắp xếp từ cao xuống thấp
+                return Integer.compare(coreB, coreA); // 높은 순서대로 정렬
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 return 0;
             }
         });
 
-        // Khởi tạo Rejoin Button
+        // Rejoin 버튼 생성
         rejoinButton = new JButton();
         rejoinButton.setBounds(33, 450, 80, 120);
         rejoinButton.setBorderPainted(false);
@@ -62,7 +62,7 @@ public class RankingPage extends JPanel {
         });
         background.add(rejoinButton);
 
-        // Khởi tạo Continue Button
+        // Continue 버튼 생성
         continueButton = new JButton();
         continueButton.setBounds(1396, 450, 80, 120);
         continueButton.setBorderPainted(false);
@@ -76,39 +76,39 @@ public class RankingPage extends JPanel {
         });
         background.add(continueButton);
 
-        // Panel chứa dữ liệu
+        // 데이터를 표시할 패널
         dataPanel = new JPanel(null);
         dataPanel.setBounds(0, 246, 1502, 600);
         dataPanel.setOpaque(false);
         background.add(dataPanel);
 
-        // Gọi updateDataPanel sau khi tất cả các thành phần được khởi tạo
+        // 모든 구성 요소가 초기화된 후 updateDataPanel 호출
         updateDataPanel();
 
-        // Nút Back để quay lại MenuPage
+        // 뒤로가기 버튼 (MenuPage로 돌아감)
         JButton backButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/ViewImage/back.png"))));
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage")); // Quay lại MenuPage
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage")); // MenuPage로 돌아가기
         background.add(backButton);
     }
 
     private void createHeader(JLabel background) {
-        // Header Group
+        // 헤더 그룹
         JPanel headerPanel = new RoundedPanel(10);
         headerPanel.setBounds(158, 167, 1221, 59);
         headerPanel.setBackground(new Color(0, 0, 0, 180));
         headerPanel.setLayout(null);
 
-        // Header Labels
+        // 헤더 라벨
         String[] headers = {"Rank", "Username", "Core", "Win rate", "Ratio"};
         int[] positions = {168, 382, 707, 935, 1230};
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
-            label.setBounds(positions[i] - 158, 0, 200, 59); // Cột tương ứng
+            label.setBounds(positions[i] - 158, 0, 200, 59); // 열 위치 지정
             label.setFont(new Font("Arial", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
@@ -117,30 +117,17 @@ public class RankingPage extends JPanel {
         background.add(headerPanel);
     }
 
-//    private List<String[]> readRankingData(String filePath) {
-//        List<String[]> data = new ArrayList<>();
-//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                data.add(line.split("\\s+")); // Tách dữ liệu theo khoảng trắng
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return data;
-//    }
-
     private void updateDataPanel() {
         dataPanel.removeAll();
 
-        int startY = 0; // Vị trí Y bắt đầu của nhóm đầu tiên
-        int height = 80; // Chiều cao mỗi nhóm
+        int startY = 0; // 첫 번째 그룹의 시작 Y 위치
+        int height = 80; // 각 그룹의 높이
         int rank = currentPage * ROWS_PER_PAGE + 1;
 
         for (int i = currentPage * ROWS_PER_PAGE; i < Math.min((currentPage + 1) * ROWS_PER_PAGE, rankingData.size()); i++) {
             String[] row = rankingData.get(i);
 
-            // Panel Group
+            // 그룹 패널
             JPanel groupPanel = new RoundedPanel(10);
             groupPanel.setBounds(158, startY, 1221, height);
             groupPanel.setBackground(new Color(0, 0, 0, 180));
@@ -167,12 +154,12 @@ public class RankingPage extends JPanel {
             coreLabel.setForeground(Color.WHITE);
             groupPanel.add(coreLabel);
 
-            // Win rate (rectangle hiển thị tỷ lệ thắng/thua)
+            // 승률 표시 (승/패 비율을 나타내는 바)
             JPanel winRatePanel = createWinRatePanel(row[2], row[3]);
-            winRatePanel.setBounds(766, (height - 30) / 2, 300, 30); // Giữa chiều cao nhóm
+            winRatePanel.setBounds(766, (height - 30) / 2, 300, 30); // 그룹 높이의 가운데
             groupPanel.add(winRatePanel);
 
-            // Ratio (tính từ dữ liệu thắng/thua)
+            // 승패 비율 (승/패 데이터를 기반으로 계산)
             int wins = Integer.parseInt(row[2]);
             int losses = Integer.parseInt(row[3]);
             double ratio = (double) wins / (wins + losses) * 100;
@@ -182,15 +169,15 @@ public class RankingPage extends JPanel {
             ratioLabel.setForeground(Color.WHITE);
             groupPanel.add(ratioLabel);
 
-            // Thêm nhóm vào dataPanel
+            // 그룹을 dataPanel에 추가
             dataPanel.add(groupPanel);
 
-            // Cập nhật vị trí Y cho nhóm tiếp theo
-            startY += height + 10; // Khoảng cách giữa các nhóm
+            // 다음 그룹의 Y 위치 업데이트
+            startY += height + 10; // 그룹 간 간격
             rank++;
         }
 
-        // Cập nhật trạng thái của các nút Rejoin và Continue
+        // Rejoin 및 Continue 버튼 상태 업데이트
         updateNavigationButtons();
 
         dataPanel.revalidate();
@@ -198,7 +185,7 @@ public class RankingPage extends JPanel {
     }
 
     private void updateNavigationButtons() {
-        // Nút Rejoin
+        // Rejoin 버튼
         if (currentPage > 0) {
             rejoinButton.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/rejon1.png")));
             rejoinButton.setEnabled(true);
@@ -207,7 +194,7 @@ public class RankingPage extends JPanel {
             rejoinButton.setEnabled(false);
         }
 
-        // Nút Continue
+        // Continue 버튼
         if ((currentPage + 1) * ROWS_PER_PAGE < rankingData.size()) {
             continueButton.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/continue1.png")));
             continueButton.setEnabled(true);
@@ -222,31 +209,31 @@ public class RankingPage extends JPanel {
         int losses = Integer.parseInt(lossesStr);
         int totalGames = wins + losses;
 
-        // Panel chứa tỷ lệ thắng/thua
+        // 승/패 비율을 나타내는 패널
         JPanel panel = new JPanel(null);
         panel.setOpaque(false);
 
-        // Số trận thắng
+        // 승리 수
         JLabel winLabel = new JLabel(wins + "W", SwingConstants.CENTER);
         winLabel.setFont(new Font("Arial", Font.BOLD, 14));
         winLabel.setForeground(Color.WHITE);
         winLabel.setBounds(0, 0, (int) ((double) wins / totalGames * 300), 30);
         panel.add(winLabel);
 
-        // Thanh thắng (màu xanh)
+        // 승리 바 (파란색)
         JPanel winBar = new JPanel();
         winBar.setBackground(Color.BLUE);
         winBar.setBounds(0, 0, (int) ((double) wins / totalGames * 300), 30);
         panel.add(winBar);
 
-        // Số trận thua
+        // 패배 수
         JLabel lossLabel = new JLabel(losses + "L", SwingConstants.CENTER);
         lossLabel.setFont(new Font("Arial", Font.BOLD, 14));
         lossLabel.setForeground(Color.WHITE);
         lossLabel.setBounds((int) ((double) wins / totalGames * 300), 0, (int) ((double) losses / totalGames * 300), 30);
         panel.add(lossLabel);
 
-        // Thanh thua (màu đỏ)
+        // 패배 바 (빨간색)
         JPanel lossBar = new JPanel();
         lossBar.setBackground(Color.RED);
         lossBar.setBounds((int) ((double) wins / totalGames * 300), 0, (int) ((double) losses / totalGames * 300), 30);

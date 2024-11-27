@@ -110,7 +110,7 @@ public class SwingMain {
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split("\\s+");
-                userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]),data[4],Integer.parseInt(data[5]),Double.parseDouble(data[6]))); // 나눠진 데이터를 List에 추가
+                // userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]),data[4],Integer.parseInt(data[5]),Double.parseDouble(data[6]))); // 나눠진 데이터를 List에 추가
             }
 
             FileController.setUserList(userList);
