@@ -6,14 +6,14 @@ import java.io.Serializable;
 /**
  * Tile.java
  *
- * Đại diện cho một thẻ bài trong trò chơi.
+ * 게임에서 카드 타일을 나타냅니다.
  */
 public class Tile implements Serializable, Cloneable {
     private TileType tileType;
-    private int number; // Số từ 0 đến 11
+    private int number; // 0부터 11까지의 숫자
     private boolean isOpened;
-    private boolean isGuessedCorrectly; // Trạng thái đoán đúng
-    private boolean isSelected; // Trạng thái được chọn trong giai đoạn chọn ban đầu
+    private boolean isGuessedCorrectly; // 정답 여부 상태
+    private boolean isSelected; // 초기 선택 단계에서 선택된 상태
 
     public Tile(TileType tileType, int number) {
         this.tileType = tileType;
@@ -23,7 +23,7 @@ public class Tile implements Serializable, Cloneable {
         this.isSelected = false;
     }
 
-    // Getter và Setter
+    // Getter 및 Setter
     public TileType getTileType() {
         return tileType;
     }
@@ -57,9 +57,9 @@ public class Tile implements Serializable, Cloneable {
     }
 
     /**
-     * Lấy đường dẫn hình ảnh của thẻ bài.
+     * 카드 타일의 이미지 경로를 가져옵니다.
      *
-     * @return Đường dẫn hình ảnh
+     * @return 이미지 경로
      */
     public String getImagePath() {
         String typePrefix = (tileType == TileType.BLACK) ? "b" : "w";
@@ -67,9 +67,9 @@ public class Tile implements Serializable, Cloneable {
     }
 
     /**
-     * Lấy đường dẫn hình ảnh khi thẻ bài được lật.
+     * 카드 타일이 뒤집혔을 때의 이미지 경로를 가져옵니다.
      *
-     * @return Đường dẫn hình ảnh lật
+     * @return 뒤집힌 이미지 경로
      */
     public String getReverseImagePath() {
         String typePrefix = (tileType == TileType.BLACK) ? "b" : "w";
@@ -77,9 +77,9 @@ public class Tile implements Serializable, Cloneable {
     }
 
     /**
-     * Lấy màu sắc tương ứng với thẻ bài.
+     * 카드 타일에 해당하는 색상을 가져옵니다.
      *
-     * @return Màu sắc của thẻ bài
+     * @return 타일의 색상
      */
     public Color getTileColor() {
         return (tileType == TileType.BLACK) ? Color.BLACK : Color.WHITE;
