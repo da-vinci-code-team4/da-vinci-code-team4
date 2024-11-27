@@ -8,11 +8,11 @@ import java.util.Random;
 /**
  * Player.java
  *
- * Lớp trừu tượng đại diện cho người chơi trong trò chơi.
+ * 게임 내 플레이어를 추상화한 클래스입니다.
  */
 public abstract class Player {
     protected String name;
-    protected List<Tile> tiles; // Thẻ bài của người chơi
+    protected List<Tile> tiles; // 플레이어의 타일 목록
     protected int score;
     protected Random random;
 
@@ -57,9 +57,9 @@ public abstract class Player {
     }
 
     /**
-     * Lấy một thẻ bài chưa được mở ngẫu nhiên.
+     * 무작위로 열리지 않은 타일을 가져옵니다.
      *
-     * @return Thẻ bài chưa được mở hoặc null nếu tất cả đã được mở
+     * @return 열리지 않은 타일 또는 null
      */
     public Tile getRandomUnopenedTile() {
         List<Tile> unopenedTiles = new ArrayList<>();
@@ -75,17 +75,17 @@ public abstract class Player {
     }
 
     /**
-     * Người chơi thực hiện đoán.
+     * 플레이어가 숫자를 추측합니다.
      *
-     * @param tile Thẻ bài mà người chơi sẽ đoán số
-     * @return Số người chơi đoán
+     * @param tile 추측할 타일
+     * @return 플레이어가 추측한 숫자
      */
     public abstract int guessNumber(Tile tile);
 
     /**
-     * Người chơi chọn một thẻ bài để đoán.
+     * 플레이어가 타일을 선택합니다.
      *
-     * @return Thẻ bài được chọn
+     * @return 선택된 타일
      */
     public abstract Tile selectTile();
 }
