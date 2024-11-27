@@ -1,5 +1,6 @@
 package com.example.project.main;
 
+import com.example.project.controller.FileController;
 import com.example.project.models.Session; // Thêm import này
 import com.example.project.models.User;
 import com.example.project.views.LoginPage;
@@ -9,6 +10,10 @@ import com.example.project.views.ProfilePage;
 import com.example.project.views.CorrectionPage; // Thêm import CorrectionPage
 import com.example.project.ui.SplashScreenPanel; // Thêm import SplashScreenPanel
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -93,11 +98,23 @@ public class SwingMain {
     // Phương thức khởi tạo người dùng mặc định
     private static void initializeDefaultUsers(List<User> userList) {
         // Thêm các thông tin bổ sung cho mỗi User với constructor đầy đủ
-        userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90, 90.0));
-        userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 92, 80.0));
-        userList.add(new User("QuocAnh", "12345678", "QuocAnh", 26, "70W - 30L", 1000, 100, 70.0));
-        userList.add(new User("HyungJoon", "12345678", "HyungJoon", 23, "85W - 15L", 1150, 96, 85.0));
-        userList.add(new User("YeWon", "12345678", "YeWon", 22, "95W - 5L", 1250, 89, 95.0));
-        userList.add(new User("TaeHyun", "12345678", "TaeHyun", 25, "65W - 35L", 950, 126, 65.0));
+//        userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90.0));
+//        userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 80.0));
+//        userList.add(new User("QuocAnh", "12345678", "QuocAnh", 26, "70W - 30L", 1000,  70.0));
+//        userList.add(new User("HyungJoon", "12345678", "HyungJoon", 23, "85W - 15L", 1150,  85.0));
+//        userList.add(new User("YeWon", "12345678", "YeWon", 22, "95W - 5L", 1250,  95.0));
+//        userList.add(new User("TaeHyun", "12345678", "TaeHyun", 25, "65W - 35L", 950,  65.0));
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/user.txt"))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split("\\s+");
+                userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]),data[4],Integer.parseInt(data[5]),Double.parseDouble(data[6]))); // 나눠진 데이터를 List에 추가
+            }
+
+            FileController.setUserList(userList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
