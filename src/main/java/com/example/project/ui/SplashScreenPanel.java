@@ -1,3 +1,4 @@
+// src/main/java/com/example/project/ui/SplashScreenPanel.java
 package com.example.project.ui;
 
 import javax.swing.*;
@@ -9,7 +10,7 @@ import java.io.IOException;
 
 public class SplashScreenPanel extends JPanel {
     private BufferedImage image;
-    private float opacity = 1.0f; // Độ trong suốt từ 0.0 (invisible) đến 1.0 (fully visible)
+    private float opacity = 1.0f; // 투명도: 0.0 (보이지 않음)부터 1.0 (완전히 보임)
 
     public SplashScreenPanel(String imagePath) {
         try {
@@ -17,18 +18,18 @@ public class SplashScreenPanel extends JPanel {
             if (is != null) {
                 image = ImageIO.read(is);
             } else {
-                System.err.println("Không tìm thấy hình ảnh cho SplashScreen: " + imagePath);
+                System.err.println("스플래시 스크린 이미지를 찾을 수 없습니다: " + imagePath);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setOpaque(false); // Không vẽ nền mặc định
+        setOpaque(false); // 기본 배경을 그리지 않음
     }
 
     /**
-     * Thiết lập độ trong suốt của splash screen.
+     * 스플래시 스크린의 투명도를 설정합니다.
      *
-     * @param opacity Giá trị độ trong suốt từ 0.0 đến 1.0
+     * @param opacity 투명도 값: 0.0부터 1.0까지
      */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
@@ -40,9 +41,9 @@ public class SplashScreenPanel extends JPanel {
         super.paintComponent(g);
         if (image != null) {
             Graphics2D g2d = (Graphics2D) g.create();
-            // Thiết lập độ trong suốt
+            // 투명도 설정
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            // Vẽ hình ảnh ở trung tâm panel
+            // 패널 중앙에 이미지 그리기
             int imgWidth = image.getWidth();
             int imgHeight = image.getHeight();
             int panelWidth = getWidth();
