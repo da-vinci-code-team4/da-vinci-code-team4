@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Controller.java
  *
- * Quản lý luồng trò chơi, xử lý logic giữa người chơi và máy tính.
+ * 게임의 흐름을 관리하고 플레이어와 컴퓨터 간의 로직을 처리합니다.
  */
 public class Controller {
     private TileManager tileManager;
@@ -19,62 +19,62 @@ public class Controller {
     private GameState gameState;
     private GameObserver observer;
 
-    // Trạng thái hiện tại của trò chơi
+    // 현재 게임의 상태
     private GamePhase currentPhase;
 
     public Controller(GameObserver observer) {
         this.observer = observer;
         tileManager = new TileManager();
-        tileManager.initializeTiles(); // Khởi tạo 24 thẻ bài (12 đen, 12 trắng) và xáo trộn
+        tileManager.initializeTiles(); // 24개의 타일 초기화 (12 검정, 12 흰색) 및 섞기
         gameState = new GameState();
         gameState.setCentralTiles(tileManager.getCentralTiles());
-        user = new GameUser("Người chơi");
-        computer = new Computer("Máy tính");
+        user = new GameUser("플레이어");
+        computer = new Computer("컴퓨터");
         gameState.setUserTiles(user.getTiles());
         gameState.setComputerTiles(computer.getTiles());
         currentPhase = GamePhase.INITIAL_SELECTION;
     }
 
     /**
-     * Bắt đầu trò chơi.
+     * 게임을 시작합니다.
      */
     public void startGame() {
-        // Cập nhật trạng thái trò chơi
+        // 게임 상태 업데이트
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Xử lý việc người chơi chọn thẻ bài từ trung tâm trong giai đoạn chọn ban đầu.
+     * 초기 선택 단계에서 중앙에서 플레이어가 타일을 선택하는 것을 처리합니다.
      *
-     * @param index Vị trí thẻ bài trong khu vực trung tâm (0-23)
+     * @param index 중앙 영역에서의 타일 위치 (0-23)
      */
     public void playerSelectInitialTile(int index) {
         if (currentPhase != GamePhase.INITIAL_SELECTION) {
-            JOptionPane.showMessageDialog(null, "Không phải lượt của bạn để chọn thẻ bài.");
+            JOptionPane.showMessageDialog(null, "타일을 선택할 차례가 아닙니다.");
             return;
         }
 
         Tile tile = tileManager.drawTile(index);
         if (tile != null && !tile.isOpened()) {
             if (!tile.isSelected()) {
-                tile.setSelected(true); // Đánh dấu thẻ bài đã được chọn
-                JOptionPane.showMessageDialog(null, "Đã chọn thẻ bài.");
+                tile.setSelected(true); // 타일이 선택되었음을 표시
+                JOptionPane.showMessageDialog(null, "타일이 선택되었습니다.");
             } else {
-                tile.setSelected(false); // Bỏ chọn thẻ bài
-                JOptionPane.showMessageDialog(null, "Đã bỏ chọn thẻ bài.");
+                tile.setSelected(false); // 타일 선택 해제
+                JOptionPane.showMessageDialog(null, "타일 선택이 취소되었습니다.");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Thẻ bài đã được mở hoặc không hợp lệ!");
+            JOptionPane.showMessageDialog(null, "타일이 이미 열렸거나 유효하지 않습니다!");
         }
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Xác nhận các thẻ bài được chọn trong giai đoạn chọn ban đầu.
+     * 초기 선택 단계에서 선택된 타일을 확인합니다.
      */
     public void confirmInitialSelection() {
         if (currentPhase != GamePhase.INITIAL_SELECTION) {
-            JOptionPane.showMessageDialog(null, "Không phải lượt của bạn để xác nhận.");
+            JOptionPane.showMessageDialog(null, "확인할 차례가 아닙니다.");
             return;
         }
 
@@ -86,7 +86,7 @@ public class Controller {
         }
 
         if (selectedTiles.size() != 4) {
-            JOptionPane.showMessageDialog(null, "Bạn phải chọn đúng 4 thẻ bài.");
+            JOptionPane.showMessageDialog(null, "정확히 4개의 타일을 선택해야 합니다.");
             return;
         }
 
@@ -97,21 +97,21 @@ public class Controller {
         }
         gameState.setUserTiles(user.getTiles());
 
-        // Loại bỏ các thẻ bài đã chọn khỏi khu vực trung tâm
+        // 선택된 타일을 중앙 영역에서 제거
         observer.onGameStateChanged(gameState);
 
-        // Máy tính chọn 4 thẻ bài
+        // 컴퓨터가 4개의 타일을 선택합니다
         currentPhase = GamePhase.COMPUTER_INITIAL_SELECTION;
         computerInitialDrawTiles();
 
-        // Chuyển sang giai đoạn người chơi rút thẻ
+        // 플레이어의 타일 뽑기 단계로 전환
         currentPhase = GamePhase.PLAYER_DRAW_PHASE;
-        observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
-        JOptionPane.showMessageDialog(null, "Giai đoạn của bạn: Vui lòng chọn một thẻ bài để rút (1).");
+        observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+        JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
     }
 
     /**
-     * Máy tính rút 4 thẻ bài trong giai đoạn chọn ban đầu.
+     * 컴퓨터가 초기 선택 단계에서 4개의 타일을 뽑습니다.
      */
     public void computerInitialDrawTiles() {
         int tilesToDraw = 4;
@@ -126,18 +126,18 @@ public class Controller {
             }
         }
         gameState.setComputerTiles(computer.getTiles());
-        JOptionPane.showMessageDialog(null, "Máy tính đã chọn 4 thẻ bài.");
+        JOptionPane.showMessageDialog(null, "컴퓨터가 4개의 타일을 선택했습니다.");
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Người chơi rút một thẻ bài từ trung tâm trong giai đoạn rút bài.
+     * 플레이어가 타일을 뽑는 것을 처리합니다.
      *
-     * @param index Vị trí thẻ bài trong khu vực trung tâm (0-23)
+     * @param index 중앙 영역에서의 타일 위치 (0-23)
      */
     public void playerDrawTile(int index) {
         if (currentPhase != GamePhase.PLAYER_DRAW_PHASE) {
-            JOptionPane.showMessageDialog(null, "Không phải lượt của bạn để rút thẻ bài.");
+            JOptionPane.showMessageDialog(null, "타일을 뽑을 차례가 아닙니다.");
             return;
         }
 
@@ -146,141 +146,141 @@ public class Controller {
             tile.setOpened(true);
             user.addTile(tile);
             gameState.setUserTiles(user.getTiles());
-            JOptionPane.showMessageDialog(null, "Đã thêm thẻ bài vào tay bạn.");
+            JOptionPane.showMessageDialog(null, "타일이 당신의 손에 추가되었습니다.");
             observer.onGameStateChanged(gameState);
 
-            // Chuyển sang giai đoạn người chơi đoán
+            // 플레이어의 추측 단계로 전환
             currentPhase = GamePhase.PLAYER_GUESS_PHASE;
-            observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
-            JOptionPane.showMessageDialog(null, "Giai đoạn của bạn: Hãy chọn thẻ bài của đối phương để đoán.");
+            observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+            JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요.");
         } else {
-            JOptionPane.showMessageDialog(null, "Lựa chọn thẻ bài không hợp lệ.");
+            JOptionPane.showMessageDialog(null, "유효하지 않은 타일 선택입니다.");
         }
     }
 
     /**
-     * Người chơi đoán thẻ bài của máy tính.
+     * 플레이어가 컴퓨터의 타일을 추측하는 것을 처리합니다.
      *
-     * @param index Vị trí thẻ bài trong khu vực máy tính (0-11)
+     * @param index 컴퓨터 영역에서의 타일 위치 (0-11)
      */
     public void playerGuessComputerTile(int index) {
         if (currentPhase != GamePhase.PLAYER_GUESS_PHASE) {
-            JOptionPane.showMessageDialog(null, "Không phải lượt của bạn để đoán.");
+            JOptionPane.showMessageDialog(null, "추측할 차례가 아닙니다.");
             return;
         }
 
         if (index < 0 || index >= computer.getTiles().size()) {
-            JOptionPane.showMessageDialog(null, "Lựa chọn thẻ bài không hợp lệ!");
+            JOptionPane.showMessageDialog(null, "유효하지 않은 타일 선택입니다!");
             return;
         }
 
         Tile computerTile = computer.getTiles().get(index);
         if (computerTile.isGuessedCorrectly()) {
-            JOptionPane.showMessageDialog(null, "Thẻ bài này đã được đoán đúng!");
+            JOptionPane.showMessageDialog(null, "이 타일은 이미 올바르게 추측되었습니다!");
             return;
         }
 
-        // Người chơi nhập số đoán
+        // 플레이어가 추측할 숫자를 입력
         int guessedNumber = user.guessNumber(computerTile);
         if (guessedNumber == computerTile.getNumber()) {
-            JOptionPane.showMessageDialog(null, "Bạn đã đoán đúng!");
-            computerTile.setGuessedCorrectly(true); // Đánh dấu đoán đúng
+            JOptionPane.showMessageDialog(null, "정답을 맞추셨습니다!");
+            computerTile.setGuessedCorrectly(true); // 올바르게 추측되었음을 표시
             user.increaseScore();
-            gameState.setTileOpenedInComputer(index); // Đánh dấu thẻ bài đã được mở trong GameState
+            gameState.setTileOpenedInComputer(index); // GameState에서 타일이 열렸음을 표시
             observer.onGameStateChanged(gameState);
 
-            // Kiểm tra điều kiện chiến thắng
+            // 승리 조건 확인
             checkGameOver();
 
-            // Chuyển sang giai đoạn rút bài
+            // 타일 뽑기 단계로 전환
             currentPhase = GamePhase.PLAYER_DRAW_PHASE;
-            observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
-            JOptionPane.showMessageDialog(null, "Giai đoạn của bạn: Vui lòng chọn một thẻ bài để rút (1).");
+            observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+            JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
         } else {
-            JOptionPane.showMessageDialog(null, "Bạn đã đoán sai!");
-            // Chuyển sang lượt của máy tính
+            JOptionPane.showMessageDialog(null, "틀렸습니다!");
+            // 컴퓨터의 턴으로 전환
             currentPhase = GamePhase.COMPUTER_TURN;
-            observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
+            observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
             computerTurn();
             checkGameOver();
         }
     }
 
     /**
-     * Lượt của máy tính để đoán thẻ bài của người chơi.
+     * 컴퓨터의 턴을 처리합니다.
      */
     public void computerTurn() {
-        // Máy tính chọn một thẻ bài để đoán
+        // 컴퓨터가 추측할 타일을 선택
         Tile userTile = user.getRandomUnopenedTile();
         if (userTile != null) {
             int guessedNumber = computer.guessNumber(userTile);
-            JOptionPane.showMessageDialog(null, "Máy tính đoán: " + guessedNumber);
+            JOptionPane.showMessageDialog(null, "컴퓨터의 추측: " + guessedNumber);
             if (guessedNumber == userTile.getNumber()) {
-                JOptionPane.showMessageDialog(null, "Máy tính đã đoán đúng!");
+                JOptionPane.showMessageDialog(null, "컴퓨터가 정답을 맞추었습니다!");
                 userTile.setOpened(true);
-                userTile.setGuessedCorrectly(true); // Đánh dấu đoán đúng
+                userTile.setGuessedCorrectly(true); // 올바르게 추측되었음을 표시
                 computer.increaseScore();
-                gameState.setTileOpenedInUser(user.getTiles().indexOf(userTile)); // Đánh dấu thẻ bài đã được mở trong GameState
+                gameState.setTileOpenedInUser(user.getTiles().indexOf(userTile)); // GameState에서 타일이 열렸음을 표시
                 observer.onGameStateChanged(gameState);
 
-                // Kiểm tra điều kiện chiến thắng
+                // 승리 조건 확인
                 checkGameOver();
 
-                // Máy tính rút một thẻ bài từ trung tâm
+                // 컴퓨터가 중앙에서 타일을 뽑음
                 computerDrawTileFromCenter();
                 checkGameOver();
 
-                // Chuyển sang giai đoạn rút bài
+                // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
-                observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
-                JOptionPane.showMessageDialog(null, "Giai đoạn của bạn: Vui lòng chọn một thẻ bài để rút (1).");
+                observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+                JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
             } else {
-                JOptionPane.showMessageDialog(null, "Máy tính đã đoán sai!");
-                // Máy tính rút một thẻ bài từ trung tâm
+                JOptionPane.showMessageDialog(null, "컴퓨터가 틀렸습니다!");
+                // 컴퓨터가 중앙에서 타일을 뽑음
                 computerDrawTileFromCenter();
                 checkGameOver();
 
-                // Chuyển sang giai đoạn rút bài
+                // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
-                observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
-                JOptionPane.showMessageDialog(null, "Giai đoạn của bạn: Vui lòng chọn một thẻ bài để rút (1).");
+                observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+                JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Máy tính không còn thẻ bài để đoán.");
-            // Chuyển sang giai đoạn rút bài
+            JOptionPane.showMessageDialog(null, "컴퓨터가 추측할 타일이 더 이상 없습니다.");
+            // 타일 뽑기 단계로 전환
             currentPhase = GamePhase.PLAYER_DRAW_PHASE;
-            observer.onGameStateChanged(gameState); // Thêm dòng này để cập nhật giao diện
-            JOptionPane.showMessageDialog(null, "Giai đoạn của bạn: Vui lòng chọn một thẻ bài để rút (1).");
+            observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+            JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
         }
     }
 
     /**
-     * Máy tính rút một thẻ bài từ trung tâm.
+     * 컴퓨터가 중앙에서 타일을 뽑는 것을 처리합니다.
      */
     private void computerDrawTileFromCenter() {
         Tile tile = tileManager.drawRandomCentralTile();
         if (tile != null) {
             computer.addTile(tile);
-            gameState.getComputerTiles().add(tile); // Cập nhật GameState
-            JOptionPane.showMessageDialog(null, "Máy tính đã rút một thẻ bài từ trung tâm.");
+            gameState.getComputerTiles().add(tile); // GameState 업데이트
+            JOptionPane.showMessageDialog(null, "컴퓨터가 중앙에서 타일을 하나 뽑았습니다.");
         } else {
-            JOptionPane.showMessageDialog(null, "Không còn thẻ bài nào trong trung tâm để máy tính rút!");
+            JOptionPane.showMessageDialog(null, "중앙에 더 이상 뽑을 타일이 없습니다!");
         }
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Kiểm tra điều kiện kết thúc trò chơi.
+     * 게임 종료 조건을 확인합니다.
      */
     public void checkGameOver() {
         if (user.getScore() >= 12 || computer.getTiles().size() == 0) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "Chúc mừng! Bạn đã thắng!");
+            JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
         } else if (computer.getScore() >= 12 || user.getTiles().size() == 0) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "Máy tính đã thắng! Bạn thua!");
+            JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신은 패배했습니다!");
         }
     }
 
