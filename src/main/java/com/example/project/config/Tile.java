@@ -1,67 +1,96 @@
 package com.example.project.config;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.io.Serializable;
 
-public class Tile extends JPanel {
-    private int number; // Số từ 0 đến 11 hoặc -1 cho Joker
-    private String symbol; // Ký tự, ví dụ: "-"
-    private Color color; // Màu sắc: Đen hoặc Trắng
-    private boolean isRevealed; // Trạng thái được mở hay chưa
+/**
+ * Tile.java
+ *
+ * Đại diện cho một thẻ bài trong trò chơi.
+ */
+public class Tile implements Serializable, Cloneable {
+    private TileType tileType;
+    private int number; // Số từ 0 đến 11
+    private boolean isOpened;
+    private boolean isGuessedCorrectly; // Trạng thái đoán đúng
+    private boolean isSelected; // Trạng thái được chọn trong giai đoạn chọn ban đầu
 
-    public Tile(int number, String symbol, Color color) {
+    public Tile(TileType tileType, int number) {
+        this.tileType = tileType;
         this.number = number;
-        this.symbol = symbol;
-        this.color = color;
-        this.isRevealed = false;
-        setPreferredSize(new Dimension(80, 120));
-        setBackground(color);
-        setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        // Hiển thị thông tin tile
-        JLabel infoLabel = new JLabel(getDisplayText(), SwingConstants.CENTER);
-        infoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        infoLabel.setForeground(Color.WHITE);
-        add(infoLabel);
-    }
-
-    // Phương thức để lấy văn bản hiển thị dựa trên trạng thái
-    public String getDisplayText() {
-        if (isRevealed) {
-            if (number == -1) {
-                return "J"; // Joker
-            }
-            return number + symbol;
-        } else {
-            return "???";
-        }
+        this.isOpened = false;
+        this.isGuessedCorrectly = false;
+        this.isSelected = false;
     }
 
     // Getter và Setter
+    public TileType getTileType() {
+        return tileType;
+    }
+
     public int getNumber() {
         return number;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public boolean isOpened() {
+        return isOpened;
     }
 
+    public void setOpened(boolean opened) {
+        isOpened = opened;
+    }
+
+    public boolean isGuessedCorrectly() {
+        return isGuessedCorrectly;
+    }
+
+    public void setGuessedCorrectly(boolean guessedCorrectly) {
+        isGuessedCorrectly = guessedCorrectly;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    /**
+     * Lấy đường dẫn hình ảnh của thẻ bài.
+     *
+     * @return Đường dẫn hình ảnh
+     */
+    public String getImagePath() {
+        String typePrefix = (tileType == TileType.BLACK) ? "b" : "w";
+        return "/img/Card/tiles/" + typePrefix + number + ".png";
+    }
+
+    /**
+     * Lấy đường dẫn hình ảnh khi thẻ bài được lật.
+     *
+     * @return Đường dẫn hình ảnh lật
+     */
+    public String getReverseImagePath() {
+        String typePrefix = (tileType == TileType.BLACK) ? "b" : "w";
+        return "/img/Card/reverseTiles/" + typePrefix + number + ".png";
+    }
+
+    /**
+     * Lấy màu sắc tương ứng với thẻ bài.
+     *
+     * @return Màu sắc của thẻ bài
+     */
     public Color getTileColor() {
-        return color;
+        return (tileType == TileType.BLACK) ? Color.BLACK : Color.WHITE;
     }
 
-    public boolean isRevealed() {
-        return isRevealed;
-    }
-
-    public void reveal() {
-        this.isRevealed = true;
-        removeAll();
-        JLabel infoLabel = new JLabel(getDisplayText(), SwingConstants.CENTER);
-        infoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        infoLabel.setForeground(Color.WHITE);
-        add(infoLabel);
-        revalidate();
-        repaint();
+    @Override
+    public Tile clone() {
+        try {
+            return (Tile) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new Tile(this.tileType, this.number);
+        }
     }
 }
