@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 /**
  * GameUser.java
  *
- * Đại diện cho người chơi (bạn).
+ * 사용자(플레이어)를 나타냅니다.
  */
 public class GameUser extends Player {
 
@@ -16,21 +16,21 @@ public class GameUser extends Player {
 
     @Override
     public int guessNumber(Tile tile) {
-        // Yêu cầu người chơi nhập số
-        String input = JOptionPane.showInputDialog(null, "Nhập số bạn đoán:");
+        // 사용자가 숫자를 입력하도록 요청
+        String input = JOptionPane.showInputDialog(null, "추측할 숫자를 입력하세요:");
         int guessedNumber = -1;
         try {
             guessedNumber = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập một số hợp lệ!");
-            return guessNumber(tile); // Thử lại
+            JOptionPane.showMessageDialog(null, "유효한 숫자를 입력해주세요!");
+            return guessNumber(tile); // 다시 시도
         }
         return guessedNumber;
     }
 
     @Override
     public Tile selectTile() {
-        // Xử lý trong GUI
+        // GUI에서 처리
         return null;
     }
 }
