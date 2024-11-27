@@ -1,11 +1,12 @@
 package com.example.project.models;
 
 import com.example.project.config.Tile;
+import java.util.Random;
 
 /**
  * Computer.java
  *
- * Đại diện cho máy tính.
+ * 컴퓨터 플레이어를 나타냅니다.
  */
 public class Computer extends Player {
 
@@ -15,13 +16,13 @@ public class Computer extends Player {
 
     @Override
     public int guessNumber(Tile tile) {
-        // AI đơn giản: Đoán ngẫu nhiên một số từ 0 đến 11
+        // 간단한 AI: 0부터 11 사이의 숫자를 무작위로 추측
         return random.nextInt(12);
     }
 
     @Override
     public Tile selectTile() {
-        // Chọn một thẻ bài chưa được mở từ đối thủ
+        // 상대방의 열리지 않은 타일 중 하나를 선택
         return getRandomUnopenedTile();
     }
 }
