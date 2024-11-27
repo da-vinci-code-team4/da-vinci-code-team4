@@ -1,3 +1,4 @@
+// src/main/java/com/example/project/utils/RoundedPanel.java
 package com.example.project.utils;
 
 import javax.imageio.ImageIO;
@@ -7,12 +8,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-// Lớp tùy chỉnh JPanel để tạo Rectangle bo góc
+// 둥근 모서리를 가진 사각형을 만들기 위한 맞춤형 JPanel 클래스
 public class RoundedPanel extends JPanel {
     private int cornerRadius = 20;
     private BufferedImage backgroundImage;
 
-    // Constructor 1: LayoutManager, Color, int
+    // 생성자 1: LayoutManager, Color, int
     public RoundedPanel(LayoutManager layout, Color bgColor, int radius) {
         super(layout);
         cornerRadius = radius;
@@ -20,7 +21,7 @@ public class RoundedPanel extends JPanel {
         setBackground(bgColor);
     }
 
-    // Constructor 2: Color, int
+    // 생성자 2: Color, int
     public RoundedPanel(Color bgColor, int radius) {
         super();
         cornerRadius = radius;
@@ -28,7 +29,7 @@ public class RoundedPanel extends JPanel {
         setBackground(bgColor);
     }
 
-    // Constructor 3: LayoutManager, Color, int, String (imagePath)
+    // 생성자 3: LayoutManager, Color, int, String (imagePath)
     public RoundedPanel(LayoutManager layout, Color bgColor, int radius, String imagePath) {
         super(layout);
         cornerRadius = radius;
@@ -37,7 +38,7 @@ public class RoundedPanel extends JPanel {
         setBackgroundImage(imagePath);
     }
 
-    // Constructor 4: Color, int, String (imagePath)
+    // 생성자 4: Color, int, String (imagePath)
     public RoundedPanel(Color bgColor, int radius, String imagePath) {
         super();
         cornerRadius = radius;
@@ -46,15 +47,15 @@ public class RoundedPanel extends JPanel {
         setBackgroundImage(imagePath);
     }
 
-    // Constructor Mặc định
+    // 기본 생성자
     public RoundedPanel() {
         super();
-        this.cornerRadius = 20; // Giá trị mặc định
+        this.cornerRadius = 20; // 기본값
         setOpaque(false);
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
     }
 
-    // Constructor Nhận Bán Kính Bo Góc
+    // 반경을 받는 생성자
     public RoundedPanel(int radius) {
         super();
         this.cornerRadius = radius;
@@ -63,9 +64,9 @@ public class RoundedPanel extends JPanel {
     }
 
     /**
-     * Đặt hình nền cho RoundedPanel từ đường dẫn ảnh.
+     * 이미지 경로에서 RoundedPanel의 배경을 설정합니다.
      *
-     * @param imagePath Đường dẫn tới ảnh (relative path trong src/main/resources/img/Card/)
+     * @param imagePath 이미지 경로 (src/main/resources/img/Card/ 내의 상대 경로)
      */
     public void setBackgroundImage(String imagePath) {
         try {
@@ -77,9 +78,9 @@ public class RoundedPanel extends JPanel {
     }
 
     /**
-     * Thay đổi hình nền.
+     * 배경을 변경합니다.
      *
-     * @param imagePath Đường dẫn tới ảnh mới
+     * @param imagePath 새로운 이미지 경로
      */
     public void changeBackgroundImage(String imagePath) {
         setBackgroundImage(imagePath);
@@ -95,9 +96,9 @@ public class RoundedPanel extends JPanel {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Vẽ nền bo tròn
+        // 둥근 배경 그리기
         if (backgroundImage != null) {
-            // Vẽ hình ảnh sao cho vừa với panel
+            // 패널에 맞게 이미지 그리기
             graphics.drawImage(backgroundImage, 0, 0, width, height, this);
         } else {
             graphics.setColor(getBackground());
