@@ -2,6 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.game.player.Player;
 import com.example.project.game.player.User;
+import com.example.project.game.status.Status;
 import com.example.project.game.tile.Tile;
 import com.example.project.game.tile.TileColor;
 import com.example.project.game.tile.TileType;
@@ -13,6 +14,7 @@ public class Controller {
     private static TileManager tileManager;
     private static User user;
     private static Player opponentPlayer;
+    private static Status status;
 
     public static void startGame(){
         System.out.println("게임시작");
@@ -23,6 +25,7 @@ public class Controller {
 
         GameManager game = new GameManager(tileManager, user, opponentPlayer);
         game.startGame();
+        status = game.getStatus();
     }
     public static String[] placeFirstPlayerTiles(int number){
         return makeFileName(user.getTile(number));
@@ -103,5 +106,9 @@ public class Controller {
         return tileManager;
     }
 
+    public static int[] getStatus(){
+        int[] data = status.getStatus();
+        return data;
+    }
 }
 

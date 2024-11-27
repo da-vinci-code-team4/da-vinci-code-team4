@@ -167,4 +167,13 @@ public class Status {
         return cntRemain == 0;
     }
 
+    public int[] getStatus() {
+        int[] data = new int[5];
+        data[0] = cntRemain;
+        data[1] = cntOpponentCorrectTile;
+        data[2] = cntMyCorrectTile;
+        data[3] = cntOpponentRemainTile;
+        data[4] = cntMyRemainTile;
+        return data;
+    }
 }

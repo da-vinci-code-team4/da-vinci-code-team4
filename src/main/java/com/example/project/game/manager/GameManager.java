@@ -119,4 +119,8 @@ public class GameManager {
     private int getTileNumber(Tile tile) {
         return ((NumberTile) tile).getNumber();
     }
+
+    public Status getStatus() {
+        return status;
+    }
 }

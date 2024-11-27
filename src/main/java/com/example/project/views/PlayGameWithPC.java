@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -48,7 +49,7 @@ public class PlayGameWithPC extends JPanel {
     private JPanel myCards;
     private JPanel sharedCards;
     private JPanel opponentCards;
-
+    RoundedPanel chatInput;
     private ArrayList<Tile> selectedTiles = new ArrayList<>();
 
     public PlayGameWithPC(JPanel mainPanel, CardLayout cardLayout) {
@@ -154,8 +155,9 @@ public class PlayGameWithPC extends JPanel {
         mainContent.add(chatPanel);
 
         // 채팅 입력 창
-        RoundedPanel chatInput = new RoundedPanel(null, new Color(0xD9D9D9), 20);
+        chatInput = new RoundedPanel(null, new Color(0xD9D9D9), 20);
         chatInput.setBounds(78, 893 - 65, 490, 38);
+        updateStatus();
         mainContent.add(chatInput);
 
         // 채팅 입력 창의 밑줄
@@ -502,5 +504,23 @@ public class PlayGameWithPC extends JPanel {
     public JPanel getMainPanel() {
         // System.out.println("main panel : "+mainPanel.getName());
         return mainPanel;
+    }
+
+    public void updateStatus(){
+        JTextField[] textFields = new JTextField[5];
+        for (int i = 0; i < 5; i++) {
+            textFields[i] = new JTextField();
+            textFields[i].setBounds(10, 10 + (i * 40), 470, 30);  // 각 텍스트 박스를 40px 간격으로 배치
+            textFields[i].setBackground(new Color(0xFFC4C4C4, true)); // 배경색 설정
+            textFields[i].setForeground(Color.BLACK);  // 글자 색 설정
+            textFields[i].setBorder(BorderFactory.createEmptyBorder());  // 테두리 없애기
+            chatInput.add(textFields[i]);
+        }
+        int[] data = Controller.getStatus();
+        textFields[0].setText("남은 전체 타일 : " + data[0]);  // 기본 텍스트 설정
+        textFields[1].setText("상대가 맞춘 타일 : " + data[1]);  // 기본 텍스트 설정
+        textFields[2].setText("내가 맞춘 타일 : " + data[2]);  // 기본 텍스트 설정
+        textFields[3].setText("상대 남은 타일 : " + data[3]);  // 기본 텍스트 설정
+        textFields[4].setText("내 남은 타일 : " + data[4]);  // 기본 텍스트 설정
     }
 }
