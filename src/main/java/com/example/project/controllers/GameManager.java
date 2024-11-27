@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * GameManager.java
  *
- * Quản lý trạng thái và luồng của trò chơi.
+ * 게임의 상태와 흐름을 관리합니다.
  */
 public class GameManager {
     private TileManager tileManager;
@@ -22,41 +22,41 @@ public class GameManager {
     public GameManager(GameObserver observer) {
         this.observer = observer;
         tileManager = new TileManager();
-        tileManager.initializeTiles(); // Khởi tạo 24 thẻ bài (12 đen, 12 trắng) và xáo trộn
+        tileManager.initializeTiles(); // 24개의 타일 초기화 (12 검정, 12 흰색) 및 섞기
         gameState = new GameState();
         gameState.setCentralTiles(tileManager.getCentralTiles());
-        user = new GameUser("Người chơi");
-        computer = new Computer("Máy tính");
+        user = new GameUser("플레이어");
+        computer = new Computer("컴퓨터");
     }
 
     /**
-     * Bắt đầu trò chơi.
+     * 게임을 시작합니다.
      */
     public void startGame() {
-        // Cập nhật trạng thái trò chơi
+        // 게임 상태 업데이트
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Người chơi lấy một thẻ bài từ khu vực trung tâm tại vị trí index.
+     * 플레이어가 중앙 영역에서 인덱스 위치의 타일을 가져갑니다.
      *
-     * @param index Vị trí thẻ bài trong khu vực trung tâm (0-23)
+     * @param index 중앙 영역에서의 타일 위치 (0-23)
      */
     public void userDrawTile(int index) {
         Tile tile = tileManager.drawTile(index);
         if (tile != null && !tile.isOpened()) {
-            tile.setOpened(true); // Đánh dấu thẻ bài đã mở
+            tile.setOpened(true); // 타일이 열렸음을 표시
             user.addTile(tile);
-            // Thêm thông báo nếu cần
-            JOptionPane.showMessageDialog(null, "Bạn đã chọn thẻ bài thành công!");
+            // 필요 시 알림 추가
+            JOptionPane.showMessageDialog(null, "타일을 성공적으로 선택했습니다!");
         } else {
-            JOptionPane.showMessageDialog(null, "Thẻ bài đã được chọn trước đó!");
+            JOptionPane.showMessageDialog(null, "타일이 이미 선택되었습니다!");
         }
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Máy tính lấy 4 thẻ bài ban đầu từ khu vực trung tâm.
+     * 컴퓨터가 초기 단계에서 중앙 영역에서 4개의 타일을 가져갑니다.
      */
     public void computerInitialDrawTiles() {
         int tilesToDraw = 4;
@@ -70,40 +70,42 @@ public class GameManager {
                 }
             }
         }
-        JOptionPane.showMessageDialog(null, "Máy tính đã chọn 4 thẻ bài ban đầu.");
+        JOptionPane.showMessageDialog(null, "컴퓨터가 초기 단계에서 4개의 타일을 선택했습니다.");
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Máy tính tiến hành lượt đoán.
+     * 컴퓨터가 추측을 진행합니다.
      */
     public void computerTurn() {
-        // Máy tính chọn một thẻ bài của người chơi để đoán
+        // 컴퓨터가 플레이어의 타일 중 하나를 선택하여 추측
         Tile userTile = user.getRandomUnopenedTile();
         if (userTile != null) {
             int guessedNumber = computer.guessNumber(userTile);
             if (guessedNumber == userTile.getNumber()) {
-                JOptionPane.showMessageDialog(null, "Máy tính đã đoán đúng số trên thẻ bài!");
+                JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 정확히 맞췄습니다!");
                 userTile.setOpened(true);
                 computer.increaseScore();
             } else {
-                JOptionPane.showMessageDialog(null, "Máy tính đã đoán sai số trên thẻ bài!");
-                // Thêm logic xử lý khi máy tính đoán sai, ví dụ: chuyển lượt
+                JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 틀렸습니다!");
+                // 컴퓨터가 틀렸을 때의 추가 로직, 예: 턴 변경
             }
         }
         observer.onGameStateChanged(gameState);
     }
 
     /**
-     * Kiểm tra điều kiện kết thúc trò chơi.
+     * 게임 종료 조건을 확인합니다.
      */
     public void checkGameOver() {
         if (user.getScore() >= 8) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
+            JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
         } else if (computer.getScore() >= 8) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
+            JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다!");
         }
     }
 
