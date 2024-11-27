@@ -11,7 +11,6 @@ import java.util.Objects;
 public class RoundedPanel extends JPanel {
     private int cornerRadius = 20;
     private BufferedImage backgroundImage;
-
     // Constructor 1: LayoutManager, Color, int
     public RoundedPanel(LayoutManager layout, Color bgColor, int radius) {
         super(layout);
@@ -69,6 +68,7 @@ public class RoundedPanel extends JPanel {
      */
     public void setBackgroundImage(String imagePath) {
         try {
+            backgroundImage = null;
             backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/img/Card/" + imagePath)));
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
@@ -104,4 +104,5 @@ public class RoundedPanel extends JPanel {
             graphics.fillRoundRect(0, 0, width - 1, height - 1, arcs.width, arcs.height);
         }
     }
+
 }

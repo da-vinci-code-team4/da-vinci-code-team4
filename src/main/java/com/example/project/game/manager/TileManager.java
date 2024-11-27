@@ -28,13 +28,9 @@ public class TileManager {
     }
 
     public void initGame() {
-        System.out.println("init");
         generateTile();
-        System.out.println("gene end");
         shuffle();
-        System.out.println("shu end");
         distributeTile();
-        System.out.println("dis end");
     }
 
     /**
@@ -98,10 +94,6 @@ public class TileManager {
         List<Tile> secondTile = deck.subList(0, NUMBER_OF_INIT_TILE);
         secondPlayer.giveTileToPlayerAtStart(secondTile);
         secondTile.clear();
-    }
-
-    public boolean isEqual(Tile selectedOpponentTile, Tile guessedOpponentTile) {
-        return false;
     }
 
     public int getDeckSize(){

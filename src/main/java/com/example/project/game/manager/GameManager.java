@@ -5,14 +5,16 @@ import static com.example.project.game.status.TurnResult.MATCH;
 import static com.example.project.game.tile.TileType.JOKER;
 
 import com.example.project.game.player.Player;
+import com.example.project.game.player.User;
 import com.example.project.game.popup.SelectTile;
-import com.example.project.game.save.Recorder;
 import com.example.project.game.status.Status;
+import com.example.project.game.status.TurnResult;
 import com.example.project.game.tile.NumberTile;
 import com.example.project.game.tile.Tile;
-import com.example.project.main.SwingMain;
 
+import javax.swing.*;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * 전체적인 게임 진행을 담당하는 클래스다.
@@ -33,7 +35,10 @@ public class GameManager {
     private final Player secondPlayer; //후공
     private final Status status = new Status(); //턴 상황 기록
 
-    private int turn = 0; //게임 턴 명시
+    private int turn;
+    private Player playerInTurn;
+    private static TurnResult turnResult = null;
+    public static CountDownLatch latch;
 
     /**
      * @param tileManager 타일 덱을 관리하는 객체를 입력 받는다
@@ -44,6 +49,7 @@ public class GameManager {
         this.tileManager = tileManager;
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
+        this.playerInTurn = firstPlayer;
     }
 
     /**
@@ -51,13 +57,21 @@ public class GameManager {
      * */
     public void startGame() {
         tileManager.initGame();
-        System.out.println("init end");
         firstPlayer.makeTileManager(tileManager); //user
         secondPlayer.makeTileManager(tileManager); //pc
-        System.out.println("호출");
-        for (int turn = 1; turn <= 26; turn++) {
-            playGame(firstPlayer);
-//            playGame(secondPlayer);
+        for (turn = 1; turn <= 26; turn++) {
+            playGame(playerInTurn);
+            if (turnResult.equals(FAIL)) {
+                changePlayer();
+            } else {
+                playerInTurn.chooseToKeepTurn();
+            }
+            turnResult = null;
+
+            if (status.isAllTileOpen()) {
+                break;
+            }
+
         }
     }
 
@@ -68,38 +82,35 @@ public class GameManager {
      *
      * @param player 현재 턴을 시작하는 플레이어다
      * */
-    private boolean playGame(Player player) {
-//        Optional<Tile> drawTile = player.drawTile(status);
-
-        SelectTile selectedTile = player.getSelectedTile(); //swing으로 팝업 띄우기
-
-        Tile tile = selectedTile.getTile();
-        String number = selectedTile.getInputNumber();
-
-        if (tile.getTileType().equals(JOKER) && number.equals("조커")) {
-            return true;
+    private void playGame(Player player) {
+        if (turn != 1) { //첫번째 턴이 아닐 경우 타일 한장 가져오기
+            Optional<Tile> drawTile = player.drawTile(status);
         }
-        if (((NumberTile) tile).getNumber() == Integer.parseInt(number)) {
-            return true;
+
+        latch = new CountDownLatch(1); // 대기 객체 생성
+        player.guessTile();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return false;
+        latch = null;
+        System.out.println("턴 종료");
     }
 
-    private void saveMatch(Tile selectedTile, Player player) {
-        status.saveResult(MATCH, player);
-        selectedTile.setOpen(true);
-        status.saveOpenTile(selectedTile);
+    private void changePlayer() {
+        if (this.playerInTurn.equals(firstPlayer)) {
+            playerInTurn = secondPlayer;
+        }
+        this.playerInTurn = firstPlayer;
     }
 
-    private void saveFail(Optional<Tile> drawTile, Player player) {
-        status.saveResult(FAIL, player);
-        drawTile.ifPresent(tile -> {
-            tile.setOpen(true);
-            status.saveOpenTile(drawTile.get());
-        });
+
+    public boolean isTurnOf(User user) {
+        return playerInTurn.equals(user);
     }
 
-    private int getTileNumber(Tile tile) {
-        return ((NumberTile) tile).getNumber();
+    public static void setTurnResult(TurnResult turnResult) {
+        GameManager.turnResult = turnResult;
     }
 }

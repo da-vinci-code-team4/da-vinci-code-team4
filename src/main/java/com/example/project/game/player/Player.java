@@ -2,7 +2,6 @@ package com.example.project.game.player;
 
 import static com.example.project.game.tile.TileType.JOKER;
 
-import com.example.project.game.popup.SelectTile;
 import com.example.project.game.status.Status;
 import com.example.project.game.tile.Tile;
 import com.example.project.game.manager.TileManager;
@@ -129,8 +128,8 @@ abstract public class Player {
         return myTileDeck.size();
     }
 
-    //상대 타일 맞추기
-    abstract public SelectTile getSelectedTile();
+    //상대 타일 맞춘 결과
+    abstract public void guessTile();
 
     /**
      * 조커 타일의 위치를 사용자가 선택한다.
