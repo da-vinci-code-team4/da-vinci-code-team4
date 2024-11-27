@@ -1,13 +1,13 @@
 package com.example.project.main;
 
-import com.example.project.models.Session; // Thêm import này
+import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.views.LoginPage;
 import com.example.project.views.RegisterPage;
 import com.example.project.views.MyPage;
 import com.example.project.views.ProfilePage;
-import com.example.project.views.CorrectionPage; // Thêm import CorrectionPage
-import com.example.project.ui.SplashScreenPanel; // Thêm import SplashScreenPanel
+import com.example.project.views.CorrectionPage;
+import com.example.project.ui.SplashScreenPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,50 +18,50 @@ import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) {
-        // Tạo JFrame chính
+        // 메인 JFrame 생성
         JFrame frame = new JFrame("Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1502, 916); // Kích thước phù hợp
+        frame.setSize(1502, 916); // 적절한 크기 설정
         frame.setLocationRelativeTo(null);
 
-        // Tạo CardLayout và JPanel chính
+        // CardLayout과 메인 JPanel 생성
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
 
-        // Danh sách người dùng
+        // 사용자 목록
         List<User> userList = new ArrayList<>();
-        initializeDefaultUsers(userList); // Gọi phương thức khởi tạo người dùng mặc định
+        initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
 
-        // Giả sử chúng ta có người dùng hiện tại (currentUser)
-        User currentUser = userList.get(0); // Ví dụ: người dùng đầu tiên trong danh sách
-        Session.getInstance().setCurrentUser(currentUser); // Thiết lập currentUser trong Session
+        // 현재 사용자 설정 (예: 사용자 목록의 첫 번째 사용자)
+        User currentUser = userList.get(0);
+        Session.getInstance().setCurrentUser(currentUser); // Session에 현재 사용자 설정
 
-        // Tạo các trang khác nhau
+        // 다양한 페이지 생성
         RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userList);
         LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userList);
         MyPage myPage = new MyPage(mainPanel, cardLayout, userList);
-        ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // Thêm ProfilePage
-        CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // Thêm CorrectionPage
+        ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // ProfilePage 추가
+        CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // CorrectionPage 추가
 
-        // Thêm các trang vào mainPanel
-        mainPanel.add(registerPage, "RegisterPage");
-        mainPanel.add(loginPage, "LoginPage");
+        // 페이지를 mainPanel에 추가
+        // mainPanel.add(registerPage, "RegisterPage");
+        // mainPanel.add(loginPage, "LoginPage");
         mainPanel.add(myPage, "MyPage");
-        mainPanel.add(profilePage, "ProfilePage"); // Thêm ProfilePage vào mainPanel
-        mainPanel.add(correctionPage, "CorrectionPage"); // Thêm CorrectionPage vào mainPanel
+        mainPanel.add(profilePage, "ProfilePage"); // ProfilePage를 mainPanel에 추가
+        mainPanel.add(correctionPage, "CorrectionPage"); // CorrectionPage를 mainPanel에 추가
 
-        // Tạo SplashScreenPanel
+        // SplashScreenPanel 생성
         SplashScreenPanel splashPanel = new SplashScreenPanel("/img/ViewImage/Background.png");
         frame.setContentPane(splashPanel);
         frame.setVisible(true);
 
-        // Tạo Swing Timer để thực hiện hiệu ứng fade-in và fade-out
+        // Swing Timer를 사용하여 페이드 인 및 페이드 아웃 효과 구현
         Timer fadeTimer = new Timer();
         fadeTimer.schedule(new TimerTask() {
             private float opacity = 0.0f;
             private boolean fadingIn = true;
-            private final float fadeStep = 0.05f; // Bước tăng giảm độ trong suốt
-            private final long timerDelay = 50; // Delay giữa các bước (ms)
+            private final float fadeStep = 0.05f; // 투명도 증가/감소 단계
+            private final long timerDelay = 50; // 각 단계 사이의 지연 시간 (ms)
 
             @Override
             public void run() {
@@ -77,7 +77,7 @@ public class Main {
                         if (opacity <= 0.0f) {
                             opacity = 0.0f;
                             fadeTimer.cancel();
-                            // Chuyển từ Splash Screen sang RegisterPage
+                            // Splash Screen에서 RegisterPage로 전환
                             frame.setContentPane(mainPanel);
                             cardLayout.show(mainPanel, "RegisterPage");
                             frame.revalidate();
@@ -87,12 +87,12 @@ public class Main {
                     splashPanel.setOpacity(opacity);
                 });
             }
-        }, 0, 50); // Thực hiện mỗi 50ms
+        }, 0, 50); // 50ms마다 실행
     }
 
-    // Phương thức khởi tạo người dùng mặc định
+    // 기본 사용자 초기화 메서드
     private static void initializeDefaultUsers(List<User> userList) {
-        // Thêm các thông tin bổ sung cho mỗi User với constructor đầy đủ
+        // 각 사용자에 대한 추가 정보와 함께 사용자 초기화
         userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90, 90.0));
         userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 92, 80.0));
         userList.add(new User("Q", "1", "QuocAnh", 26, "70W - 30L", 1000, 100, 70.0));
