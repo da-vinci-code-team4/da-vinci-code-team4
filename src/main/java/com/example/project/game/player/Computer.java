@@ -5,8 +5,8 @@ import com.example.project.game.tile.Tile;
 import java.util.Random;
 
 public class Computer extends Player {
-    public Computer(String name, int rank, int score) {
-        super(name, rank, score);
+    public Computer(String name, int rank, int score, int winCnt, int lossCnt) {
+        super(name, rank, score, winCnt, lossCnt);
     }
 
     @Override

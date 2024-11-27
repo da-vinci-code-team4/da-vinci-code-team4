@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.controller.FileController;
 import com.example.project.utils.RoundedPanel;
 
 import javax.imageio.ImageIO;
@@ -41,7 +42,8 @@ public class HistoryPage extends JPanel {
         createHeader(background);
 
         // Đọc dữ liệu từ history.txt
-        historyData = readHistoryData("src/main/resources/texts/history.txt");
+//        historyData = readHistoryData("src/main/resources/texts/history.txt");
+        historyData = FileController.getHistory();
 
         // Sắp xếp historyData theo Date từ mới nhất đến cũ nhất
         historyData.sort((a, b) -> b[0].compareTo(a[0])); // Giả định định dạng ngày là YYYY/MM/DD
@@ -151,20 +153,20 @@ public class HistoryPage extends JPanel {
      * @param filePath Đường dẫn tới tệp history.txt
      * @return Danh sách các dòng dữ liệu đã tách thành mảng String
      */
-    private List<String[]> readHistoryData(String filePath) {
-        List<String[]> data = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // Tách dữ liệu theo khoảng trắng, giả định định dạng: Date Result Core PlayTime
-                data.add(line.split("\\s+"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Không thể đọc tệp history.txt.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-        return data;
-    }
+//    private List<String[]> readHistoryData(String filePath) {
+//        List<String[]> data = new ArrayList<>();
+//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                // Tách dữ liệu theo khoảng trắng, giả định định dạng: Date Result Core PlayTime
+//                data.add(line.split("\\s+"));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Không thể đọc tệp history.txt.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        }
+//        return data;
+//    }
 
     /**
      * Cập nhật dataPanel để hiển thị dữ liệu của trang hiện tại.

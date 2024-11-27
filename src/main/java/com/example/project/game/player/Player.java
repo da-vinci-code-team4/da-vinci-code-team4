@@ -23,6 +23,8 @@ abstract public class Player {
     private final String name;
     private int rank;
     private int score;
+    private int winCnt;
+    private int lossCnt;
 
     /**
      * 플레이어가 가진 타일을 저장한다.
@@ -34,11 +36,15 @@ abstract public class Player {
      * @param name        플레이어의 이름을 입력 받는다
      * @param rank        플레이어의 랭킹을 입력 받는다
      * @param score       플레이어의 점수를 입력 받는다
+     * @param winCnt      플레이어의 승리횟수
+     * @param lossCnt     플레이어의 패배횟수
      */
-    public Player(String name, int rank, int score) {
+    public Player(String name, int rank, int score, int winCnt, int lossCnt) {
         this.name = name;
         this.rank = rank;
         this.score = score;
+        this.winCnt = winCnt;
+        this.lossCnt = lossCnt;
     }
 
     public void makeTileManager(TileManager tileManager){
@@ -149,5 +155,9 @@ abstract public class Player {
     public Tile getTile(int number){
         List<Tile> list = new ArrayList<>(myTileDeck);
         return list.get(number);
+    }
+
+    public void updateScore(int number){
+        this.score = score + number;
     }
 }
