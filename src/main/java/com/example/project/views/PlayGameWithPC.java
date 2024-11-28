@@ -600,4 +600,24 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             return shape.contains(x, y);
         }
     }
+
+    @Override
+    public void showVictoryScreen(VictoryScreen victoryScreen) {
+
+        // VictoryScreen 추가
+        this.setLayout(new BorderLayout());
+        this.add(victoryScreen, BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
+    }
+
+    @Override
+    public void showDefeatScreen(DefeatScreen defeatScreen) {
+
+        // DefeatScreen 추가
+        this.setLayout(new BorderLayout());
+        this.add(defeatScreen, BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
+    }
 }
