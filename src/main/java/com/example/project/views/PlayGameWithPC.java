@@ -115,23 +115,40 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         });
         swingTimer.start();
 
-        // 종료 버튼
+        // 확인 대화상자가 있는 종료 버튼 (JButton 사용)
         URL exitImageUrl = getClass().getResource("/img/ViewImage/back.png");
         ImageIcon exitIcon;
         if (exitImageUrl != null) {
             exitIcon = new ImageIcon(exitImageUrl);
         } else {
-            exitIcon = new ImageIcon(); // 빈 아이콘 또는 플레이스홀더
+            exitIcon = new ImageIcon(); // 비어 있는 아이콘 또는 플레이스홀더
         }
-        exitButton = new JLabel(exitIcon);
-        exitButton.setBounds(1396, 13, 70, 70);
+        JButton exitButton = new JButton(exitIcon);
+        exitButton.setBounds(714, 10, 60, 60); // 새 크기에 맞게 위치 조정
         exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        exitButton.addMouseListener(new MouseAdapter() {
+        exitButton.setBorder(BorderFactory.createEmptyBorder());
+        exitButton.setContentAreaFilled(false);
+        exitButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                swingTimer.stop(); // 종료 시 시계 중지
-                // 플레이 페이지로 돌아가기
-                cardLayout.show(mainPanel, "PlayPage");
+            public void actionPerformed(ActionEvent e) {
+                // 확인 대화상자 표시
+                int result = JOptionPane.showConfirmDialog(
+                        PlayGameWithPC.this, // 대화상자의 부모는 현재 패널
+                        "게임 진행 중 나가시겠습니까?", // 메시지
+                        "확인", // 대화상자 제목
+                        JOptionPane.YES_NO_OPTION, // Yes와 No 옵션
+                        JOptionPane.QUESTION_MESSAGE // 질문 아이콘
+                );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    // 사용자가 "Yes"를 선택한 경우
+                    swingTimer.stop(); // 나갈 때 타이머 정지
+                    // 종료 작업 수행: 예를 들어, 메인 화면으로 돌아가거나 애플리케이션 종료
+                    cardLayout.show(mainPanel, "PlayPage");
+                } else {
+                    // 사용자가 "No"를 선택한 경우 - 아무 작업도 하지 않음
+                    // 필요하면 다른 로직을 추가할 수 있음
+                }
             }
         });
         mainContent.add(exitButton);
