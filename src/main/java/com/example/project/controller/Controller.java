@@ -108,5 +108,42 @@ public class Controller {
         return tileManager;
     }
 
+    /*
+    * 게임 종료 시 숭리, 패배, 정보, 총 걸린시간, 점수 상승하락 변화
+
+    public void checkGameOver() {
+        if (user.getCore() >= targetCore || computer.getTiles().size() == 0) {
+            gameState.setGameOver(true);
+            observer.onGameStateChanged(gameState);
+            JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
+
+            // 플레이 시간을 계산
+            int timeTaken = (int) ((System.currentTimeMillis() - startTime) / 1000);
+
+            // 점수와 랭킹 업데이트 (필요 시)
+            user.setCore(user.getCore() + 100); // 100점 추가
+            // user.setRanking(newRank); // 랭킹 업데이트 (필요 시)
+
+            // 승리 화면 생성 및 표시
+            VictoryScreen victoryScreen = new VictoryScreen(user, timeTaken);
+            observer.showVictoryScreen(victoryScreen);
+
+        } else if (computer.getCore() >= targetCore || user.getTiles().size() == 0) {
+            gameState.setGameOver(true);
+            observer.onGameStateChanged(gameState);
+            JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신이 패배했습니다!");
+
+            // 플레이 시간을 계산
+            int timeTaken = (int) ((System.currentTimeMillis() - startTime) / 1000);
+
+            // 점수와 랭킹 업데이트 (필요 시)
+            user.setCore(user.getCore() - 100); // 100점 차감
+            // user.setRanking(newRank); // 랭킹 업데이트 (필요 시)
+
+            // 패배 화면 생성 및 표시
+            DefeatScreen defeatScreen = new DefeatScreen(user, timeTaken);
+            observer.showDefeatScreen(defeatScreen);
+        }
+    }*/
 }
 
