@@ -348,4 +348,26 @@ public class Controller {
             observer.showDefeatScreen(defeatScreen);
         }
     }*/
+    /**
+     * 게임 다시 작동
+     */
+    /*
+    public void restartGame() {
+        // 게임 상태 초기화
+        gameState = new GameState();
+        tileManager.initializeTiles();
+        gameState.setCentralTiles(tileManager.getCentralTiles());
+        user.reset(); // GameUser에 reset 메서드가 있다고 가정
+        computer.reset(); // Computer에 reset 메서드가 있다고 가정
+        gameState.setUserTiles(user.getTiles());
+        gameState.setComputerTiles(computer.getTiles());
+        currentPhase = GamePhase.INITIAL_SELECTION;
+
+        // 시간 초기화
+        startTime = System.currentTimeMillis();
+
+        // UI 업데이트
+        observer.onGameStateChanged(gameState);
+    }
+    */
 }
