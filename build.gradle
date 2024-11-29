@@ -41,6 +41,12 @@ sourceSets {
     main {
         java {
             srcDirs = ['src/main/java'] // Java 소스 코드 디렉토리
+            exclude 'com/example/project/controller/**'
+            exclude 'com/example/project/game/**'
+            exclude 'com/example/project/listener/**'
+            exclude 'com/example/project/main/SwingMain.java'
+            exclude 'com/example/project/factory/**'
+
         }
         resources {
             srcDirs = ['src/main/resources'] // 리소스 파일 디렉토리

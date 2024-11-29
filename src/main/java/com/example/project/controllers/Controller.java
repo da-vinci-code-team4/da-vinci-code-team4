@@ -199,6 +199,9 @@ public class Controller {
             currentPhase = GamePhase.PLAYER_DRAW_PHASE;
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
             JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+
+            //Trả về kết quả MATCH
+            /*return TurnResult.MATCH;*/
         } else {
             JOptionPane.showMessageDialog(null, "틀렸습니다!");
             // 컴퓨터의 턴으로 전환
@@ -206,6 +209,9 @@ public class Controller {
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
             computerTurn();
             checkGameOver();
+
+            // Trả về kết quả FAIL
+            /*return TurnResult.FAIL;*/
         }
     }
 

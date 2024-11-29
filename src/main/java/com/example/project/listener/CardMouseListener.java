@@ -1,4 +1,4 @@
-package com.example.project.listener;
+/*package com.example.project.listener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,4 +27,4 @@ public class CardMouseListener extends MouseAdapter {
         System.out.println("타일이 클릭되었습니다: " + color + " " + index);
         parentFrame.selectTile(tile);
     }
-}
+}*/

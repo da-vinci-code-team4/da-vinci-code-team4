@@ -124,7 +124,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             exitIcon = new ImageIcon(); // 비어 있는 아이콘 또는 플레이스홀더
         }
         JButton exitButton = new JButton(exitIcon);
-        exitButton.setBounds(714, 10, 60, 60); // 새 크기에 맞게 위치 조정
+        exitButton.setBounds(1384, 30, 60, 60); // 새 크기에 맞게 위치 조정
         exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         exitButton.setBorder(BorderFactory.createEmptyBorder());
         exitButton.setContentAreaFilled(false);
@@ -144,7 +144,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     // 사용자가 "Yes"를 선택한 경우
                     swingTimer.stop(); // 나갈 때 타이머 정지
                     // 종료 작업 수행: 예를 들어, 메인 화면으로 돌아가거나 애플리케이션 종료
-                    cardLayout.show(mainPanel, "PlayPage");
+                    cardLayout.show(mainPanel, "MyPage");
                 } else {
                     // 사용자가 "No"를 선택한 경우 - 아무 작업도 하지 않음
                     // 필요하면 다른 로직을 추가할 수 있음
@@ -480,7 +480,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     /**
      * 컴퓨터 영역 업데이트.
      */
-    private void updateComputerPanel() {
+    /*private void updateComputerPanel() {
         List<Tile> computerTiles = computerPlayer.getTiles();
 
         for (int i = 0; i < computerCardSlots.size(); i++) {
@@ -513,6 +513,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 // 플레이어의 추측 단계에서 ActionListener 추가
                 if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE && !tile.isGuessedCorrectly()) {
                     slotButton.addActionListener(e -> {
+                        System.out.println("Button " + index + " clicked.");
                         controller.playerGuessComputerTile(index);
                         updateComputerPanel();
                         updateGameInfo();
@@ -536,6 +537,65 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     /**
      * 게임 종료 조건 확인.
      */
+    private void updateComputerPanel() {
+        List<Tile> computerTiles = computerPlayer.getTiles();
+        System.out.println("Updating Computer Panel. Current Phase: " + controller.getCurrentPhase());
+        System.out.println("Number of computer tiles: " + computerTiles.size());
+
+        for (int i = 0; i < computerCardSlots.size(); i++) {
+            JButton slotButton = computerCardSlots.get(i);
+            if (i < computerTiles.size()) {
+                Tile tile = computerTiles.get(i);
+                System.out.println("Tile " + i + ": Guessed Correctly? " + tile.isGuessedCorrectly());
+
+                if (tile.isGuessedCorrectly()) {
+                    // Hiển thị hình ảnh mặt trước
+                    String imagePath = tile.getImagePath();
+                    URL imageUrl = getClass().getResource(imagePath);
+                    if (imageUrl != null) {
+                        slotButton.setIcon(new ImageIcon(imageUrl));
+                    } else {
+                        slotButton.setIcon(null);
+                    }
+                    slotButton.setBackground(Color.WHITE);
+                } else {
+                    // Hiển thị mặt sau của thẻ
+                    slotButton.setBackground(Color.GREEN);
+                    slotButton.setIcon(null);
+                }
+
+                final int index = i; // Lưu vị trí
+
+                // Loại bỏ các ActionListener cũ
+                for (ActionListener al : slotButton.getActionListeners()) {
+                    slotButton.removeActionListener(al);
+                }
+
+                // Thêm ActionListener nếu trong giai đoạn đoán và thẻ chưa được đoán đúng
+                if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE && !tile.isGuessedCorrectly()) {
+                    slotButton.addActionListener(e -> {
+                        System.out.println("Button " + index + " clicked for guessing.");
+                        controller.playerGuessComputerTile(index);
+                        updateComputerPanel();
+                        updateGameInfo();
+                        updateCentralPanel();
+                        updateUserPanel();
+                    });
+                    slotButton.setEnabled(true); // Đảm bảo nút được kích hoạt
+                } else {
+                    slotButton.setEnabled(false);
+                }
+            } else {
+                slotButton.setBackground(new Color(0x007B75));
+                slotButton.setIcon(null);
+                slotButton.setEnabled(false);
+            }
+        }
+
+        computerPanel.revalidate();
+        computerPanel.repaint();
+    }
+
     private void checkGameOver() {
         controller.checkGameOver();
     }

@@ -1,4 +1,4 @@
-package com.example.project.views;
+/*package com.example.project.views;
 
 import com.example.project.controller.FileController;
 import com.example.project.utils.RoundedPanel;
@@ -125,7 +125,7 @@ public class HistoryPage extends JPanel {
      * Tạo header với các cột: Date, Results, Core, Play Time, Replay.
      *
      * @param background JLabel nền để thêm header vào.
-     */
+     */ /*
     private void createHeader(JLabel background) {
         // Header Panel
         JPanel headerPanel = new RoundedPanel(10);
@@ -171,6 +171,7 @@ public class HistoryPage extends JPanel {
     /**
      * Cập nhật dataPanel để hiển thị dữ liệu của trang hiện tại.
      */
+    /*
     private void updateDataPanel() {
         dataPanel.removeAll();
 
@@ -263,7 +264,7 @@ public class HistoryPage extends JPanel {
 
     /**
      * Cập nhật trạng thái và biểu tượng của các nút điều hướng dựa trên trang hiện tại.
-     */
+     */ /*
     private void updateNavigationButtons() {
         // Cập nhật Rejoin Button (Trở về Trang Trước)
         if (currentPage > 0) {
@@ -304,20 +305,346 @@ public class HistoryPage extends JPanel {
             }
             continueButton.setEnabled(false);
         }
-    }
+    }  */ /*
 
     /**
      * Tải hình ảnh từ đường dẫn tài nguyên.
      *
      * @param path Đường dẫn tài nguyên hình ảnh.
      * @return BufferedImage nếu tải thành công, null nếu không tìm thấy.
-     */
+     */ /*
     private BufferedImage loadImage(String path) {
         try (InputStream is = getClass().getResourceAsStream(path)) {
             if (is != null) {
                 return ImageIO.read(is);
             } else {
                 System.err.println("Tài nguyên không tồn tại: " + path);
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+        */
+
+package com.example.project.views;
+
+import com.example.project.utils.RoundedPanel;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HistoryPage extends JPanel {
+    private int currentPage = 0; // 현재 페이지
+    private static final int ROWS_PER_PAGE = 6; // 페이지당 표시되는 행 수
+    private List<String[]> historyData; // history.txt에서 읽은 데이터
+    private JPanel dataPanel;
+    private JButton rejoinButton;
+    private JButton continueButton;
+
+    public HistoryPage(JPanel mainPanel, CardLayout cardLayout) {
+        setLayout(null);
+        setBackground(new Color(0, 0, 0, 0)); // 배경 없음
+
+        // 배경 설정
+        JLabel background = new JLabel();
+        BufferedImage bgImage = loadImage("/img/ViewImage/Background.png");
+        if (bgImage != null) {
+            background.setIcon(new ImageIcon(bgImage));
+        } else {
+            System.err.println("Background.png을 찾을 수 없습니다!");
+        }
+        background.setBounds(0, 0, 1502, 916);
+        background.setLayout(null);
+        add(background);
+
+        // 헤더 생성
+        createHeader(background);
+
+        // history.txt에서 데이터 읽기
+        historyData = readHistoryData("src/main/resources/texts/history.txt");
+
+        // 날짜(Date) 기준으로 최신순 정렬
+        historyData.sort((a, b) -> b[0].compareTo(a[0])); // 날짜 형식이 YYYY/MM/DD라고 가정
+
+        // 이전 버튼 생성
+        rejoinButton = new JButton();
+        BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon1.png");
+        BufferedImage rejoinImg = loadImage("/img/ViewImage/rejon.png");
+        if (rejoin1Img != null) {
+            rejoinButton.setIcon(new ImageIcon(rejoin1Img));
+        } else {
+            System.err.println("rejon.png을 찾을 수 없습니다!");
+            rejoinButton.setText("Rejoin"); // 이미지가 없을 때 대체 텍스트 추가
+        }
+        rejoinButton.setBounds(33, 450, 80, 120);
+        rejoinButton.setBorderPainted(false);
+        rejoinButton.setContentAreaFilled(false);
+        rejoinButton.setFocusPainted(false);
+        rejoinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        rejoinButton.addActionListener(e -> {
+            if (currentPage > 0) {
+                currentPage--;
+                updateDataPanel();
+            }
+        });
+        background.add(rejoinButton);
+
+        // 다음 버튼 생성
+        continueButton = new JButton();
+        BufferedImage continue1Img = loadImage("/img/ViewImage/continue1.png");
+        BufferedImage continueImg = loadImage("/img/ViewImage/continue.png");
+        if (continue1Img != null) {
+            continueButton.setIcon(new ImageIcon(continue1Img));
+        } else {
+            System.err.println("continue1.png을 찾을 수 없습니다!");
+            continueButton.setText("Continue"); // 이미지가 없을 때 대체 텍스트 추가
+        }
+        continueButton.setBounds(1396, 450, 80, 120);
+        continueButton.setBorderPainted(false);
+        continueButton.setContentAreaFilled(false);
+        continueButton.setFocusPainted(false);
+        continueButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        continueButton.addActionListener(e -> {
+            if ((currentPage + 1) * ROWS_PER_PAGE < historyData.size()) {
+                currentPage++;
+                updateDataPanel();
+            }
+        });
+        background.add(continueButton);
+
+        // 데이터 패널
+        dataPanel = new JPanel(null);
+        dataPanel.setBounds(0, 246, 1502, 600);
+        dataPanel.setOpaque(false);
+        background.add(dataPanel);
+
+        // 뒤로가기 버튼 (MenuPage로 돌아감)
+        JButton backButton = new JButton();
+        BufferedImage backImg = loadImage("/img/ViewImage/back.png");
+        if (backImg != null) {
+            backButton.setIcon(new ImageIcon(backImg));
+        } else {
+            System.err.println("back.png을 찾을 수 없습니다!");
+            backButton.setText("Back"); // 이미지가 없을 때 대체 텍스트 추가
+        }
+        backButton.setBounds(1384, 30, 128, 86);
+        backButton.setBorderPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setFocusPainted(false);
+        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage")); // MenuPage로 이동
+        background.add(backButton);
+
+        // 초기 데이터 표시
+        updateDataPanel();
+    }
+
+    /**
+     * 헤더 생성 (컬럼: 날짜(Date), 결과(Results), 점수(Core), 플레이 시간(Play Time), 리플레이(Replay)).
+     */
+    private void createHeader(JLabel background) {
+        // 헤더 패널
+        JPanel headerPanel = new RoundedPanel(10);
+        headerPanel.setBounds(158, 167, 1221, 59);
+        headerPanel.setBackground(new Color(0, 0, 0, 180));
+        headerPanel.setLayout(null);
+
+        // 헤더 레이블
+        String[] headers = {"날짜", "결과", "점수", "플레이 시간", "리플레이"};
+        int[] positions = {168, 382, 707, 935, 1230};
+        for (int i = 0; i < headers.length; i++) {
+            JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
+            label.setBounds(positions[i] - 158, 0, 200, 59); // 컬럼 위치 조정
+            label.setFont(new Font("Arial", Font.BOLD, 20));
+            label.setForeground(Color.WHITE);
+            headerPanel.add(label);
+        }
+
+        background.add(headerPanel);
+    }
+
+    /**
+     * 텍스트 파일에서 히스토리 데이터 읽기.
+     *
+     * @param filePath history.txt 파일 경로
+     * @return 분리된 문자열 배열 목록
+     */
+    private List<String[]> readHistoryData(String filePath) {
+        List<String[]> data = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // 공백 기준으로 데이터 분리
+                data.add(line.split("\\s+"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "history.txt 파일을 읽을 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+        }
+        return data;
+    }
+
+    /**
+     * 현재 페이지 데이터를 표시하도록 dataPanel 업데이트.
+     */
+    private void updateDataPanel() {
+        dataPanel.removeAll();
+
+        int startY = 0; // 첫 번째 행의 Y 위치 시작점
+        int height = 80; // 각 행 높이
+        int replayButtonWidth = 60;
+        int replayButtonHeight = 60;
+
+        for (int i = currentPage * ROWS_PER_PAGE; i < Math.min((currentPage + 1) * ROWS_PER_PAGE, historyData.size()); i++) {
+            String[] row = historyData.get(i);
+
+            // 각 행: 날짜(Date), 결과(Result), 점수(Core), 플레이 시간(Play Time)
+            String date = row[0];
+            String result = row[1];
+            String coreStr = row[2];
+            String playTime = row[3];
+
+            // 점수 계산 (+/- 표시)
+            int core = Integer.parseInt(coreStr);
+            String coreDisplay = (result.equalsIgnoreCase("Victory") ? "P(+" + core + ")" : "P(-" + core + ")");
+
+            // 각 행의 패널
+            JPanel groupPanel = new RoundedPanel(10);
+            groupPanel.setBounds(158, startY, 1221, height);
+            groupPanel.setBackground(new Color(0, 0, 0, 180));
+            groupPanel.setLayout(null);
+
+            // 날짜 레이블
+            JLabel dateLabel = new JLabel(date, SwingConstants.CENTER);
+            dateLabel.setBounds(10, 0, 200, height);
+            dateLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            dateLabel.setForeground(Color.WHITE);
+            groupPanel.add(dateLabel);
+
+            // 결과 레이블
+            JLabel resultsLabel = new JLabel(result, SwingConstants.CENTER);
+            resultsLabel.setBounds(214, 0, 200, height);
+            resultsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            resultsLabel.setForeground(Color.WHITE);
+            groupPanel.add(resultsLabel);
+
+            // 점수 레이블
+            JLabel coreLabel = new JLabel(coreDisplay, SwingConstants.CENTER);
+            coreLabel.setBounds(538, 0, 200, height);
+            coreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            coreLabel.setForeground(Color.WHITE);
+            groupPanel.add(coreLabel);
+
+            // 플레이 시간 레이블
+            JLabel playTimeLabel = new JLabel(playTime, SwingConstants.CENTER);
+            playTimeLabel.setBounds(766, 0, 200, height);
+            playTimeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            playTimeLabel.setForeground(Color.WHITE);
+            groupPanel.add(playTimeLabel);
+
+            // 리플레이 버튼
+            JButton replayButton = new JButton();
+            BufferedImage replayImg = loadImage("/img/ViewImage/replay.png");
+            if (replayImg != null) {
+                replayButton.setIcon(new ImageIcon(replayImg));
+            } else {
+                System.err.println("replay.png을 찾을 수 없습니다!");
+                replayButton.setText("Replay"); // 이미지가 없을 때 대체 텍스트 추가
+            }
+            replayButton.setBounds(1060, 10, replayButtonWidth, replayButtonHeight);
+            replayButton.setBorderPainted(false);
+            replayButton.setContentAreaFilled(false);
+            replayButton.setFocusPainted(false);
+            replayButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            // 리플레이 버튼의 ActionListener (기능 추가 필요)
+            replayButton.addActionListener(e -> {
+                // 리플레이 기능은 나중에 추가 예정
+                JOptionPane.showMessageDialog(this, "리플레이 기능은 나중에 추가될 예정입니다.", "정보", JOptionPane.INFORMATION_MESSAGE);
+            });
+            groupPanel.add(replayButton);
+
+            // dataPanel에 행 패널 추가
+            dataPanel.add(groupPanel);
+
+            // 다음 행의 Y 위치 업데이트
+            startY += height + 10; // 행 간 간격 10px
+        }
+
+        // 이전 및 다음 버튼 상태 업데이트
+        updateNavigationButtons();
+
+        dataPanel.revalidate();
+        dataPanel.repaint();
+    }
+
+    /**
+     * 현재 페이지에 따라 이전 및 다음 버튼 상태와 아이콘을 업데이트.
+     */
+    private void updateNavigationButtons() {
+        // 이전 버튼 상태 업데이트
+        if (currentPage > 0) {
+            BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon1.png");
+            if (rejoin1Img != null) {
+                rejoinButton.setIcon(new ImageIcon(rejoin1Img));
+                rejoinButton.setEnabled(true);
+            } else {
+                System.err.println("rejon1.png을 찾을 수 없습니다!");
+                rejoinButton.setEnabled(false);
+            }
+        } else {
+            BufferedImage rejoinImg = loadImage("/img/ViewImage/rejon.png");
+            if (rejoinImg != null) {
+                rejoinButton.setIcon(new ImageIcon(rejoinImg));
+            } else {
+                System.err.println("rejon.png을 찾을 수 없습니다!");
+            }
+            rejoinButton.setEnabled(false);
+        }
+
+        // 다음 버튼 상태 업데이트
+        if ((currentPage + 1) * ROWS_PER_PAGE < historyData.size()) {
+            BufferedImage continue1Img = loadImage("/img/ViewImage/continue1.png");
+            if (continue1Img != null) {
+                continueButton.setIcon(new ImageIcon(continue1Img));
+                continueButton.setEnabled(true);
+            } else {
+                System.err.println("continue1.png을 찾을 수 없습니다!");
+                continueButton.setEnabled(false);
+            }
+        } else {
+            BufferedImage continueImg = loadImage("/img/ViewImage/continue.png");
+            if (continueImg != null) {
+                continueButton.setIcon(new ImageIcon(continueImg));
+            } else {
+                System.err.println("continue.png을 찾을 수 없습니다!");
+            }
+            continueButton.setEnabled(false);
+        }
+    }
+
+    /**
+     * 리소스 경로에서 이미지를 로드.
+     *
+     * @param path 리소스 이미지 경로.
+     * @return 성공 시 BufferedImage, 실패 시 null.
+     */
+    private BufferedImage loadImage(String path) {
+        try (InputStream is = getClass().getResourceAsStream(path)) {
+            if (is != null) {
+                return ImageIO.read(is);
+            } else {
+                System.err.println("리소스를 찾을 수 없습니다: " + path);
                 return null;
             }
         } catch (IOException e) {
