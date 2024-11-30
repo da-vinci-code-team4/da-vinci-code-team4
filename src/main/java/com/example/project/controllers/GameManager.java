@@ -1,11 +1,13 @@
 // src/main/java/com/example/project/controllers/GameManager.java
 package com.example.project.controllers;
 
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import com.example.project.config.Tile;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
-import com.example.project.config.Tile;
-import javax.swing.JOptionPane;
-import java.util.Optional;
 
 /**
  * GameManager.java
@@ -26,7 +28,7 @@ public class GameManager {
         gameState = new GameState();
         gameState.setCentralTiles(tileManager.getCentralTiles());
         user = new GameUser("플레이어");
-        computer = new Computer("컴퓨터");
+        // computer = new Computer("컴퓨터");
     }
 
     /**
@@ -123,5 +125,9 @@ public class GameManager {
 
     public TileManager getTileManager() {
         return tileManager;
+    }
+    
+    public List<Tile> getUserTiles() {
+        return user.getTiles();
     }
 }

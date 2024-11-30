@@ -113,4 +113,5 @@ public abstract class Player {
         this.score = 0;
         this.tiles.clear();
     }
+
 }

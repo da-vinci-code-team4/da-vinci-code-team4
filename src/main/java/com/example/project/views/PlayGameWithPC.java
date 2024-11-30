@@ -444,7 +444,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 Tile tile = userTiles.get(i);
                 if (tile.isGuessedCorrectly()) {
                     // 맞게 추측했다면 앞면 이미지 표시
-                    String imagePath = tile.getReverseImagePath();
+                    String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
                         slotButton.setIcon(new ImageIcon(imageUrl));
@@ -695,8 +695,9 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
     @Override
     public void showVictoryScreen(VictoryScreen victoryScreen) {
-
+        System.out.println("Showing victory screen.");
         // VictoryScreen 추가
+        // this.removeAll();
         this.setLayout(new BorderLayout());
         this.add(victoryScreen, BorderLayout.CENTER);
         this.revalidate();
@@ -705,8 +706,9 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
     @Override
     public void showDefeatScreen(DefeatScreen defeatScreen) {
-
+        System.out.println("Showing defeat screen.");
         // DefeatScreen 추가
+        // this.removeAll();
         this.setLayout(new BorderLayout());
         this.add(defeatScreen, BorderLayout.CENTER);
         this.revalidate();
