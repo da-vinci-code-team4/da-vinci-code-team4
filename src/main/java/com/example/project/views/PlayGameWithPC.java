@@ -235,7 +235,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         }
 
         // 게임 정보 패널
-        RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(0xD9D9D9), 20);
+        RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(255,255,255), 20);
         gameInfoPanel.setBounds(78, 614, 571, 264);
         gameInfoPanel.setLayout(null);
         mainContent.add(gameInfoPanel);
