@@ -35,6 +35,17 @@ public class Computer extends Player {
         return count;
     }
 
+    public int countGuessedCorrectly() {
+        int count = 0;
+        for (Tile tile : tiles) {
+            if (tile.isGuessedCorrectly()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
     @Override
     public int guessNumber(Tile tile) {
         // 컴퓨터가 열려있는 타일과 자신이 가지고 있는 타일을 확인하여 추측할 숫자를 결정

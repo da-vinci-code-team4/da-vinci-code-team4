@@ -1,6 +1,9 @@
 package com.example.project.controllers;
 
 import com.example.project.config.TileType;
+import com.example.project.models.Computer;
+import com.example.project.models.GameUser;
+
 import com.example.project.controllers.*;
 import com.example.project.models.*;
 import com.example.project.views.*;
@@ -496,7 +499,6 @@ public class Controller {
              DefeatScreen defeatScreen = new DefeatScreen(currentUser, calculateTimeTaken());
              observer.showDefeatScreen(defeatScreen);
          }
-
         // //유저 패배
         // if(user.hasAllTilesOpened()){
         //     gameState.setGameOver(true);
