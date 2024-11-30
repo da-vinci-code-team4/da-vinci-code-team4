@@ -1,5 +1,6 @@
 package com.example.project.controllers;
 
+import com.example.project.config.TileType;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
 import com.example.project.config.Tile;
@@ -170,7 +171,7 @@ public class Controller {
             // 플레이어의 추측 단계로 전환
             currentPhase = GamePhase.PLAYER_GUESS_PHASE;
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-            JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요.");
+            JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요. (조커는 13으로 입력)");
         } else {
             JOptionPane.showMessageDialog(null, "유효하지 않은 타일 선택입니다.");
         }
@@ -200,7 +201,7 @@ public class Controller {
 
         // 플레이어가 추측할 숫자를 입력
         int guessedNumber = user.guessNumber(computerTile);
-        if (guessedNumber == computerTile.getNumber()) {
+        if (guessedNumber == computerTile.getNumber() || computerTile.getTileType().equals(TileType.JOKER) && guessedNumber == 130) {
             JOptionPane.showMessageDialog(null, "정답을 맞추셨습니다!");
             computerTile.setGuessedCorrectly(true); // 올바르게 추측되었음을 표시
             user.increaseScore();
@@ -216,7 +217,7 @@ public class Controller {
                     // 타일 뽑기 단계로 전환
                     currentPhase = GamePhase.PLAYER_GUESS_PHASE;
                     observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-                    JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요.");
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요.(조커는 13으로 입력");
                     break;
                 case "N":
                     currentPhase = GamePhase.COMPUTER_TURN;
@@ -308,14 +309,17 @@ public class Controller {
      * 게임 종료 조건을 확인합니다.
      */
     public void checkGameOver() {
-        if (user.getScore() >= computer.getTiles().size()) {
+        if (computer.hasAllTilesOpened()) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
             JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
-        } else if (computer.getScore() >= user.getTiles().size()) {
+        } else if (user.hasAllTilesOpened()) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
             JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신은 패배했습니다!");
+        }
+        else{
+            System.out.println("아직");
         }
     }
 

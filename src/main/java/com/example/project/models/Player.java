@@ -49,12 +49,13 @@ public abstract class Player {
 
     public boolean hasAllTilesOpened() {
         for (Tile tile : tiles) {
-            if (!tile.isOpened()) {
+            if (!tile.isGuessedCorrectly()) {
                 return false;
             }
         }
         return true;
     }
+
 
     /**
      * 무작위로 열리지 않은 타일을 가져옵니다.
