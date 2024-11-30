@@ -64,16 +64,20 @@ public abstract class Player {
     public Tile getRandomUnopenedTile() {
         List<Tile> unopenedTiles = new ArrayList<>();
         for (Tile tile : tiles) {
-            if (!tile.isOpened() && !tile.isGuessedCorrectly()) {
+//             && !tile.isGuessedCorrectly()
+            if (tile.isOpened()) {
                 unopenedTiles.add(tile);
             }
         }
         if (!unopenedTiles.isEmpty()) {
-            return unopenedTiles.get(random.nextInt(unopenedTiles.size()));
+            return unopenedTiles.get(random.nextInt(unopenedTiles.size())*10);
         }
         return null;
     }
 
+    public void sorting() {
+        tiles.sort((tile1, tile2) -> Integer.compare(tile1.getNumber(), tile2.getNumber()));
+    }
     /**
      * 플레이어가 숫자를 추측합니다.
      *

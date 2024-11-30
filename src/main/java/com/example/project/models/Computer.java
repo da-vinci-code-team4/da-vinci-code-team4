@@ -17,7 +17,7 @@ public class Computer extends Player {
     @Override
     public int guessNumber(Tile tile) {
         // 간단한 AI: 0부터 11 사이의 숫자를 무작위로 추측
-        return random.nextInt(12);
+        return random.nextInt(12)*10;
     }
 
     @Override

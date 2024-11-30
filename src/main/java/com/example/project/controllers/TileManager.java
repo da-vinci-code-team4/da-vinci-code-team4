@@ -1,6 +1,7 @@
 package com.example.project.controllers;
 
 import com.example.project.config.Tile;
+import com.example.project.config.TileColor;
 import com.example.project.config.TileType;
 
 import java.util.ArrayList;
@@ -31,13 +32,17 @@ public class TileManager {
 
         // 흰색 타일 12개 추가
         for (int i = 0; i < 12; i++) {
-            centralTiles.add(new Tile(TileType.WHITE, i));
+            centralTiles.add(new Tile(TileType.NUMBER,TileColor.WHITE, i*10));
         }
 
         // 검정색 타일 12개 추가
         for (int i = 0; i < 12; i++) {
-            centralTiles.add(new Tile(TileType.BLACK, i));
+            centralTiles.add(new Tile(TileType.NUMBER, TileColor.BLACK, i*10));
         }
+
+        //조커타일 생성
+        centralTiles.add(new Tile(TileType.JOKER, TileColor.WHITE,1000));
+        centralTiles.add(new Tile(TileType.JOKER, TileColor.BLACK,1000));
 
         // 타일 섞기
         Collections.shuffle(centralTiles);

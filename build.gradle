@@ -76,7 +76,20 @@ shadowJar {
     archiveClassifier.set('')
     archiveVersion.set('')
 }
+tasks.withType(JavaCompile) {
+    // 소스 파일 인코딩 설정
+    options.encoding = 'UTF-8'
+}
 
+compileJava {
+    // 컴파일 시에도 인코딩을 UTF-8로 설정
+    options.encoding = 'UTF-8'
+}
+
+run {
+    // 실행 시에도 인코딩을 UTF-8로 설정
+    environment 'JAVA_TOOL_OPTIONS', '-Dfile.encoding=UTF-8'
+}
 //=================================================== 베트남어 ===================================================
 
 // plugins 설정

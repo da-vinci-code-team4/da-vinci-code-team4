@@ -20,7 +20,7 @@ public class GameUser extends Player {
         String input = JOptionPane.showInputDialog(null, "추측할 숫자를 입력하세요:");
         int guessedNumber = -1;
         try {
-            guessedNumber = Integer.parseInt(input);
+            guessedNumber = Integer.parseInt(input)*10;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "유효한 숫자를 입력해주세요!");
             return guessNumber(tile); // 다시 시도
