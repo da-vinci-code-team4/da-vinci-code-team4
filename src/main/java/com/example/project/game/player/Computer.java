@@ -43,13 +43,14 @@ public class Computer extends Player {
 
     @Override
     public int inputJokerTilePosition() {
-        return 0;
+        int pos = rand.nextInt(0, this.tiles.size());
+        System.out.println("Computer's joker tile position : " + pos);
+        return pos;
     }
 
     @Override
     public boolean chooseToKeepTurn() {
         //50프로 확률로 선택
-        Random rand = new Random();
         int val = rand.nextInt(0, 2);
         if (val == 0) {
             return true;

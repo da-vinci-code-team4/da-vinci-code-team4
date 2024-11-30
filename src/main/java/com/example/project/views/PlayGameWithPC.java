@@ -377,7 +377,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 // 타일이 열렸다면 빈 슬롯으로 표시
                 tileButton.setIcon(null);
                 tileButton.setEnabled(false);
-                tileButton.setBackground(Color.GRAY);
+                tileButton.setBackground(Color.LIGHT_GRAY);
             } else if (tile.isSelected()) {
                 // 타일이 선택되었다면 색상 변경
                 tileButton.setBackground(Color.YELLOW);
@@ -451,7 +451,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     } else {
                         slotButton.setIcon(null);
                     }
-                    slotButton.setBackground(Color.WHITE);
+                    slotButton.setBackground(Color.GRAY);
                 } else if (tile.isOpened()) {
                     // 타일이 열렸다면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
@@ -543,7 +543,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * 게임 종료 조건 확인.
+     * 컴퓨터 영역 업데이트.
      */
     private void updateComputerPanel() {
         computerPlayer.sorting();
@@ -558,7 +558,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 System.out.println("Tile " + i + ": Guessed Correctly? " + tile.isGuessedCorrectly());
 
                 if (tile.isGuessedCorrectly()) {
-                    // Hiển thị hình ảnh mặt trước
+                    // 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
@@ -601,7 +601,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     slotButton.setEnabled(false);
                 }
             } else {
-                slotButton.setBackground(new Color(0x007B75));
+                slotButton.setBackground(new Color(0x007B75));//녹색
                 slotButton.setIcon(null);
                 slotButton.setEnabled(false);
             }
