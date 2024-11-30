@@ -79,6 +79,17 @@ public abstract class Player {
     public void sorting() {
         tiles.sort((tile1, tile2) -> Integer.compare(tile1.getNumber(), tile2.getNumber()));
     }
+
+    //최근타일 공개
+    public void openLatest(Tile tile){
+        for (Tile myTile : tiles) {
+            if(myTile.equals(tile)){
+                myTile.setGuessedCorrectly(true);
+                myTile.setOpened(true);
+                break;
+            }
+        }
+    }
     /**
      * 플레이어가 숫자를 추측합니다.
      *

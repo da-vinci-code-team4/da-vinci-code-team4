@@ -22,6 +22,10 @@ public class Controller {
     // 현재 게임의 상태
     private GamePhase currentPhase;
 
+    //최근에 가져간 타일
+    private Tile userLatest;
+    private Tile pcLatest;
+
     // private int targetCore;
 
     public Controller(GameObserver observer) {
@@ -150,6 +154,7 @@ public class Controller {
         }
 
         Tile tile = tileManager.drawTile(index);
+        userLatest = tile;
 
         if (tile != null && !tile.isOpened()) {
             tile.isJoker(user.getTiles());
@@ -212,6 +217,7 @@ public class Controller {
         } else {
             JOptionPane.showMessageDialog(null, "틀렸습니다!");
             // 컴퓨터의 턴으로 전환
+            user.openLatest(userLatest);
             currentPhase = GamePhase.COMPUTER_TURN;
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
             computerTurn();
@@ -226,6 +232,10 @@ public class Controller {
      * 컴퓨터의 턴을 처리합니다.
      */
     public void computerTurn() {
+        // 컴퓨터가 중앙에서 타일을 뽑음
+        computerDrawTileFromCenter();
+        checkGameOver();
+
         // 컴퓨터가 추측할 타일을 선택
         Tile userTile = user.getRandomUnopenedTile();
         if (userTile != null) {
@@ -242,20 +252,14 @@ public class Controller {
                 // 승리 조건 확인
                 checkGameOver();
 
-                // 컴퓨터가 중앙에서 타일을 뽑음
-                computerDrawTileFromCenter();
-                checkGameOver();
-
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
                 JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
-            } else {
+            }
+            else {
                 JOptionPane.showMessageDialog(null, "컴퓨터가 틀렸습니다!");
-                // 컴퓨터가 중앙에서 타일을 뽑음
-                computerDrawTileFromCenter();
-                checkGameOver();
-
+                computer.openLatest(pcLatest);
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
