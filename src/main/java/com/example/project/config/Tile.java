@@ -37,15 +37,32 @@ public class Tile implements Serializable, Cloneable {
 
     //조커타일인지 확인 후 입력한 위치에 넣기
     public void isJoker(List<Tile> tiles) {
+        int setting;
         if(this.tileType == TileType.JOKER) {
-            String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + tiles.size() + " )");
-            if(Integer.parseInt(inp) > tiles.size()-1 || Integer.parseInt(inp) < 0) {
-                while(Integer.parseInt(inp) > tiles.size()-1 || Integer.parseInt(inp) < 0) {
+            String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (tiles.size()) + " )");
+            if(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
+                while(Integer.parseInt(inp) > tiles.size() + 1 || Integer.parseInt(inp) < 0) {
                     JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
                     inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + tiles.size() + " )");
                 }
             }
-            setNumber(Integer.parseInt(inp)*10);
+
+            if(Integer.parseInt(inp) == tiles.size()) {
+                int temp = tiles.get(Integer.parseInt(inp)-1).getNumber();
+                setting = temp + 1;
+            }
+            else{
+                int afterTile = tiles.get(Integer.parseInt(inp)-1).getNumber();
+                int beforeTile = tiles.get(Integer.parseInt(inp)-2).getNumber();
+                if(afterTile == beforeTile) {
+                    setting = afterTile - 1;
+                    tiles.get(Integer.parseInt(inp)-2).setNumber(setting-1);
+                }
+                else{
+                    setting = afterTile - 1;
+                }
+            }
+            setNumber(setting);
         }
     }
 

@@ -65,7 +65,7 @@ public abstract class Player {
         List<Tile> unopenedTiles = new ArrayList<>();
         for (Tile tile : tiles) {
 //             && !tile.isGuessedCorrectly()
-            if (tile.isOpened()) {
+            if (tile.isOpened() && !tile.isGuessedCorrectly()) {
                 unopenedTiles.add(tile);
             }
         }
@@ -75,6 +75,7 @@ public abstract class Player {
         return null;
     }
 
+    //타일 정렬하는 메소드
     public void sorting() {
         tiles.sort((tile1, tile2) -> Integer.compare(tile1.getNumber(), tile2.getNumber()));
     }

@@ -144,6 +144,10 @@ public class Controller {
             JOptionPane.showMessageDialog(null, "타일을 뽑을 차례가 아닙니다.");
             return;
         }
+        if(!tileManager.hasTiles()){
+            JOptionPane.showMessageDialog(null, "중앙에 더 이상 뽑을 타일이 없습니다!");
+            return;
+        }
 
         Tile tile = tileManager.drawTile(index);
 

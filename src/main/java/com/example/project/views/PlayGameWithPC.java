@@ -311,7 +311,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         List<Tile> initialTiles = controller.getTileManager().getCentralTiles();
 
         // 중앙 영역에 24개의 버튼 생성
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 26; i++) {
             JButton tileButton = createRoundedButton();
             Tile tile = initialTiles.get(i);
             tileButton.setBackground(tile.getTileColor()); // 타일 유형에 따라 배경색 설정
