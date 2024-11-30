@@ -1,11 +1,13 @@
 // src/main/java/com/example/project/controllers/GameManager.java
 package com.example.project.controllers;
 
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import com.example.project.config.Tile;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
-import com.example.project.config.Tile;
-import javax.swing.JOptionPane;
-import java.util.Optional;
 
 /**
  * GameManager.java
@@ -26,7 +28,7 @@ public class GameManager {
         gameState = new GameState();
         gameState.setCentralTiles(tileManager.getCentralTiles());
         user = new GameUser("플레이어");
-        computer = new Computer("컴퓨터");
+        // computer = new Computer("컴퓨터");
     }
 
     /**
@@ -74,25 +76,25 @@ public class GameManager {
         observer.onGameStateChanged(gameState);
     }
 
-    /**
-     * 컴퓨터가 추측을 진행합니다.
-     */
-    public void computerTurn() {
-        // 컴퓨터가 플레이어의 타일 중 하나를 선택하여 추측
-        Tile userTile = user.getRandomUnopenedTile();
-        if (userTile != null) {
-            int guessedNumber = computer.guessNumber(userTile);
-            if (guessedNumber == userTile.getNumber()) {
-                JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 정확히 맞췄습니다!");
-                userTile.setOpened(true);
-                computer.increaseScore();
-            } else {
-                JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 틀렸습니다!");
-                // 컴퓨터가 틀렸을 때의 추가 로직, 예: 턴 변경
-            }
-        }
-        observer.onGameStateChanged(gameState);
-    }
+    // /**
+    //  * 컴퓨터가 추측을 진행합니다.
+    //  */
+    // public void computerTurn() {
+    //     // 컴퓨터가 플레이어의 타일 중 하나를 선택하여 추측
+    //     Tile userTile = user.getRandomUnopenedTile();
+    //     if (userTile != null) {
+    //         int guessedNumber = computer.guessNumber(userTile);
+    //         if (guessedNumber == userTile.getNumber()) {
+    //             JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 정확히 맞췄습니다!");
+    //             userTile.setOpened(true);
+    //             computer.increaseScore();
+    //         } else {
+    //             JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 틀렸습니다!");
+    //             // 컴퓨터가 틀렸을 때의 추가 로직, 예: 턴 변경
+    //         }
+    //     }
+    //     observer.onGameStateChanged(gameState);
+    // }
 
     /**
      * 게임 종료 조건을 확인합니다.
@@ -123,5 +125,9 @@ public class GameManager {
 
     public TileManager getTileManager() {
         return tileManager;
+    }
+    
+    public List<Tile> getUserTiles() {
+        return user.getTiles();
     }
 }
