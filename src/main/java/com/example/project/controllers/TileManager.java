@@ -148,4 +148,14 @@ public class TileManager {
         }
         return false;
     }
+
+    public boolean allTilesGuessedCorrectly() {
+        for (Tile tile : centralTiles) {
+            if (!tile.isGuessedCorrectly()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

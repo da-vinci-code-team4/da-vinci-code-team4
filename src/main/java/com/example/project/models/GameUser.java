@@ -14,6 +14,16 @@ public class GameUser extends Player {
         super(name);
     }
 
+    public int countGuessedCorrectly() {
+        int count = 0;
+        for (Tile tile : tiles) {
+            if (tile.isGuessedCorrectly()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     @Override
     public int guessNumber(Tile tile) {
         // 사용자가 숫자를 입력하도록 요청
