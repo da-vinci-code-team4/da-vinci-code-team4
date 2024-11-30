@@ -5,7 +5,7 @@ package com.example.project.config;
  *
  * Định nghĩa loại thẻ bài.
  */
-public enum TileType {
-    JOKER,
-    NUMBER
+public enum TileColor {
+    BLACK,
+    WHITE
 }

@@ -2,6 +2,8 @@ package com.example.project.config;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  * Tile.java
@@ -10,13 +12,15 @@ import java.io.Serializable;
  */
 public class Tile implements Serializable, Cloneable {
     private TileType tileType;
+    private TileColor tileColor;
     private int number; // 0부터 11까지의 숫자
     private boolean isOpened;
     private boolean isGuessedCorrectly; // 정답 여부 상태
     private boolean isSelected; // 초기 선택 단계에서 선택된 상태
 
-    public Tile(TileType tileType, int number) {
+    public Tile(TileType tileType, TileColor tileColor, int number) {
         this.tileType = tileType;
+        this.tileColor = tileColor;
         this.number = number;
         this.isOpened = false;
         this.isGuessedCorrectly = false;
@@ -26,6 +30,82 @@ public class Tile implements Serializable, Cloneable {
     // Getter 및 Setter
     public TileType getTileType() {
         return tileType;
+    }
+    public void setTileType(TileType tileType) {
+        this.tileType = tileType;
+    }
+
+    //조커타일인지 확인 후 입력한 위치에 넣기
+    public void isJoker(List<Tile> tiles) {
+        int setting;
+        if(this.tileType == TileType.JOKER) {
+            String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (tiles.size()) + " )");
+            if(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
+                while(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
+                    JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
+                    inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + tiles.size() + " )");
+                }
+            }
+
+            if(Integer.parseInt(inp) == tiles.size()) {
+                int temp = tiles.get(Integer.parseInt(inp)-1).getNumber();
+                setting = temp + 1;
+            }
+            else if(Integer.parseInt(inp) == 0){
+                int afterTile = tiles.get(Integer.parseInt(inp)).getNumber();
+                setting = afterTile - 1;
+            }
+            else{
+                int afterTile = tiles.get(Integer.parseInt(inp)).getNumber();
+                int beforeTile = tiles.get(Integer.parseInt(inp)-1).getNumber();
+                if(afterTile == beforeTile) {
+                    setting = afterTile - 1;
+                    tiles.get(Integer.parseInt(inp)-1).setNumber(setting-1);
+                }
+                else{
+                    setting = afterTile - 1;
+                }
+            }
+            setNumber(setting);
+        }
+    }
+
+    public void isJoker(int number, List<Tile> selectedTiles) {
+        int setting;
+        if(this.tileType == TileType.JOKER) {
+            String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (selectedTiles.size()-1) + " )");
+            if(Integer.parseInt(inp) > selectedTiles.size() || Integer.parseInt(inp) < 0) {
+                while(Integer.parseInt(inp) > selectedTiles.size() || Integer.parseInt(inp) < 0) {
+                    JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
+                    inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + (selectedTiles.size()-1) + " )");
+                }
+            }
+
+            if(Integer.parseInt(inp) == selectedTiles.size()-1) {
+                int temp = selectedTiles.get(Integer.parseInt(inp)-1).getNumber();
+                setting = temp + 1;
+            }
+            else if(Integer.parseInt(inp) == 0){
+                int afterTile = selectedTiles.get(Integer.parseInt(inp)).getNumber();
+                setting = afterTile - 1;
+            }
+            else{
+                int afterTile = selectedTiles.get(Integer.parseInt(inp)).getNumber();
+                int beforeTile = selectedTiles.get(Integer.parseInt(inp)-1).getNumber();
+                if(afterTile == beforeTile) {
+                    setting = afterTile - 1;
+                    selectedTiles.get(Integer.parseInt(inp)-1).setNumber(setting-1);
+                }
+                else{
+                    setting = afterTile - 1;
+                }
+            }
+            setNumber(setting);
+        }
+    }
+
+    private void setNumber(int number) {
+        this.number = number;
     }
 
     public int getNumber() {
@@ -62,8 +142,11 @@ public class Tile implements Serializable, Cloneable {
      * @return 이미지 경로
      */
     public String getImagePath() {
-        String typePrefix = (tileType == TileType.BLACK) ? "b" : "w";
-        return "/img/Card/tiles/" + typePrefix + number + ".png";
+        if(tileType.equals(TileType.JOKER)){
+            return getJokerImagePath();
+        }
+        String typePrefix = (tileColor == TileColor.BLACK) ? "b" : "w";
+        return "/img/Card/tiles/" + typePrefix + number/10 + ".png";
     }
 
     /**
@@ -72,8 +155,21 @@ public class Tile implements Serializable, Cloneable {
      * @return 뒤집힌 이미지 경로
      */
     public String getReverseImagePath() {
-        String typePrefix = (tileType == TileType.BLACK) ? "b" : "w";
-        return "/img/Card/reverseTiles/" + typePrefix + number + ".png";
+        if(tileType.equals(TileType.JOKER)){
+            return getJokerImagePath();
+        }
+        String typePrefix = (tileColor == TileColor.BLACK) ? "b" : "w";
+        return "/img/Card/reverseTiles/" + typePrefix + number/10 + ".png";
+    }
+
+    public String getBackImagePath() {
+        String typePrefix = (tileColor == TileColor.BLACK) ? "black" : "white";
+        return "/img/Card/tiles/" + typePrefix + ".png";
+    }
+
+    public String getJokerImagePath() {
+        String typePrefix = (tileColor == TileColor.BLACK) ? "bjoker" : "wjoker";
+        return "/img/Card/tiles/" + typePrefix + ".png";
     }
 
     /**
@@ -82,7 +178,7 @@ public class Tile implements Serializable, Cloneable {
      * @return 타일의 색상
      */
     public Color getTileColor() {
-        return (tileType == TileType.BLACK) ? Color.BLACK : Color.WHITE;
+        return (tileColor == TileColor.BLACK) ? Color.BLACK : Color.WHITE;
     }
 
     @Override
@@ -90,7 +186,7 @@ public class Tile implements Serializable, Cloneable {
         try {
             return (Tile) super.clone();
         } catch (CloneNotSupportedException e) {
-            return new Tile(this.tileType, this.number);
+            return new Tile(this.tileType,this.tileColor, this.number);
         }
     }
 }

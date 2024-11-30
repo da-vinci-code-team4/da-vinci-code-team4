@@ -49,12 +49,13 @@ public abstract class Player {
 
     public boolean hasAllTilesOpened() {
         for (Tile tile : tiles) {
-            if (!tile.isOpened()) {
+            if (!tile.isGuessedCorrectly()) {
                 return false;
             }
         }
         return true;
     }
+
 
     /**
      * 무작위로 열리지 않은 타일을 가져옵니다.
@@ -64,7 +65,8 @@ public abstract class Player {
     public Tile getRandomUnopenedTile() {
         List<Tile> unopenedTiles = new ArrayList<>();
         for (Tile tile : tiles) {
-            if (!tile.isOpened() && !tile.isGuessedCorrectly()) {
+//             && !tile.isGuessedCorrectly()
+            if (tile.isOpened() && !tile.isGuessedCorrectly()) {
                 unopenedTiles.add(tile);
             }
         }
@@ -74,6 +76,21 @@ public abstract class Player {
         return null;
     }
 
+    //타일 정렬하는 메소드
+    public void sorting() {
+        tiles.sort((tile1, tile2) -> Integer.compare(tile1.getNumber(), tile2.getNumber()));
+    }
+
+    //최근타일 공개
+    public void openLatest(Tile tile){
+        for (Tile myTile : tiles) {
+            if(myTile.equals(tile)){
+                myTile.setGuessedCorrectly(true);
+                myTile.setOpened(true);
+                break;
+            }
+        }
+    }
     /**
      * 플레이어가 숫자를 추측합니다.
      *
@@ -88,4 +105,12 @@ public abstract class Player {
      * @return 선택된 타일
      */
     public abstract Tile selectTile();
+
+    /**
+     * Phương thức đặt lại trạng thái của người chơi.
+     */
+    public void reset() {
+        this.score = 0;
+        this.tiles.clear();
+    }
 }

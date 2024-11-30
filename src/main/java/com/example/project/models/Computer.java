@@ -14,10 +14,21 @@ public class Computer extends Player {
         super(name);
     }
 
+    public int countGuessedCorrectly() {
+        int count = 0;
+        for (Tile tile : tiles) {
+            if (tile.isGuessedCorrectly()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
     @Override
     public int guessNumber(Tile tile) {
         // 간단한 AI: 0부터 11 사이의 숫자를 무작위로 추측
-        return random.nextInt(12);
+        return random.nextInt(12)*10;
     }
 
     @Override

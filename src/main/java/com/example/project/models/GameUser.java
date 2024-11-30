@@ -14,13 +14,23 @@ public class GameUser extends Player {
         super(name);
     }
 
+    public int countGuessedCorrectly() {
+        int count = 0;
+        for (Tile tile : tiles) {
+            if (tile.isGuessedCorrectly()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     @Override
     public int guessNumber(Tile tile) {
         // 사용자가 숫자를 입력하도록 요청
         String input = JOptionPane.showInputDialog(null, "추측할 숫자를 입력하세요:");
         int guessedNumber = -1;
         try {
-            guessedNumber = Integer.parseInt(input);
+            guessedNumber = Integer.parseInt(input)*10;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "유효한 숫자를 입력해주세요!");
             return guessNumber(tile); // 다시 시도

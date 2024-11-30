@@ -216,7 +216,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
         // 플레이어의 카드 슬롯 목록 초기화
         userCardSlots = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             JButton slotButton = createRoundedButton();
             slotButton.setBackground(Color.BLUE);
             slotButton.setFocusable(false);
@@ -226,7 +226,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
         // 컴퓨터의 카드 슬롯 목록 초기화
         computerCardSlots = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             JButton slotButton = createRoundedButton();
             slotButton.setBackground(new Color(0x007B75)); // 원래의 녹색
             slotButton.setFocusable(false);
@@ -235,7 +235,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         }
 
         // 게임 정보 패널
-        RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(0xD9D9D9), 20);
+        RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(255,255,255), 20);
         gameInfoPanel.setBounds(78, 614, 571, 264);
         gameInfoPanel.setLayout(null);
         mainContent.add(gameInfoPanel);
@@ -253,32 +253,32 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
         // 상대 정보 레이블
         opponentMatchedTilesLabel = new JLabel("맞춘 상대 타일 수 : 0");
-        opponentMatchedTilesLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        opponentMatchedTilesLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         opponentMatchedTilesLabel.setForeground(Color.BLACK);
         opponentMatchedTilesLabel.setBounds(20, 30, 235, 30);
         leftInfoPanel.add(opponentMatchedTilesLabel);
 
         opponentTilesMatchedLabel = new JLabel("상대가 맞춘 타일 수 : 0");
-        opponentTilesMatchedLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        opponentTilesMatchedLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         opponentTilesMatchedLabel.setForeground(Color.BLACK);
         opponentTilesMatchedLabel.setBounds(20, 80, 235, 30);
         leftInfoPanel.add(opponentTilesMatchedLabel);
 
         opponentRemainingTilesLabel = new JLabel("남은 상대 타일 수 : 0");
-        opponentRemainingTilesLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        opponentRemainingTilesLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         opponentRemainingTilesLabel.setForeground(Color.BLACK);
         opponentRemainingTilesLabel.setBounds(20, 130, 235, 30);
         leftInfoPanel.add(opponentRemainingTilesLabel);
 
         // 사용자 정보 레이블
         remainingTilesLabel = new JLabel("중앙 타일 남은 수 : 0");
-        remainingTilesLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        remainingTilesLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         remainingTilesLabel.setForeground(Color.BLACK);
         remainingTilesLabel.setBounds(20, 30, 235, 30);
         rightInfoPanel.add(remainingTilesLabel);
 
         myRemainingTilesLabel = new JLabel("남은 내 타일 수 : 0");
-        myRemainingTilesLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        myRemainingTilesLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         myRemainingTilesLabel.setForeground(Color.BLACK);
         myRemainingTilesLabel.setBounds(20, 80, 235, 30);
         rightInfoPanel.add(myRemainingTilesLabel);
@@ -311,7 +311,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         List<Tile> initialTiles = controller.getTileManager().getCentralTiles();
 
         // 중앙 영역에 24개의 버튼 생성
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 26; i++) {
             JButton tileButton = createRoundedButton();
             Tile tile = initialTiles.get(i);
             tileButton.setBackground(tile.getTileColor()); // 타일 유형에 따라 배경색 설정
@@ -435,6 +435,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
      * 플레이어 영역 업데이트.
      */
     private void updateUserPanel() {
+        userPlayer.sorting();
         List<Tile> userTiles = userPlayer.getTiles();
 
         for (int i = 0; i < userCardSlots.size(); i++) {
@@ -443,7 +444,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 Tile tile = userTiles.get(i);
                 if (tile.isGuessedCorrectly()) {
                     // 맞게 추측했다면 앞면 이미지 표시
-                    String imagePath = tile.getImagePath();
+                    String imagePath = tile.getReverseImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
                         slotButton.setIcon(new ImageIcon(imageUrl));
@@ -463,6 +464,13 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     slotButton.setBackground(Color.WHITE);
                 } else {
                     // 타일의 뒷면 또는 빈 슬롯 표시
+                    String imagePath = tile.getBackImagePath();
+                    URL imageUrl = getClass().getResource(imagePath);
+                    if (imageUrl != null) {
+                        slotButton.setIcon(new ImageIcon(imageUrl));
+                    } else {
+                        slotButton.setIcon(null);
+                    }
                     slotButton.setBackground(Color.BLUE);
                     slotButton.setIcon(null);
                 }
@@ -538,6 +546,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
      * 게임 종료 조건 확인.
      */
     private void updateComputerPanel() {
+        computerPlayer.sorting();
         List<Tile> computerTiles = computerPlayer.getTiles();
         System.out.println("Updating Computer Panel. Current Phase: " + controller.getCurrentPhase());
         System.out.println("Number of computer tiles: " + computerTiles.size());
@@ -560,8 +569,14 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     slotButton.setBackground(Color.WHITE);
                 } else {
                     // Hiển thị mặt sau của thẻ
-                    slotButton.setBackground(Color.GREEN);
-                    slotButton.setIcon(null);
+                    String imagePath = tile.getBackImagePath();
+                    URL imageUrl = getClass().getResource(imagePath);
+                    if (imageUrl != null) {
+                        slotButton.setIcon(new ImageIcon(imageUrl));
+                    } else {
+                        slotButton.setBackground(Color.BLUE);
+                    }
+                    slotButton.setBackground(Color.WHITE);
                 }
 
                 final int index = i; // Lưu vị trí
@@ -620,7 +635,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     private int getUnopenedTilesCount(Player player) {
         int count = 0;
         for (Tile tile : player.getTiles()) {
-            if (!tile.isOpened() && !tile.isGuessedCorrectly()) {
+            if (tile.isOpened() && !tile.isGuessedCorrectly()) {
                 count++;
             }
         }
