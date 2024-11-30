@@ -207,14 +207,21 @@ public class Controller {
             // 승리 조건 확인
             checkGameOver();
 
-            // 타일 뽑기 단계로 전환
-            currentPhase = GamePhase.PLAYER_DRAW_PHASE;
-            observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-            JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+            String option = JOptionPane.showInputDialog(null, "계속하시겠습니까 (Y/N) :");
+            switch (option) {
+                case "Y":
+                    // 타일 뽑기 단계로 전환
+                    currentPhase = GamePhase.PLAYER_DRAW_PHASE;
+                    observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+                    break;
+                case "N":
+                    break;
+            }
 
-            //Trả về kết quả MATCH
-            /*return TurnResult.MATCH;*/
-        } else {
+        }
+
+        else {
             JOptionPane.showMessageDialog(null, "틀렸습니다!");
             // 컴퓨터의 턴으로 전환
             user.openLatest(userLatest);
