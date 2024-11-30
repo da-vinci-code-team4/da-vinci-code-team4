@@ -259,7 +259,7 @@ public class Controller {
             }
             else {
                 JOptionPane.showMessageDialog(null, "컴퓨터가 틀렸습니다!");
-                computer.openLatest(pcLatest);
+                computer.openLatest(pcLatest); //최근 뽑은 타일 공개
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
@@ -279,6 +279,7 @@ public class Controller {
      */
     private void computerDrawTileFromCenter() {
         Tile tile = tileManager.drawRandomCentralTile();
+        pcLatest = tile;
         if (tile != null) {
             computer.addTile(tile);
             gameState.getComputerTiles().add(tile); // GameState 업데이트
