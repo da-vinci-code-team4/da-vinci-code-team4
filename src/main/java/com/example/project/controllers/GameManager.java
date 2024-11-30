@@ -76,41 +76,6 @@ public class GameManager {
         observer.onGameStateChanged(gameState);
     }
 
-    // /**
-    //  * 컴퓨터가 추측을 진행합니다.
-    //  */
-    // public void computerTurn() {
-    //     // 컴퓨터가 플레이어의 타일 중 하나를 선택하여 추측
-    //     Tile userTile = user.getRandomUnopenedTile();
-    //     if (userTile != null) {
-    //         int guessedNumber = computer.guessNumber(userTile);
-    //         if (guessedNumber == userTile.getNumber()) {
-    //             JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 정확히 맞췄습니다!");
-    //             userTile.setOpened(true);
-    //             computer.increaseScore();
-    //         } else {
-    //             JOptionPane.showMessageDialog(null, "컴퓨터가 타일의 번호를 틀렸습니다!");
-    //             // 컴퓨터가 틀렸을 때의 추가 로직, 예: 턴 변경
-    //         }
-    //     }
-    //     observer.onGameStateChanged(gameState);
-    // }
-
-    /**
-     * 게임 종료 조건을 확인합니다.
-     */
-    public void checkGameOver() {
-        if (user.getScore() >= 8) {
-            gameState.setGameOver(true);
-            observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
-        } else if (computer.getScore() >= 8) {
-            gameState.setGameOver(true);
-            observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다!");
-        }
-    }
-
     public GameUser getUser() {
         return user;
     }
