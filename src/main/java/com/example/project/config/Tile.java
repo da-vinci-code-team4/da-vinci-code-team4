@@ -56,11 +56,11 @@ public class Tile implements Serializable, Cloneable {
                 setting = afterTile - 1;
             }
             else{
-                int afterTile = tiles.get(Integer.parseInt(inp)+1).getNumber();
+                int afterTile = tiles.get(Integer.parseInt(inp)).getNumber();
                 int beforeTile = tiles.get(Integer.parseInt(inp)-1).getNumber();
                 if(afterTile == beforeTile) {
                     setting = afterTile - 1;
-                    tiles.get(Integer.parseInt(inp)-2).setNumber(setting-1);
+                    tiles.get(Integer.parseInt(inp)-1).setNumber(setting-1);
                 }
                 else{
                     setting = afterTile - 1;
@@ -90,7 +90,7 @@ public class Tile implements Serializable, Cloneable {
                 setting = afterTile - 1;
             }
             else{
-                int afterTile = selectedTiles.get(Integer.parseInt(inp)+1).getNumber();
+                int afterTile = selectedTiles.get(Integer.parseInt(inp)).getNumber();
                 int beforeTile = selectedTiles.get(Integer.parseInt(inp)-1).getNumber();
                 if(afterTile == beforeTile) {
                     setting = afterTile - 1;

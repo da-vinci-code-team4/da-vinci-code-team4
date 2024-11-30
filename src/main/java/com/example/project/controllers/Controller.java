@@ -152,6 +152,7 @@ public class Controller {
         }
         if(!tileManager.hasTiles()){
             JOptionPane.showMessageDialog(null, "중앙에 더 이상 뽑을 타일이 없습니다!");
+            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
             return;
         }
 
@@ -307,11 +308,11 @@ public class Controller {
      * 게임 종료 조건을 확인합니다.
      */
     public void checkGameOver() {
-        if (user.getScore() >= 12 || computer.getTiles().size() == 0) {
+        if (user.getScore() >= computer.getTiles().size()) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
             JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
-        } else if (computer.getScore() >= 12 || user.getTiles().size() == 0) {
+        } else if (computer.getScore() >= user.getTiles().size()) {
             gameState.setGameOver(true);
             observer.onGameStateChanged(gameState);
             JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신은 패배했습니다!");
