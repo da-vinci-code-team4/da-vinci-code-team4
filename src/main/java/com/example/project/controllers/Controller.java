@@ -249,7 +249,7 @@ public class Controller {
         Tile userTile = user.getRandomUnopenedTile();
         if (userTile != null) {
             int guessedNumber = computer.guessNumber(userTile);
-            JOptionPane.showMessageDialog(null, "컴퓨터의 추측: " + guessedNumber);
+            JOptionPane.showMessageDialog(null, "컴퓨터의 추측: " + guessedNumber/10);
             if (guessedNumber == userTile.getNumber()) {
                 JOptionPane.showMessageDialog(null, "컴퓨터가 정답을 맞추었습니다!");
                 userTile.setOpened(true);
@@ -292,7 +292,7 @@ public class Controller {
         Tile tile = tileManager.drawRandomCentralTile();
         pcLatest = tile;
         if (tile != null) {
-            computer.addTile(tile);
+//            computer.addTile(tile);
             gameState.getComputerTiles().add(tile); // GameState 업데이트
             JOptionPane.showMessageDialog(null, "컴퓨터가 중앙에서 타일을 하나 뽑았습니다.");
         } else {
