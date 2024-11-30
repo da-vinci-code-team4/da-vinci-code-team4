@@ -635,7 +635,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     private int getUnopenedTilesCount(Player player) {
         int count = 0;
         for (Tile tile : player.getTiles()) {
-            if (!tile.isOpened() && !tile.isGuessedCorrectly()) {
+            if (tile.isOpened() && !tile.isGuessedCorrectly()) {
                 count++;
             }
         }

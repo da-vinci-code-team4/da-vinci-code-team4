@@ -218,6 +218,8 @@ public class Controller {
             JOptionPane.showMessageDialog(null, "틀렸습니다!");
             // 컴퓨터의 턴으로 전환
             user.openLatest(userLatest);
+            computer.increaseScore();
+            gameState.setTileOpenedInUser(user.getTiles().indexOf(userLatest)); // GameState에서 타일이 열렸음을 표시
             currentPhase = GamePhase.COMPUTER_TURN;
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
             computerTurn();
@@ -260,6 +262,8 @@ public class Controller {
             else {
                 JOptionPane.showMessageDialog(null, "컴퓨터가 틀렸습니다!");
                 computer.openLatest(pcLatest); //최근 뽑은 타일 공개
+                user.increaseScore();
+                gameState.setTileOpenedInUser(computer.getTiles().indexOf(pcLatest)); // GameState에서 타일이 열렸음을 표시
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
