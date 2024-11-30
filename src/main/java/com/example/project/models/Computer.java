@@ -35,16 +35,6 @@ public class Computer extends Player {
         return count;
     }
 
-    public int countGuessedCorrectly() {
-        int count = 0;
-        for (Tile tile : tiles) {
-            if (tile.isGuessedCorrectly()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
 
     @Override
     public int guessNumber(Tile tile) {
