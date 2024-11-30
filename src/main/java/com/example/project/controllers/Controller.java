@@ -3,7 +3,6 @@ package com.example.project.controllers;
 import com.example.project.config.TileType;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
-
 import com.example.project.controllers.*;
 import com.example.project.models.*;
 import com.example.project.views.*;
@@ -182,70 +181,6 @@ public class Controller {
             JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요. (조커는 13으로 입력)");
         } else {
             JOptionPane.showMessageDialog(null, "유효하지 않은 타일 선택입니다.");
-        }
-    }
-
-    /**
-     * 플레이어가 컴퓨터의 타일을 추측하는 것을 처리합니다.
-     *
-     * @param index 컴퓨터 영역에서의 타일 위치 (0-11)
-     */
-    /*public void playerGuessComputerTile(int index) {
-        if (currentPhase != GamePhase.PLAYER_GUESS_PHASE) {
-            JOptionPane.showMessageDialog(null, "추측할 차례가 아닙니다.");
-            return;
-        }
-
-        if (index < 0 || index >= computer.getTiles().size()) {
-            JOptionPane.showMessageDialog(null, "유효하지 않은 타일 선택입니다!");
-            return;
-        }
-
-        Tile computerTile = computer.getTiles().get(index);
-        if (computerTile.isGuessedCorrectly()) {
-            JOptionPane.showMessageDialog(null, "이 타일은 이미 올바르게 추측되었습니다!");
-            return;
-        }
-
-        // 플레이어가 추측할 숫자를 입력
-        int guessedNumber = user.guessNumber(computerTile);
-        if (guessedNumber == computerTile.getNumber() || computerTile.getTileType().equals(TileType.JOKER) && guessedNumber == 130) {
-            JOptionPane.showMessageDialog(null, "정답을 맞추셨습니다!");
-            computerTile.setGuessedCorrectly(true); // 올바르게 추측되었음을 표시
-            user.increaseScore();
-            gameState.setTileOpenedInComputer(index); // GameState에서 타일이 열렸음을 표시
-            observer.onGameStateChanged(gameState);
-
-            // 승리 조건 확인
-            checkGameOver();
-
-            String option = JOptionPane.showInputDialog(null, "계속하시겠습니까 (Y/N) :");
-            switch (option.trim().toUpperCase()) {
-                case "Y":
-                    // 타일 뽑기 단계로 전환
-                    currentPhase = GamePhase.PLAYER_GUESS_PHASE;
-                    observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-                    JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요.(조커는 13으로 입력");
-                    break;
-                case "N":
-                    currentPhase = GamePhase.COMPUTER_TURN;
-                    observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-                    computerTurn();
-                    checkGameOver();
-                    break;
-            }
-        }
-
-        else {
-            JOptionPane.showMessageDialog(null, "틀렸습니다!");
-            // 컴퓨터의 턴으로 전환
-            user.openLatest(userLatest);
-            computer.increaseScore();
-            gameState.setTileOpenedInUser(user.getTiles().indexOf(userLatest)); // GameState에서 타일이 열렸음을 표시
-            currentPhase = GamePhase.COMPUTER_TURN;
-            observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-            computerTurn();
-            checkGameOver();
         }
     }
 
@@ -472,7 +407,7 @@ public class Controller {
          }
 
          // 3. 플레이어의 승리 조건
-         if (user.getScore() >= 12 || computer.getTiles().size() == 0) {
+         if (user.getScore() >= 13 || computer.getTiles().size() == 0) {
              System.out.println("플레이어가 승리했습니다.");
              gameState.setGameOver(true);
              observer.onGameStateChanged(gameState);
@@ -486,7 +421,7 @@ public class Controller {
              observer.showVictoryScreen(victoryScreen);
          }
          // 4. 컴퓨터의 승리 조건
-         else if (computer.getScore() >= 12 || user.getTiles().size() == 0) {
+         else if (computer.getScore() >= 13 || user.getTiles().size() == 0) {
              System.out.println("컴퓨터가 승리했습니다.");
              gameState.setGameOver(true);
              observer.onGameStateChanged(gameState);
@@ -499,36 +434,6 @@ public class Controller {
              DefeatScreen defeatScreen = new DefeatScreen(currentUser, calculateTimeTaken());
              observer.showDefeatScreen(defeatScreen);
          }
-        // //유저 패배
-        // if(user.hasAllTilesOpened()){
-        //     gameState.setGameOver(true);
-        //     currentPhase = GamePhase.GAME_OVER;
-        //     JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신은 패배했습니다!");
-        //     // 사용자 점수 업데이트
-        //     currentUser.setCore(currentUser.getCore() - 100);
-        //     // DefeatScreen 표시
-        //     DefeatScreen defeatScreen = new DefeatScreen(currentUser, calculateTimeTaken());
-        //     observer.showDefeatScreen(defeatScreen);
-        //     return;
-        // }
-        // //컴퓨터 패배
-        // else if(computer.hasAllTilesOpened()){
-        //      System.out.println("플레이어가 승리했습니다.");
-        //      gameState.setGameOver(true);
-        //      currentPhase = GamePhase.GAME_OVER;
-        //      JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
-
-        //      // 사용자 점수 업데이트
-        //      currentUser.setCore(currentUser.getCore() + 100);
-
-        //      // VictoryScreen 표시
-        //      VictoryScreen victoryScreen = new VictoryScreen(currentUser, calculateTimeTaken());
-        //      observer.showVictoryScreen(victoryScreen);
-        //      return;
-        // }
-        // else{
-        //     return;
-        // }
      }
 
     private int calculateTimeTaken() {
