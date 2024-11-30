@@ -70,7 +70,7 @@ public abstract class Player {
             }
         }
         if (!unopenedTiles.isEmpty()) {
-            return unopenedTiles.get(random.nextInt(unopenedTiles.size())*10);
+            return unopenedTiles.get(random.nextInt(unopenedTiles.size()));
         }
         return null;
     }
