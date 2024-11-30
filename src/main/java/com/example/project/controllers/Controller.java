@@ -3,6 +3,9 @@ package com.example.project.controllers;
 import com.example.project.config.TileType;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
+import com.example.project.controllers.*;
+import com.example.project.models.*;
+import com.example.project.views.*;
 import com.example.project.config.Tile;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ public class Controller {
     private Computer computer;
     private GameState gameState;
     private GameObserver observer;
+    private long startTime;
+    private User currentUser;
 
     // 현재 게임의 상태
     private GamePhase currentPhase;
@@ -31,7 +36,6 @@ public class Controller {
 
     public Controller(GameObserver observer) {
         this.observer = observer;
-        // this.targetCore = targetCore;
         tileManager = new TileManager();
         tileManager.initializeTiles(); // 24개의 타일 초기화 (12 검정, 12 흰색) 및 섞기
         gameState = new GameState();
@@ -41,6 +45,8 @@ public class Controller {
         gameState.setUserTiles(user.getTiles());
         gameState.setComputerTiles(computer.getTiles());
         currentPhase = GamePhase.INITIAL_SELECTION;
+        startTime = System.currentTimeMillis();
+        currentUser = Session.getInstance().getCurrentUser();
     }
 
     /**
@@ -305,24 +311,6 @@ public class Controller {
         observer.onGameStateChanged(gameState);
     }
 
-    /**
-     * 게임 종료 조건을 확인합니다.
-     */
-    public void checkGameOver() {
-        if (computer.hasAllTilesOpened()) {
-            gameState.setGameOver(true);
-            observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
-        } else if (user.hasAllTilesOpened()) {
-            gameState.setGameOver(true);
-            observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신은 패배했습니다!");
-        }
-        else{
-            System.out.println("아직");
-        }
-    }
-
     public GameUser getUser() {
         return user;
     }
@@ -347,47 +335,45 @@ public class Controller {
         this.currentPhase = phase;
     }
 
-     /*
+     /**
     * 게임 종료 시 숭리, 패배, 정보, 총 걸린시간, 점수 상승하락 변화
+    */
 
-    public void checkGameOver() {
-        if (user.getCore() >= targetCore || computer.getTiles().size() == 0) {
-            gameState.setGameOver(true);
-            observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
+     public void checkGameOver() {
+         if (user.getScore() >= 12 || computer.getTiles().size() == 0) {
+             gameState.setGameOver(true);
+             observer.onGameStateChanged(gameState);
+             JOptionPane.showMessageDialog(null, "축하합니다! 당신이 승리했습니다!");
 
-            // 플레이 시간을 계산
-            int timeTaken = (int) ((System.currentTimeMillis() - startTime) / 1000);
+             // Tính toán thời gian chơi
+             int timeTaken = (int) ((System.currentTimeMillis() - startTime) / 1000);
 
-            // 점수와 랭킹 업데이트 (필요 시)
-            user.setCore(user.getCore() + 100); // 100점 추가
-            // user.setRanking(newRank); // 랭킹 업데이트 (필요 시)
+             // Cập nhật điểm core cho User
+             currentUser.setCore(currentUser.getCore() + 100);
 
-            // 승리 화면 생성 및 표시
-            VictoryScreen victoryScreen = new VictoryScreen(user, timeTaken);
-            observer.showVictoryScreen(victoryScreen);
+             // Tạo và hiển thị VictoryScreen
+             VictoryScreen victoryScreen = new VictoryScreen(currentUser, timeTaken);
+             observer.showVictoryScreen(victoryScreen);
+         }
+         else if (computer.getScore() >= 12 || user.getTiles().size() == 0) {
+             gameState.setGameOver(true);
+             observer.onGameStateChanged(gameState);
+             JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신은 패배했습니다!");
 
-        } else if (computer.getCore() >= targetCore || user.getTiles().size() == 0) {
-            gameState.setGameOver(true);
-            observer.onGameStateChanged(gameState);
-            JOptionPane.showMessageDialog(null, "컴퓨터가 승리했습니다! 당신이 패배했습니다!");
+             // Tính toán thời gian chơi
+             int timeTaken = (int) ((System.currentTimeMillis() - startTime) / 1000);
 
-            // 플레이 시간을 계산
-            int timeTaken = (int) ((System.currentTimeMillis() - startTime) / 1000);
+             // Cập nhật điểm core cho User
+             currentUser.setCore(currentUser.getCore() - 100);
 
-            // 점수와 랭킹 업데이트 (필요 시)
-            user.setCore(user.getCore() - 100); // 100점 차감
-            // user.setRanking(newRank); // 랭킹 업데이트 (필요 시)
-
-            // 패배 화면 생성 및 표시
-            DefeatScreen defeatScreen = new DefeatScreen(user, timeTaken);
-            observer.showDefeatScreen(defeatScreen);
-        }
-    }*/
+             // Tạo và hiển thị DefeatScreen
+             DefeatScreen defeatScreen = new DefeatScreen(currentUser, timeTaken);
+             observer.showDefeatScreen(defeatScreen);
+         }
+     }
     /**
      * 게임 다시 작동
      */
-    /*
     public void restartGame() {
         // 게임 상태 초기화
         gameState = new GameState();
@@ -405,5 +391,4 @@ public class Controller {
         // UI 업데이트
         observer.onGameStateChanged(gameState);
     }
-    */
 }

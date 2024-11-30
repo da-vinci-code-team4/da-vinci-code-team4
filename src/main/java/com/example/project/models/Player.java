@@ -105,4 +105,12 @@ public abstract class Player {
      * @return 선택된 타일
      */
     public abstract Tile selectTile();
+
+    /**
+     * Phương thức đặt lại trạng thái của người chơi.
+     */
+    public void reset() {
+        this.score = 0;
+        this.tiles.clear();
+    }
 }
