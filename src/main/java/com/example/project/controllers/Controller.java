@@ -94,6 +94,7 @@ public class Controller {
         }
 
         for (Tile tile : selectedTiles) {
+            tile.isJoker(user.getTiles());
             tile.setOpened(true);
             tile.setSelected(false);
             user.addTile(tile);
@@ -145,7 +146,9 @@ public class Controller {
         }
 
         Tile tile = tileManager.drawTile(index);
+
         if (tile != null && !tile.isOpened()) {
+            tile.isJoker(user.getTiles());
             tile.setOpened(true);
             user.addTile(tile);
             gameState.setUserTiles(user.getTiles());

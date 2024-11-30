@@ -2,6 +2,8 @@ package com.example.project.config;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  * Tile.java
@@ -31,6 +33,24 @@ public class Tile implements Serializable, Cloneable {
     }
     public void setTileType(TileType tileType) {
         this.tileType = tileType;
+    }
+
+    //조커타일인지 확인 후 입력한 위치에 넣기
+    public void isJoker(List<Tile> tiles) {
+        if(this.tileType == TileType.JOKER) {
+            String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + tiles.size() + " )");
+            if(Integer.parseInt(inp) > tiles.size()-1 || Integer.parseInt(inp) < 0) {
+                while(Integer.parseInt(inp) > tiles.size()-1 || Integer.parseInt(inp) < 0) {
+                    JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
+                    inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + tiles.size() + " )");
+                }
+            }
+            setNumber(Integer.parseInt(inp)*10);
+        }
+    }
+
+    private void setNumber(int number) {
+        this.number = number;
     }
 
     public int getNumber() {
