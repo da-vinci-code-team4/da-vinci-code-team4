@@ -97,8 +97,10 @@ public class Controller {
             return;
         }
 
+        //선택한 타일들 정렬
+        selectedTiles.sort((tile1, tile2) -> Integer.compare(tile1.getNumber(), tile2.getNumber()));
         for (Tile tile : selectedTiles) {
-            tile.isJoker(user.getTiles());
+            tile.isJoker(1, selectedTiles);
             tile.setOpened(true);
             tile.setSelected(false);
             user.addTile(tile);
@@ -208,17 +210,20 @@ public class Controller {
             checkGameOver();
 
             String option = JOptionPane.showInputDialog(null, "계속하시겠습니까 (Y/N) :");
-            switch (option) {
+            switch (option.trim().toUpperCase()) {
                 case "Y":
                     // 타일 뽑기 단계로 전환
-                    currentPhase = GamePhase.PLAYER_DRAW_PHASE;
+                    currentPhase = GamePhase.PLAYER_GUESS_PHASE;
                     observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-                    JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요.");
                     break;
                 case "N":
+                    currentPhase = GamePhase.COMPUTER_TURN;
+                    observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
+                    computerTurn();
+                    checkGameOver();
                     break;
             }
-
         }
 
         else {
@@ -231,9 +236,6 @@ public class Controller {
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
             computerTurn();
             checkGameOver();
-
-            // Trả về kết quả FAIL
-            /*return TurnResult.FAIL;*/
         }
     }
 

@@ -41,7 +41,7 @@ public class Tile implements Serializable, Cloneable {
         if(this.tileType == TileType.JOKER) {
             String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (tiles.size()) + " )");
             if(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
-                while(Integer.parseInt(inp) > tiles.size() + 1 || Integer.parseInt(inp) < 0) {
+                while(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
                     JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
                     inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + tiles.size() + " )");
                 }
@@ -51,12 +51,50 @@ public class Tile implements Serializable, Cloneable {
                 int temp = tiles.get(Integer.parseInt(inp)-1).getNumber();
                 setting = temp + 1;
             }
+            else if(Integer.parseInt(inp) == 0){
+                int afterTile = tiles.get(Integer.parseInt(inp)).getNumber();
+                setting = afterTile - 1;
+            }
             else{
-                int afterTile = tiles.get(Integer.parseInt(inp)-1).getNumber();
-                int beforeTile = tiles.get(Integer.parseInt(inp)-2).getNumber();
+                int afterTile = tiles.get(Integer.parseInt(inp)+1).getNumber();
+                int beforeTile = tiles.get(Integer.parseInt(inp)-1).getNumber();
                 if(afterTile == beforeTile) {
                     setting = afterTile - 1;
                     tiles.get(Integer.parseInt(inp)-2).setNumber(setting-1);
+                }
+                else{
+                    setting = afterTile - 1;
+                }
+            }
+            setNumber(setting);
+        }
+    }
+
+    public void isJoker(int number, List<Tile> selectedTiles) {
+        int setting;
+        if(this.tileType == TileType.JOKER) {
+            String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (selectedTiles.size()-1) + " )");
+            if(Integer.parseInt(inp) > selectedTiles.size() || Integer.parseInt(inp) < 0) {
+                while(Integer.parseInt(inp) > selectedTiles.size() || Integer.parseInt(inp) < 0) {
+                    JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
+                    inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + (selectedTiles.size()-1) + " )");
+                }
+            }
+
+            if(Integer.parseInt(inp) == selectedTiles.size()-1) {
+                int temp = selectedTiles.get(Integer.parseInt(inp)-1).getNumber();
+                setting = temp + 1;
+            }
+            else if(Integer.parseInt(inp) == 0){
+                int afterTile = selectedTiles.get(Integer.parseInt(inp)).getNumber();
+                setting = afterTile - 1;
+            }
+            else{
+                int afterTile = selectedTiles.get(Integer.parseInt(inp)+1).getNumber();
+                int beforeTile = selectedTiles.get(Integer.parseInt(inp)-1).getNumber();
+                if(afterTile == beforeTile) {
+                    setting = afterTile - 1;
+                    selectedTiles.get(Integer.parseInt(inp)-1).setNumber(setting-1);
                 }
                 else{
                     setting = afterTile - 1;
