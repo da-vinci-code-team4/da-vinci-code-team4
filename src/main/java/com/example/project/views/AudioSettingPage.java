@@ -1,53 +1,59 @@
 package com.example.project.views;
 
+import com.example.project.audio.AudioManager;
 import com.example.project.utils.RoundedPanel;
-import com.example.project.ui.CustomSliderUI; // Import lớp CustomSliderUI
+import com.example.project.ui.CustomSliderUI;
+import com.example.project.utils.AudioUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.Properties;
 
 public class AudioSettingPage extends JPanel {
+    private static final String CONFIG_FILE = "audio_settings.properties";
+
     private CardLayout cardLayout;
     private JPanel mainPanel;
+
+    private int backgroundMusicVolume = 50;
+    private int soundEffectsVolume = 50;
+
+    private AudioManager audioManager;
 
     public AudioSettingPage(JPanel mainPanel, CardLayout cardLayout) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
+        this.audioManager = AudioManager.getInstance();
         setLayout(null);
         setBackground(Color.WHITE);
 
-        // Cài đặt background
+        loadAudioSettings();
+
+        adjustBackgroundMusicVolume(backgroundMusicVolume);
+        adjustSoundEffectsVolume(soundEffectsVolume);
+
         JLabel background = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/Background.png")));
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
 
-        // Thêm hình chữ nhật chứa ảnh tab.png và dòng chữ "Audio Setting"
         addAudioSettingHeader(background);
 
-        // Thêm nhóm điều chỉnh âm lượng nhạc nền
-        addVolumeControlGroup(background, 130, 305, "Background Music");
+        // Add volume control sliders
+        addVolumeControlGroup(background, 130, 305, "Background Music", "Background Music");
+        addVolumeControlGroup(background, 130, 505, "Sound Effects", "Sound Effects");
 
-        // Thêm nhóm điều chỉnh âm lượng hiệu ứng âm thanh (cách nhóm trên 50px)
-        addVolumeControlGroup(background, 130, 305 + 140 + 50, "Sound Effects");
-
-        // Nút Back để quay lại MyPage
+        // Add back button
         addBackButton(background);
     }
 
-    /**
-     * Thêm phần header chứa ảnh tab.png và dòng chữ "Audio Setting".
-     *
-     * @param background JLabel nền để thêm thành phần vào.
-     */
     private void addAudioSettingHeader(JLabel background) {
-        // Tạo panel chứa ảnh tab.png
         JLabel tabLabel = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/tab.png")));
         tabLabel.setBounds(503, 120, 505, 161);
         tabLabel.setLayout(null);
         background.add(tabLabel);
 
-        // Thêm dòng chữ "Audio Setting" vào trong tabLabel
         JLabel titleLabel = new JLabel("Audio Setting", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
         titleLabel.setForeground(Color.WHITE);
@@ -55,68 +61,95 @@ public class AudioSettingPage extends JPanel {
         tabLabel.add(titleLabel);
     }
 
-    /**
-     * Thêm một nhóm điều khiển âm lượng gồm thanh trượt và nhãn với ảnh tab2.png.
-     *
-     * @param background JLabel nền để thêm thành phần vào.
-     * @param x          Vị trí X của nhóm.
-     * @param y          Vị trí Y của nhóm.
-     * @param labelText  Văn bản cho nhãn bên phải.
-     */
-    private void addVolumeControlGroup(JLabel background, int x, int y, String labelText) {
-        // Tạo panel cho nhóm điều khiển âm lượng
-        JPanel groupPanel = new RoundedPanel(15);
+    private void addVolumeControlGroup(JLabel background, int x, int y, String labelText, String groupType) {
+        RoundedPanel groupPanel = new RoundedPanel(15);
         groupPanel.setBounds(x, y, 1200, 140);
-        groupPanel.setBackground(new Color(0, 0, 0, 150)); // Màu nền với độ trong suốt
+        groupPanel.setBackground(new Color(0, 0, 0, 150));
         groupPanel.setLayout(null);
         background.add(groupPanel);
 
-        // Thêm thanh trượt (JSlider) bên trái
-        JSlider volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        JSlider volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100,
+                groupType.equals("Background Music") ? backgroundMusicVolume : soundEffectsVolume);
         volumeSlider.setBounds(20, 55, 800, 50);
         volumeSlider.setMajorTickSpacing(20);
         volumeSlider.setMinorTickSpacing(5);
         volumeSlider.setPaintTicks(true);
         volumeSlider.setPaintLabels(true);
-
-        // Áp dụng CustomSliderUI cho thanh trượt
         volumeSlider.setUI(new CustomSliderUI(volumeSlider));
-
         groupPanel.add(volumeSlider);
 
-        // Thêm nhãn với ảnh tab2.png và dòng chữ bên phải
         JLabel labelPanel = new JLabel(new ImageIcon(getClass().getResource("/img/ViewImage/tab2.png")));
         labelPanel.setBounds(840, 30, 330, 100);
         labelPanel.setLayout(new BorderLayout());
         groupPanel.add(labelPanel);
 
-        // Thêm dòng chữ vào labelPanel
         JLabel label = new JLabel(labelText, SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 30));
         label.setForeground(Color.WHITE);
         labelPanel.add(label, BorderLayout.CENTER);
 
-        // Thêm ChangeListener cho thanh trượt để xử lý thay đổi âm lượng
         volumeSlider.addChangeListener(e -> {
             int volume = volumeSlider.getValue();
-            // Xử lý thay đổi âm lượng ở đây
+            if (groupType.equals("Background Music")) {
+                backgroundMusicVolume = volume;
+                adjustBackgroundMusicVolume(volume);
+            } else if (groupType.equals("Sound Effects")) {
+                soundEffectsVolume = volume;
+                adjustSoundEffectsVolume(volume);
+            }
+            saveAudioSettings(); // Save immediately
             System.out.println(labelText + " Volume: " + volume);
         });
     }
 
-    /**
-     * Thêm nút Back để quay lại MyPage.
-     *
-     * @param background JLabel nền để thêm nút vào.
-     */
     private void addBackButton(JLabel background) {
-        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/ViewImage/back.png")));
-        backButton.setBounds(1384, 30, 128, 86);
+        JButton backButton = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("/img/ViewImage/back.png"))
+                .getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH)));
+        backButton.setBounds(1384, 30, 64, 64);
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        AudioUtil.addClickSound(backButton);
+
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
+    }
+
+    private void adjustBackgroundMusicVolume(int volume) {
+        float scaledVolume = scaleVolume(volume);
+        audioManager.setBackgroundMusicVolume(volume);
+    }
+
+    private void adjustSoundEffectsVolume(int volume) {
+        float scaledVolume = scaleVolume(volume);
+        audioManager.setSoundEffectsVolume(volume);
+    }
+
+    private void saveAudioSettings() {
+        try (FileOutputStream output = new FileOutputStream(CONFIG_FILE)) {
+            Properties props = new Properties();
+            props.setProperty("backgroundMusicVolume", String.valueOf(backgroundMusicVolume));
+            props.setProperty("soundEffectsVolume", String.valueOf(soundEffectsVolume));
+            props.store(output, "Audio Settings");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadAudioSettings() {
+        try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
+            Properties props = new Properties();
+            props.load(input);
+            backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "50"));
+            soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "50"));
+        } catch (IOException e) {
+            System.out.println("No settings file found. Using default values.");
+        }
+    }
+
+    private float scaleVolume(int volume) {
+        return -80f + (volume / 100f) * 86f;
     }
 }

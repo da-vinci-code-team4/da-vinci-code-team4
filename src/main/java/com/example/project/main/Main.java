@@ -10,6 +10,8 @@ import com.example.project.views.ProfilePage;
 import com.example.project.views.CorrectionPage;
 import com.example.project.views.PlayGameWithPC;
 import com.example.project.ui.SplashScreenPanel;
+import com.example.project.audio.AudioPlayer;
+import com.example.project.audio.AudioManager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,9 +25,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.*;
 
 public class Main {
+    //public static AudioPlayer backgroundMusicPlayer;
+    //public static AudioPlayer soundEffectsPlayer;
+
     public static void main(String[] args) {
+
+        AudioManager audioManager = AudioManager.getInstance();
+
+        //backgroundMusicPlayer = new AudioPlayer("audio/BackgroundMusic.wav", true); // Looping background music
+        //soundEffectsPlayer = new AudioPlayer("audio/Click.wav"); // Sound effect for clicks
+
+        //backgroundMusicPlayer.play();
+        audioManager.playBackgroundMusic();
+
         // 메인 JFrame 생성
         JFrame frame = new JFrame("애플리케이션");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

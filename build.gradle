@@ -81,6 +81,11 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+tasks.withType(JavaExec) {
+    // Thiết lập classpath để Gradle nhận biết file resources
+    systemProperty 'java.class.path', sourceSets.main.runtimeClasspath.asPath
+}
+
 compileJava {
     // 컴파일 시에도 인코딩을 UTF-8로 설정
     options.encoding = 'UTF-8'
