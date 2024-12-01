@@ -591,6 +591,9 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     slotButton.addActionListener(e -> {
                         System.out.println("Button " + index + " clicked for guessing.");
                         controller.playerGuessComputerTile(index);
+                        if (controller.getCurrentPhase().equals(GamePhase.GAME_OVER)) {
+                            return;
+                        }
                         updateComputerPanel();
                         updateGameInfo();
                         updateCentralPanel();
@@ -649,10 +652,6 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         updateUserPanel();
         updateComputerPanel();
         updateGameInfo();
-
-        if (gameState.isGameOver()) {
-            checkGameOver();
-        }
     }
 
     /**
