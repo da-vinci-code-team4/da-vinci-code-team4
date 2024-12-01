@@ -1,5 +1,6 @@
 package com.example.project.main;
 
+import com.example.project.controllers.FileController;
 import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.views.LoginPage;
@@ -9,6 +10,9 @@ import com.example.project.views.ProfilePage;
 import com.example.project.views.CorrectionPage;
 import com.example.project.ui.SplashScreenPanel;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -93,11 +97,23 @@ public class Main {
     // 기본 사용자 초기화 메서드
     private static void initializeDefaultUsers(List<User> userList) {
         // 각 사용자에 대한 추가 정보와 함께 사용자 초기화
-        userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90, 90.0));
-        userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 92, 80.0));
-        userList.add(new User("QuocAnh", "12345678", "QuocAnh", 26, "70W - 30L", 1000, 100, 70.0));
-        userList.add(new User("HyungJoon", "12345678", "HyungJoon", 23, "85W - 15L", 1150, 96, 85.0));
-        userList.add(new User("YeWon", "12345678", "YeWon", 22, "95W - 5L", 1250, 89, 95.0));
-        userList.add(new User("TaeHyun", "12345678", "TaeHyun", 25, "65W - 35L", 950, 126, 65.0));
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/texts/user.txt"))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split("\\s+");
+                userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]), data[4], Integer.parseInt(data[5]), Integer.parseInt(data[6]), Double.parseDouble(data[7]))); // 나눠진 데이터를 List에 추가
+            }
+
+            FileController.setUserList(userList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90, 90.0));
+//        userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 92, 80.0));
+//        userList.add(new User("QuocAnh", "12345678", "QuocAnh", 26, "70W - 30L", 1000, 100, 70.0));
+//        userList.add(new User("HyungJoon", "12345678", "HyungJoon", 23, "85W - 15L", 1150, 96, 85.0));
+//        userList.add(new User("YeWon", "12345678", "YeWon", 22, "95W - 5L", 1250, 89, 95.0));
+//        userList.add(new User("TaeHyun", "12345678", "TaeHyun", 25, "65W - 35L", 950, 126, 65.0));
     }
 }

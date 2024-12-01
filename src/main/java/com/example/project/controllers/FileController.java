@@ -1,6 +1,5 @@
-package com.example.project.controller;
+package com.example.project.controllers;
 
-import com.example.project.models.Session;
 import com.example.project.models.User;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -56,7 +55,7 @@ public class FileController {
         // "w"와 "l"을 제거하고 숫자만 추출
         int wins = Integer.parseInt(parts[0].replaceAll("[^0-9]", "")); // "99w"에서 숫자만 남기기
         int losses = Integer.parseInt(parts[1].replaceAll("[^0-9]", "")); // 숫자만 남기기
-        String userLine = (currentUser.getUsername() + " " +currentUser.getScore()+" "+ wins+ " "+ losses + " " + currentUser.getRecord());
+        String userLine = (currentUser.getUsername() + " " +currentUser.getCore()+" "+ wins+ " "+ losses + " " + currentUser.getRecord());
         ranking.add(userLine.split("\\s+"));
     }
 
@@ -74,16 +73,16 @@ public class FileController {
             System.out.println("파일 쓰기 오류: " + e.getMessage());
         }
 
-        if(result.equals("Defeat")){
-            Controller.updateUserScore(-score);
-            Controller.updateWin(-1);
-        }
-        else{
-            Controller.updateUserScore(score);
-            winData= Controller.updateWin(1);
-        }
+//        if(result.equals("Defeat")){
+//            com.example.project.controller.Controller.updateUserScore(-score);
+//            com.example.project.controller.Controller.updateWin(-1);
+//        }
+//        else{
+//            com.example.project.controller.Controller.updateUserScore(score);
+//            winData= Controller.updateWin(1);
+//        }
 
-        currentUser.setScore(currentUser.getScore()+score);
+        currentUser.setCore(currentUser.getCore()+score);
         currentUser.setRecord(winData[0] + " " + winData[1]);
     }
 
@@ -98,7 +97,7 @@ public class FileController {
     public static void updateUserFile() {
         for (User user : users) {
             if(user.getUsername().equals(currentUser.getUsername())){
-                user.setScore(currentUser.getScore());
+                user.setCore(currentUser.getCore());
                 user.setRecord(currentUser.getRecord());
             }
         }
@@ -107,7 +106,7 @@ public class FileController {
             // 1. 파일을 지운 후 새로운 내용으로 덮어쓰기
             for (User user : users) {
                 String newContent = user.getId() + " " + user.getPassword() + " " + user.getUsername() + " " +
-                    user.getAge() + " " + user.getRecord() + " " + user.getScore() + " " + user.getRatio(); // 새로 쓸 내용
+                    user.getAge() + " " + user.getRecord() + " " + user.getCore() + " " + user.getRatio(); // 새로 쓸 내용
                 writer.write(newContent); // 새 내용을 파일에 씁니다.
             }
         } catch (IOException e) {
