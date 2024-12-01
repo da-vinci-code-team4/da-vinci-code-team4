@@ -3,6 +3,7 @@ package com.example.project.config;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -101,6 +102,13 @@ public class Tile implements Serializable, Cloneable {
                 }
             }
             setNumber(setting);
+        }
+    }
+    public void isJoker() {
+        if(this.tileType == TileType.JOKER){
+            Random rand = new Random();
+            number = rand.nextInt(0,13) * 10 - 1;
+            setNumber(number);
         }
     }
 

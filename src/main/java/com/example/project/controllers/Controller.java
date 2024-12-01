@@ -136,6 +136,7 @@ public class Controller {
             int index = tileManager.getRandomAvailableTileIndex();
             if (index != -1) {
                 Tile computerTile = tileManager.drawTile(index);
+                computerTile.isJoker();
                 System.out.println("Computer's tile: "+computerTile.getNumber()+" "+computerTile.getTileColor());
                 if (computerTile != null && !computerTile.isOpened()) {
                     computerTile.setOpened(true);
@@ -322,6 +323,7 @@ public class Controller {
         pcLatest = tile;
         if (tile != null) {
 //            computer.addTile(tile);
+            tile.isJoker();
             gameState.getComputerTiles().add(tile); // GameState 업데이트
             JOptionPane.showMessageDialog(null, "컴퓨터가 중앙에서 타일을 하나 뽑았습니다.");
         } else {
