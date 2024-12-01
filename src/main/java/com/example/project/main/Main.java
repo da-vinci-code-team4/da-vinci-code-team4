@@ -35,6 +35,7 @@ public class Main {
         // 사용자 목록
         List<User> userList = new ArrayList<>();
         initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
+        Session.getInstance().setUserList(userList);
 
         // 현재 사용자 설정 (예: 사용자 목록의 첫 번째 사용자)
         User currentUser = userList.get(0);
@@ -104,8 +105,6 @@ public class Main {
                 String[] data = line.split("\\s+");
                 userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]), data[4], Integer.parseInt(data[5]), Integer.parseInt(data[6]), Double.parseDouble(data[7]))); // 나눠진 데이터를 List에 추가
             }
-
-            FileController.setUserList(userList);
         } catch (IOException e) {
             e.printStackTrace();
         }

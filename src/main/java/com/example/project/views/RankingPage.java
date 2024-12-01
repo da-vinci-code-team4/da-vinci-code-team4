@@ -245,6 +245,8 @@ public class RankingPage extends JPanel {
 
 package com.example.project.views;
 
+import com.example.project.models.Session;
+import com.example.project.models.User;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -371,6 +373,18 @@ public class RankingPage extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        List<User> userList = Session.getInstance().getUserList();
+        System.out.println(userList);
+        for (User user : userList) {
+            String[] parts = user.getRecord().split("-"); // "99w"와 "122l"로 나누기
+            // "w"와 "l"을 제거하고 숫자만 추출
+            int wins = Integer.parseInt(parts[0].replaceAll("[^0-9]", "")); // "99w"에서 숫자만 남기기
+            int losses = Integer.parseInt(parts[1].replaceAll("[^0-9]", "")); // 숫자만 남기기
+            String userLine = (user.getUsername() + " " +user.getCore()+" "+ wins+ " "+ losses);
+            data.add(userLine.split("\\s+"));
+        }
+
         return data;
     }
 
