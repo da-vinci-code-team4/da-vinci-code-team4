@@ -11,8 +11,11 @@ import com.example.project.views.CorrectionPage;
 import com.example.project.ui.SplashScreenPanel;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -98,7 +101,32 @@ public class Main {
     // 기본 사용자 초기화 메서드
     private static void initializeDefaultUsers(List<User> userList) {
         // 각 사용자에 대한 추가 정보와 함께 사용자 초기화
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/texts/user.txt"))) {
+        String filePath = System.getProperty("user.dir") + "/user.txt";
+
+        // JAR 파일 외부에 user.txt가 없으면 resources에서 복사
+        File externalFile = new File(filePath);
+        if (!externalFile.exists()) {
+            // resources 폴더 내의 파일을 외부로 복사
+            try (InputStream inputStream = Main.class.getResourceAsStream("/texts/user.txt");
+                FileOutputStream outputStream = new FileOutputStream(externalFile)) {
+
+                if (inputStream != null) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                    System.out.println("파일이 외부로 복사되었습니다: " + filePath);
+                } else {
+                    System.out.println("resources 폴더에서 user.txt 파일을 찾을 수 없습니다.");
+                    return;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
 
             while ((line = br.readLine()) != null) {
