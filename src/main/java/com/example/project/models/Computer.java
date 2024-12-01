@@ -39,8 +39,6 @@ public class Computer extends Player {
     @Override
     public int guessNumber(Tile tile) {
         // 컴퓨터가 열려있는 타일과 자신이 가지고 있는 타일을 확인하여 추측할 숫자를 결정
-        
-        System.out.println("Computer is guessing number for tile: " + tile.getNumber()+" "+tile.getTileColor());
         List<Integer> possibleNumbers = new ArrayList<>(); // 추측 가능한 숫자 목록
         List<Tile> userTiles = controller.getUserTiles();
         
@@ -57,15 +55,13 @@ public class Computer extends Player {
             // 사용자가 이미 추측한 타일은 제외
             for(Tile t : userTiles){
                 if(t.getNumber()/10 == i && t.isGuessedCorrectly()){
-                    System.out.println("User's tile: "+t.getNumber()+" "+t.getTileColor()+" "+t.isGuessedCorrectly());
                     continue Loop;
                 }
             }
             //나머지 숫자 추가
             possibleNumbers.add(i*10);
         }
-        
-        System.out.println("Possible Numbers:");
+
         for(Integer i : possibleNumbers){
             System.out.println(i);
         }
@@ -80,7 +76,6 @@ public class Computer extends Player {
             .filter(i -> i <= max)
             .collect(Collectors.toList());
 
-        System.out.println("Possible Numbers:");
         for(Integer i : possibleNumbers){
             System.out.println(i);
         }

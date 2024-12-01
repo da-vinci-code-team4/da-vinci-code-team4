@@ -10,97 +10,117 @@ import java.awt.event.ActionListener;
 /**
  * VictoryScreen.java
  *
- * 플레이어가 게임에서 승리했을 때 승리 화면을 표시합니다.
+ * 사용자가 승리했을 때 승리 화면을 표시합니다.
  */
 public class VictoryScreen extends JPanel {
     private User user;
-    private int timeTaken;  // 게임 완료 시간(초)
+    private int timeTaken;  // 게임을 완료하는 데 걸린 시간 (초)
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
-    public VictoryScreen(User user, int timeTaken) {
+    public VictoryScreen(User user, int timeTaken, JPanel mainPanel, CardLayout cardLayout) {
         this.user = user;
         this.timeTaken = timeTaken;
-
+        this.mainPanel = mainPanel;
+        this.cardLayout = cardLayout;
         initializeUI();
     }
 
     private void initializeUI() {
-        // 화면 크기와 배경색 설정
-        setPreferredSize(new Dimension(784, 400));
+        // 크기 및 배경색 설정
+        setPreferredSize(new Dimension(1502, 916));
         setBackground(Color.decode("#D9D9D9"));
-        setLayout(new BorderLayout());
+        setLayout(null); // 절대 레이아웃 또는 다른 적절한 레이아웃 사용
 
-        // 모서리가 둥근 패널 설정 (20px 반경)
-        JPanel mainPanel = new RoundedPanel(20);
-        mainPanel.setBackground(Color.decode("#D9D9D9"));
-        mainPanel.setLayout(null);
-        mainPanel.setBounds(0, 0, 784, 400);
-        add(mainPanel, BorderLayout.CENTER);
+        // 모서리가 둥근 내부 패널 생성 (20px)
+        RoundedPanel innerPanel = new RoundedPanel(20);
+        innerPanel.setBackground(Color.decode("#D9D9D9"));
+        innerPanel.setLayout(null);
+        innerPanel.setBounds(0, 0, 1502, 916);
+        add(innerPanel);
 
-        // 상단에 PNG 이미지 추가 (위쪽 여백 31px)
+        // 상단에 PNG 아이콘 추가
         ImageIcon victoryIcon = new ImageIcon(getClass().getResource("/img/ViewImage/victory.png"));
         JLabel iconLabel = new JLabel(victoryIcon);
-        iconLabel.setBounds((784 - victoryIcon.getIconWidth()) / 2, 31, victoryIcon.getIconWidth(), victoryIcon.getIconHeight());
-        mainPanel.add(iconLabel);
+        iconLabel.setBounds((1502 - victoryIcon.getIconWidth()) / 2, 31, victoryIcon.getIconWidth(), victoryIcon.getIconHeight());
+        innerPanel.add(iconLabel);
 
-        // 시간 표시 라벨 (PNG 이미지와 -20px 간격)
+        // 시간 표시 레이블 추가
         JLabel timeLabel = new JLabel("시간: " + formatTime(timeTaken));
         timeLabel.setFont(new Font("Arial", Font.BOLD, 20));
         timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timeLabel.setBounds(0, iconLabel.getY() + victoryIcon.getIconHeight() - 20, 784, 30);
-        mainPanel.add(timeLabel);
+        timeLabel.setBounds(0, iconLabel.getY() + victoryIcon.getIconHeight() - 20, 1502, 30);
+        innerPanel.add(timeLabel);
 
-        // 점수 표시 라벨 (100점 추가)
-        // User로부터 점수를 가져와 100 추가
+        // 점수 표시 레이블 추가 (100점 증가)
         int displayScore = user.getCore() + 100;
         JLabel scoreLabel = new JLabel("점수: " + displayScore + "P(+100)");
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        scoreLabel.setBounds(0, timeLabel.getY() + 40, 784, 30);
-        mainPanel.add(scoreLabel);
+        scoreLabel.setBounds(0, timeLabel.getY() + 40, 1502, 30);
+        innerPanel.add(scoreLabel);
 
-        // 랭킹 표시 라벨 (점수와 10px 간격)
+        // 랭킹 표시 레이블 추가
         JLabel rankLabel = new JLabel("랭킹: " + user.getRanking());
         rankLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         rankLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        rankLabel.setBounds(0, scoreLabel.getY() + 40, 784, 30);
-        mainPanel.add(rankLabel);
+        rankLabel.setBounds(0, scoreLabel.getY() + 40, 1502, 30);
+        innerPanel.add(rankLabel);
 
-        // "다시" 버튼 (재시작)
+        // "다시" 버튼 추가 (Retry)
         JButton retryButton = new JButton("다시");
         retryButton.setFont(new Font("Arial", Font.BOLD, 16));
-        retryButton.setBounds(784 / 2 - 170, rankLabel.getY() + 60, 150, 40);
-        mainPanel.add(retryButton);
+        retryButton.setBounds(1502 / 2 - 170, rankLabel.getY() + 60, 150, 40);
+        innerPanel.add(retryButton);
 
-        // "홈" 버튼 (메인 화면으로)
+        // "홈" 버튼 추가 (Home)
         JButton homeButton = new JButton("홈");
         homeButton.setFont(new Font("Arial", Font.BOLD, 16));
-        homeButton.setBounds(784 / 2 + 20, rankLabel.getY() + 60, 150, 40);
-        mainPanel.add(homeButton);
+        homeButton.setBounds(1502 / 2 + 20, rankLabel.getY() + 60, 150, 40);
+        innerPanel.add(homeButton);
 
-        // 버튼 이벤트 처리
+        // "다시" 버튼 이벤트 처리
         retryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 게임 재시작 처리
-                // 예: Controller 또는 MainFrame을 호출하여 화면을 전환
-                // 아래는 가상의 예시입니다:
-                // Controller.restartGame();
+                System.out.println("다시 버튼이 클릭되었습니다. PlayGameWithPC를 재설정합니다.");
+
+                // 기존 PlayGameWithPC 제거
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof PlayGameWithPC) {
+                        mainPanel.remove(comp);
+                        break;
+                    }
+                }
+
+                // 새로운 PlayGameWithPC 인스턴스 생성
+                PlayGameWithPC newPlayGame = new PlayGameWithPC(mainPanel, cardLayout);
+
+                // 새로운 PlayGameWithPC를 mainPanel에 추가하고 같은 카드 이름으로 설정
+                mainPanel.add(newPlayGame, "PlayGameWithPC");
+
+                // PlayGameWithPC 카드 표시
+                cardLayout.show(mainPanel, "PlayGameWithPC");
+
+                // UI 업데이트를 위해 재검증 및 다시 그리기
+                mainPanel.revalidate();
+                mainPanel.repaint();
             }
         });
 
+        // "홈" 버튼 이벤트 처리
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 메인 화면으로 이동
-                // 예: Controller 또는 MainFrame을 호출하여 메인 화면으로 전환
-                // 아래는 가상의 예시입니다:
-                // Controller.goToHome();
+                System.out.println("홈 버튼이 클릭되었습니다. MyPage로 전환합니다.");
+                cardLayout.show(mainPanel, "MyPage");
             }
         });
     }
 
     /**
-     * 초 단위를 "분:초" 문자열 형식으로 변환합니다.
+     * 시간을 "분:초" 형식의 문자열로 변환합니다.
      *
      * @param totalSeconds 총 초
      * @return 형식화된 시간 문자열
@@ -112,7 +132,7 @@ public class VictoryScreen extends JPanel {
     }
 
     /**
-     * 둥근 모서리를 가진 JPanel 클래스
+     * 모서리가 둥근 JPanel 클래스.
      */
     private class RoundedPanel extends JPanel {
         private int radius;

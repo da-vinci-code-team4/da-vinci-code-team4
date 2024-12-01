@@ -5,11 +5,12 @@ import com.example.project.controllers.GameObserver;
 import com.example.project.controllers.GamePhase;
 import com.example.project.controllers.GameState;
 import com.example.project.config.Tile;
-import com.example.project.config.TileType;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
 import com.example.project.models.Player;
+import com.example.project.models.User;
 import com.example.project.utils.RoundedPanel;
+import com.example.project.models.Session;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +22,7 @@ import java.util.List;
 /**
  * PlayGameWithPC.java
  *
- * 컴퓨터와 플레이할 때 게임의 사용자 인터페이스입니다.
- * UI 구성 요소, 사용자 상호 작용을 처리하고 게임 로직과 통합합니다.
+ * 컴퓨터와 플레이할 때의 사용자 인터페이스.
  */
 public class PlayGameWithPC extends JPanel implements GameObserver {
     private CardLayout cardLayout;
@@ -50,12 +50,10 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     private JLabel opponentRemainingTilesLabel;
     private JLabel myRemainingTilesLabel;
 
-    private JLabel exitButton;
-
-    // 중앙 영역의 버튼 목록
+    // 중앙 버튼 목록
     private List<JButton> centralCardSlots;
 
-    // 초기 선택 단계에서 선택된 카드의 인덱스
+    // 초기 단계에서 선택된 타일의 인덱스
     private List<Integer> selectedTileIndices;
 
     // 확인 버튼
@@ -67,36 +65,62 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         setLayout(null);
         setBackground(Color.WHITE);
 
-        // 게임 컨트롤러 초기화
+        // 컨트롤러 초기화
         controller = new Controller(this);
         gameState = controller.getGameState();
         userPlayer = controller.getUser();
         computerPlayer = controller.getComputer();
 
-        // centralCardSlots 리스트 초기화
+        // 중앙 버튼 목록 및 선택된 인덱스 초기화
         centralCardSlots = new ArrayList<>();
         selectedTileIndices = new ArrayList<>();
 
         // UI 구성 요소 초기화
         initializeUIComponents();
 
-        // 0.75초 지연 후 게임 시작
+        // 0.75초 후 게임 시작
         Timer initialDelayTimer = new Timer(750, e -> startGame());
         initialDelayTimer.setRepeats(false);
         initialDelayTimer.start();
     }
 
     /**
-     * 모든 UI 구성 요소 초기화.
+     * 사용자가 패배했을 때 패배 화면을 표시합니다.
+     */
+    private void showDefeatScreen() {
+        DefeatScreen defeatScreen = new DefeatScreen(
+                controller.getCurrentUser(),
+                controller.calculateTimeTaken(),
+                mainPanel,
+                cardLayout
+        );
+        showDefeatScreen(defeatScreen);
+    }
+
+    /**
+     * 사용자가 승리했을 때 승리 화면을 표시합니다.
+     */
+    private void showVictoryScreen() {
+        VictoryScreen victoryScreen = new VictoryScreen(
+                controller.getCurrentUser(),
+                controller.calculateTimeTaken(),
+                mainPanel,
+                cardLayout
+        );
+        showVictoryScreen(victoryScreen);
+    }
+
+    /**
+     * 모든 UI 구성 요소를 초기화합니다.
      */
     private void initializeUIComponents() {
-        // 메인 콘텐츠 패널
+        // mainContent 패널 생성
         JPanel mainContent = new JPanel(null);
         mainContent.setBackground(Color.WHITE);
         mainContent.setBounds(0, 0, 1502, 916);
         add(mainContent);
 
-        // 시간 표시 패널
+        // 시간 표시 패널 생성
         RoundedPanel timePanel = new RoundedPanel(new FlowLayout(), new Color(0xD9D9D9), 20);
         timePanel.setBounds(1058, 13, 244, 70);
         mainContent.add(timePanel);
@@ -105,61 +129,59 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         timeLabel.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
         timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeLabel.setVerticalAlignment(SwingConstants.CENTER);
-        timeLabel.setForeground(Color.BLACK); // 글자 색상
+        timeLabel.setForeground(Color.BLACK);
         timePanel.add(timeLabel);
 
-        // 매초 시계를 업데이트하기 위한 Swing Timer 초기화
+        // 매초 시계를 업데이트하는 Swing Timer 초기화
         swingTimer = new Timer(1000, e -> {
             seconds++;
             updateClock(seconds);
         });
         swingTimer.start();
 
-        // 확인 대화상자가 있는 종료 버튼 (JButton 사용)
+        // Exit 버튼 (MyPage로 돌아가기) 생성
+        JButton exitButton = createRoundedButton();
         URL exitImageUrl = getClass().getResource("/img/ViewImage/back.png");
         ImageIcon exitIcon;
         if (exitImageUrl != null) {
             exitIcon = new ImageIcon(exitImageUrl);
+            exitButton.setIcon(exitIcon);
         } else {
-            exitIcon = new ImageIcon(); // 비어 있는 아이콘 또는 플레이스홀더
+            exitButton.setText("Exit"); // 아이콘을 찾을 수 없을 경우 텍스트 사용
         }
-        JButton exitButton = new JButton(exitIcon);
-        exitButton.setBounds(1384, 30, 60, 60); // 새 크기에 맞게 위치 조정
+        exitButton.setBounds(1384, 30, 60, 60);
         exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        exitButton.setBorder(BorderFactory.createEmptyBorder());
-        exitButton.setContentAreaFilled(false);
+        exitButton.setBackground(Color.WHITE);
+        mainContent.add(exitButton);
+
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 확인 대화상자 표시
                 int result = JOptionPane.showConfirmDialog(
-                        PlayGameWithPC.this, // 대화상자의 부모는 현재 패널
-                        "게임 진행 중 나가시겠습니까?", // 메시지
-                        "확인", // 대화상자 제목
-                        JOptionPane.YES_NO_OPTION, // Yes와 No 옵션
-                        JOptionPane.QUESTION_MESSAGE // 질문 아이콘
+                        PlayGameWithPC.this,
+                        "게임 진행 중 나가시겠습니까?",
+                        "확인",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
                 );
 
                 if (result == JOptionPane.YES_OPTION) {
-                    // 사용자가 "Yes"를 선택한 경우
-                    swingTimer.stop(); // 나갈 때 타이머 정지
-                    // 종료 작업 수행: 예를 들어, 메인 화면으로 돌아가거나 애플리케이션 종료
+                    // Yes를 선택하면 타이머를 멈추고 MyPage로 전환
+                    swingTimer.stop();
                     cardLayout.show(mainPanel, "MyPage");
-                } else {
-                    // 사용자가 "No"를 선택한 경우 - 아무 작업도 하지 않음
-                    // 필요하면 다른 로직을 추가할 수 있음
                 }
+                // No를 선택하면 아무 것도 하지 않음
             }
         });
-        mainContent.add(exitButton);
 
-        // 컴퓨터의 이미지와 레이블
+        // PC 이미지와 레이블 추가
         URL pcImageUrl = getClass().getResource("/img/ViewImage/pc2.png");
         ImageIcon pcIconImage;
         if (pcImageUrl != null) {
             pcIconImage = new ImageIcon(pcImageUrl);
         } else {
-            pcIconImage = new ImageIcon(); // 빈 아이콘 또는 플레이스홀더
+            pcIconImage = new ImageIcon();
         }
         JLabel pcIcon = new JLabel(pcIconImage);
         pcIcon.setBounds(45, 68, 139, 179);
@@ -173,13 +195,13 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         pcText.setHorizontalAlignment(SwingConstants.CENTER);
         mainContent.add(pcText);
 
-        // 플레이어의 이미지와 레이블
+        // 사용자 이미지와 레이블 추가
         URL meImageUrl = getClass().getResource("/img/ViewImage/me.png");
         ImageIcon meIconImage;
         if (meImageUrl != null) {
             meIconImage = new ImageIcon(meImageUrl);
         } else {
-            meIconImage = new ImageIcon(); // 빈 아이콘 또는 플레이스홀더
+            meIconImage = new ImageIcon();
         }
         JLabel meIcon = new JLabel(meIconImage);
         meIcon.setBounds(1332, 654, 139, 186);
@@ -188,33 +210,33 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         mainContent.add(meIcon);
 
         JLabel meText = new JLabel("Me");
-        meText.setBounds(1342, 815, 139, 50); // 필요하면 위치 조정
+        meText.setBounds(1342, 815, 139, 50);
         meText.setFont(new Font("Capriola-Regular", Font.PLAIN, 48));
         meText.setHorizontalAlignment(SwingConstants.CENTER);
         mainContent.add(meText);
 
-        // 중앙 영역
+        // centralPanel 생성
         centralPanel = new JPanel(new GridLayout(2, 12, 5, 5));
         centralPanel.setBounds(98, 308, 1313, 261);
         centralPanel.setBackground(Color.WHITE);
         mainContent.add(centralPanel);
 
-        // 중앙의 카드 슬롯 목록 초기화
+        // centralPanel의 버튼 초기화
         initializeCentralTiles();
 
-        // 플레이어 영역
+        // userPanel 생성
         userPanel = new JPanel(new GridLayout(2, 6, 5, 5));
         userPanel.setBounds(673, 617, 650, 261);
         userPanel.setBackground(Color.WHITE);
         mainContent.add(userPanel);
 
-        // 컴퓨터 영역
+        // computerPanel 생성
         computerPanel = new RoundedPanel(new GridLayout(2, 6, 10, 10), new Color(0xFFFFFF), 20);
         computerPanel.setBounds(210, 16, 650, 261);
         computerPanel.setBackground(Color.WHITE);
         mainContent.add(computerPanel);
 
-        // 플레이어의 카드 슬롯 목록 초기화
+        // userPanel의 버튼 초기화
         userCardSlots = new ArrayList<>();
         for (int i = 0; i < 13; i++) {
             JButton slotButton = createRoundedButton();
@@ -224,34 +246,35 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             userCardSlots.add(slotButton);
         }
 
-        // 컴퓨터의 카드 슬롯 목록 초기화
+        // computerPanel의 버튼 초기화
         computerCardSlots = new ArrayList<>();
         for (int i = 0; i < 13; i++) {
             JButton slotButton = createRoundedButton();
-            slotButton.setBackground(new Color(0x007B75)); // 원래의 녹색
+            slotButton.setBackground(new Color(0x007B75)); // 파란색
             slotButton.setFocusable(false);
             computerPanel.add(slotButton);
             computerCardSlots.add(slotButton);
         }
 
-        // 게임 정보 패널
-        RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(255,255,255), 20);
+        // gameInfoPanel 생성
+        RoundedPanel gameInfoPanel = new RoundedPanel(null, new Color(255, 255, 255), 20);
         gameInfoPanel.setBounds(78, 614, 571, 264);
         gameInfoPanel.setLayout(null);
         mainContent.add(gameInfoPanel);
 
-        // 상대 및 사용자 정보를 위한 서브 패널
+        // leftInfoPanel 생성
         JPanel leftInfoPanel = new JPanel(null);
         leftInfoPanel.setBounds(10, 10, 275, 244);
         leftInfoPanel.setOpaque(false);
         gameInfoPanel.add(leftInfoPanel);
 
+        // rightInfoPanel 생성
         JPanel rightInfoPanel = new JPanel(null);
         rightInfoPanel.setBounds(286, 10, 275, 244);
         rightInfoPanel.setOpaque(false);
         gameInfoPanel.add(rightInfoPanel);
 
-        // 상대 정보 레이블
+        // 상대 정보 레이블 추가
         opponentMatchedTilesLabel = new JLabel("맞춘 상대 타일 수 : 0");
         opponentMatchedTilesLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         opponentMatchedTilesLabel.setForeground(Color.BLACK);
@@ -270,7 +293,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         opponentRemainingTilesLabel.setBounds(20, 130, 235, 30);
         leftInfoPanel.add(opponentRemainingTilesLabel);
 
-        // 사용자 정보 레이블
+        // 사용자 정보 레이블 추가
         remainingTilesLabel = new JLabel("중앙 타일 남은 수 : 0");
         remainingTilesLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         remainingTilesLabel.setForeground(Color.BLACK);
@@ -283,12 +306,13 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         myRemainingTilesLabel.setBounds(20, 80, 235, 30);
         rightInfoPanel.add(myRemainingTilesLabel);
 
-        // 확인 버튼
+        // "확인" 버튼 생성
         confirmButton = new JButton("확인");
-        confirmButton.setBounds(700, 580, 100, 40); // 필요에 따라 위치 조정
+        confirmButton.setBounds(700, 580, 100, 40); // 필요시 위치 조정
         confirmButton.setVisible(false); // 처음에는 숨김
         mainContent.add(confirmButton);
 
+        // "확인" 버튼 이벤트 처리
         confirmButton.addActionListener(e -> {
             GamePhase phase = controller.getCurrentPhase();
             if (phase == GamePhase.INITIAL_SELECTION) {
@@ -305,25 +329,25 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * 중앙 영역에 24장의 카드(흰색 12장, 검은색 12장)를 초기화하고 섞습니다.
+     * centralPanel의 버튼들을 초기화합니다.
      */
     private void initializeCentralTiles() {
         List<Tile> initialTiles = controller.getTileManager().getCentralTiles();
 
-        // 중앙 영역에 24개의 버튼 생성
-        for (int i = 0; i < 26; i++) {
+        // centralPanel에 26개의 버튼 생성
+        for (int i = 0; i < 26; i++) { // 필요시 24로 수정
             JButton tileButton = createRoundedButton();
             Tile tile = initialTiles.get(i);
-            tileButton.setBackground(tile.getTileColor()); // 타일 유형에 따라 배경색 설정
+            tileButton.setBackground(tile.getTileColor());
             centralCardSlots.add(tileButton);
             centralPanel.add(tileButton);
         }
     }
 
     /**
-     * 둥근 모서리를 가진 JButton 생성.
+     * 둥근 모서리를 가진 JButton을 생성합니다.
      *
-     * @return 커스터마이즈된 JButton.
+     * @return 커스터마이징된 JButton
      */
     private JButton createRoundedButton() {
         JButton button = new RoundedButton(20);
@@ -334,19 +358,19 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * 게임 시작.
+     * 게임을 시작합니다.
      */
     private void startGame() {
         controller.startGame();
 
-        // 영역이 표시된 후 메시지 표시
+        // 플레이어에게 4개의 타일을 선택하라는 알림 표시
         JOptionPane.showMessageDialog(this, "가져올 타일을 선택하세요(4개)");
     }
 
     /**
-     * 시계 디스플레이 업데이트.
+     * 시계를 업데이트합니다.
      *
-     * @param seconds 경과된 총 초 수.
+     * @param seconds 경과된 총 초
      */
     private void updateClock(int seconds) {
         int minutes = seconds / 60;
@@ -356,7 +380,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * 중앙 영역 업데이트.
+     * centralPanel을 업데이트합니다.
      */
     private void updateCentralPanel() {
         List<Tile> centralTiles = gameState.getCentralTiles();
@@ -365,7 +389,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         for (int i = 0; i < centralCardSlots.size(); i++) {
             JButton tileButton = centralCardSlots.get(i);
             if (i >= centralTiles.size()) {
-                // 이 위치에 타일이 없으면 슬롯을 비웁니다.
+                // 해당 위치에 더 이상 타일이 없으면 비활성화하고 배경색 변경
                 tileButton.setIcon(null);
                 tileButton.setEnabled(false);
                 tileButton.setBackground(Color.LIGHT_GRAY);
@@ -374,24 +398,24 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             Tile tile = centralTiles.get(i);
 
             if (tile.isOpened()) {
-                // 타일이 열렸다면 빈 슬롯으로 표시
+                // 타일이 열렸으면 비활성화하고 배경색 변경
                 tileButton.setIcon(null);
                 tileButton.setEnabled(false);
                 tileButton.setBackground(Color.LIGHT_GRAY);
             } else if (tile.isSelected()) {
-                // 타일이 선택되었다면 색상 변경
+                // 타일이 선택되었으면 배경색 변경
                 tileButton.setBackground(Color.YELLOW);
                 tileButton.setEnabled(true);
             } else {
-                // 타일 사용 가능
+                // 타일을 선택할 수 있음
                 tileButton.setBackground(tile.getTileColor());
                 tileButton.setIcon(null);
                 tileButton.setEnabled(true);
             }
 
-            final int index = i; // 타일 인덱스 저장
+            final int index = i; // 타일의 인덱스 저장
 
-            // 중복을 피하기 위해 이전의 ActionListener 제거
+            // 기존 ActionListener 제거
             for (ActionListener al : tileButton.getActionListeners()) {
                 tileButton.removeActionListener(al);
             }
@@ -402,7 +426,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     controller.playerSelectInitialTile(index);
                     updateCentralPanel();
                     updateGameInfo();
-                    // 4개의 타일이 선택되었다면 확인 버튼 표시
+                    // 4개의 타일을 선택했으면 "확인" 버튼 표시
                     int selectedCount = 0;
                     for (Tile t : centralTiles) {
                         if (t.isSelected()) {
@@ -432,18 +456,22 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * 플레이어 영역 업데이트.
+     * userPanel을 업데이트합니다.
      */
     private void updateUserPanel() {
         userPlayer.sorting();
         List<Tile> userTiles = userPlayer.getTiles();
+        System.out.println("플레이어 패널 업데이트 중. 현재 단계: " + controller.getCurrentPhase());
+        System.out.println("플레이어 타일 수: " + userTiles.size());
 
         for (int i = 0; i < userCardSlots.size(); i++) {
             JButton slotButton = userCardSlots.get(i);
             if (i < userTiles.size()) {
                 Tile tile = userTiles.get(i);
+                // 각 타일의 상태 표시
+                System.out.println("타일 " + i + ": 올바르게 맞혔습니까? " + tile.isGuessedCorrectly());
                 if (tile.isGuessedCorrectly()) {
-                    // 맞게 추측했다면 앞면 이미지 표시
+                    // 타일이 올바르게 맞춰졌으면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
@@ -453,7 +481,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     }
                     slotButton.setBackground(Color.GRAY);
                 } else if (tile.isOpened()) {
-                    // 타일이 열렸다면 앞면 이미지 표시
+                    // 타일이 열렸으면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
@@ -463,11 +491,11 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     }
                     slotButton.setBackground(Color.WHITE);
                 } else {
-                    // 타일의 뒷면 또는 빈 슬롯 표시
+                    // 타일이 열리지 않았으면 뒷면 이미지 표시 또는 아무것도 없음
                     String imagePath = tile.getBackImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
-                        slotButton.setIcon(new ImageIcon(imageUrl));
+                        slotButton.setIcon(new ImageIcon(imagePath));
                     } else {
                         slotButton.setIcon(null);
                     }
@@ -475,7 +503,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     slotButton.setIcon(null);
                 }
             } else {
-                // 빈 슬롯
+                // 타일이 없는 슬롯 비활성화 및 아이콘 제거
                 slotButton.setBackground(Color.BLUE);
                 slotButton.setIcon(null);
             }
@@ -486,90 +514,23 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
-     * 컴퓨터 영역 업데이트.
-     */
-    /*private void updateComputerPanel() {
-        List<Tile> computerTiles = computerPlayer.getTiles();
-
-        for (int i = 0; i < computerCardSlots.size(); i++) {
-            JButton slotButton = computerCardSlots.get(i);
-            if (i < computerTiles.size()) {
-                Tile tile = computerTiles.get(i);
-                if (tile.isGuessedCorrectly()) {
-                    // 맞게 추측했다면 앞면 이미지 표시
-                    String imagePath = tile.getImagePath();
-                    URL imageUrl = getClass().getResource(imagePath);
-                    if (imageUrl != null) {
-                        slotButton.setIcon(new ImageIcon(imageUrl));
-                    } else {
-                        slotButton.setIcon(null);
-                    }
-                    slotButton.setBackground(Color.WHITE);
-                } else {
-                    // 타일의 뒷면 표시
-                    slotButton.setBackground(Color.GREEN);
-                    slotButton.setIcon(null);
-                }
-
-                final int index = i; // 위치 저장
-
-                // 이전의 ActionListener 제거
-                for (ActionListener al : slotButton.getActionListeners()) {
-                    slotButton.removeActionListener(al);
-                }
-
-                // 플레이어의 추측 단계에서 ActionListener 추가
-                if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE && !tile.isGuessedCorrectly()) {
-                    slotButton.addActionListener(e -> {
-                        System.out.println("Button " + index + " clicked.");
-                        controller.playerGuessComputerTile(index);
-                        updateComputerPanel();
-                        updateGameInfo();
-                        updateCentralPanel();
-                        updateUserPanel();
-                    });
-                } else {
-                    slotButton.setEnabled(false);
-                }
-            } else {
-                slotButton.setBackground(new Color(0x007B75));
-                slotButton.setIcon(null);
-                slotButton.setEnabled(false);
-            }
-        }
-
-        computerPanel.revalidate();
-        computerPanel.repaint();
-    }
-
-    /**
-     * 컴퓨터 영역 업데이트.
+     * computerPanel을 업데이트합니다.
      */
     private void updateComputerPanel() {
         computerPlayer.sorting();
         List<Tile> computerTiles = computerPlayer.getTiles();
-        System.out.println("Updating Computer Panel. Current Phase: " + controller.getCurrentPhase());
-        System.out.println("Number of computer tiles: " + computerTiles.size());
+        System.out.println("컴퓨터 패널 업데이트 중. 현재 단계: " + controller.getCurrentPhase());
+        System.out.println("컴퓨터 타일 수: " + computerTiles.size());
 
         for (int i = 0; i < computerCardSlots.size(); i++) {
             JButton slotButton = computerCardSlots.get(i);
             if (i < computerTiles.size()) {
                 Tile tile = computerTiles.get(i);
-                System.out.println("Tile " + i + ": Guessed Correctly? " + tile.isGuessedCorrectly());
+                System.out.println("타일 " + i + ": 올바르게 맞혔습니까? " + tile.isGuessedCorrectly());
 
                 if (tile.isGuessedCorrectly()) {
-                    // 앞면 이미지 표시
+                    // 타일이 올바르게 맞춰졌으면 앞면 이미지 표시
                     String imagePath = tile.getImagePath();
-                    URL imageUrl = getClass().getResource(imagePath);
-                    if (imageUrl != null) {
-                        slotButton.setIcon(new ImageIcon(imageUrl));
-                    } else {
-                        slotButton.setIcon(null);
-                    }
-                    slotButton.setBackground(Color.WHITE);
-                } else {
-                    // Hiển thị mặt sau của thẻ
-                    String imagePath = tile.getBackImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
                         slotButton.setIcon(new ImageIcon(imageUrl));
@@ -577,31 +538,42 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                         slotButton.setBackground(Color.BLUE);
                     }
                     slotButton.setBackground(Color.WHITE);
+                } else {
+                    // 타일이 올바르게 맞춰지지 않았으면 뒷면 이미지 표시
+                    String imagePath = tile.getBackImagePath();
+                    URL imageUrl = getClass().getResource(imagePath);
+                    if (imageUrl != null) {
+                        slotButton.setIcon(new ImageIcon(imagePath));
+                    } else {
+                        slotButton.setBackground(Color.BLUE);
+                    }
+                    slotButton.setBackground(Color.WHITE);
                 }
 
-                final int index = i; // Lưu vị trí
+                final int index = i; // 타일의 위치 저장
 
-                // Loại bỏ các ActionListener cũ
+                // 기존 ActionListener 제거
                 for (ActionListener al : slotButton.getActionListeners()) {
                     slotButton.removeActionListener(al);
                 }
 
-                // Thêm ActionListener nếu trong giai đoạn đoán và thẻ chưa được đoán đúng
+                // 게임 단계가 추측 단계이고 타일이 아직 맞춰지지 않았으면 ActionListener 추가
                 if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE && !tile.isGuessedCorrectly()) {
                     slotButton.addActionListener(e -> {
-                        System.out.println("Button " + index + " clicked for guessing.");
+                        System.out.println("버튼 " + index + " 클릭됨 (컴퓨터 타일 추측).");
                         controller.playerGuessComputerTile(index);
                         updateComputerPanel();
                         updateGameInfo();
                         updateCentralPanel();
                         updateUserPanel();
                     });
-                    slotButton.setEnabled(true); // Đảm bảo nút được kích hoạt
+                    slotButton.setEnabled(true); // 버튼 활성화
                 } else {
                     slotButton.setEnabled(false);
                 }
             } else {
-                slotButton.setBackground(new Color(0x007B75));//녹색
+                // 타일이 없는 슬롯 비활성화 및 아이콘 제거
+                slotButton.setBackground(new Color(0x007B75)); // 파란색
                 slotButton.setIcon(null);
                 slotButton.setEnabled(false);
             }
@@ -611,12 +583,15 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         computerPanel.repaint();
     }
 
+    /**
+     * 게임이 종료되었는지 확인합니다.
+     */
     private void checkGameOver() {
         controller.checkGameOver();
     }
 
     /**
-     * 게임 정보 업데이트.
+     * 게임 정보를 업데이트합니다.
      */
     private void updateGameInfo() {
         remainingTilesLabel.setText("중앙 타일 남은 수 : " + controller.getTileManager().getDeckSize());
@@ -629,8 +604,8 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     /**
      * 플레이어의 열리지 않은 타일 수를 가져옵니다.
      *
-     * @param player 확인할 플레이어.
-     * @return 열리지 않은 타일의 수.
+     * @param player 확인할 플레이어
+     * @return 열리지 않은 타일 수
      */
     private int getUnopenedTilesCount(Player player) {
         int count = 0;
@@ -645,14 +620,40 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     @Override
     public void onGameStateChanged(GameState state) {
         this.gameState = state;
+        System.out.println("onGameStateChanged 호출됨. 게임 종료: " + gameState.isGameOver());
+
+        if (gameState.isGameOver()) {
+            System.out.println("게임이 종료되었습니다. 결과를 표시합니다.");
+            String winner = gameState.getWinner();
+            if ("COMPUTER".equals(winner)) {
+                VictoryScreen victoryScreen = new VictoryScreen(
+                        controller.getCurrentUser(),
+                        controller.calculateTimeTaken(),
+                        mainPanel,
+                        cardLayout
+                );
+                showVictoryScreen(victoryScreen);
+            } else if ("PLAYER".equals(winner)) {
+                DefeatScreen defeatScreen = new DefeatScreen(
+                        controller.getCurrentUser(),
+                        controller.calculateTimeTaken(),
+                        mainPanel,
+                        cardLayout
+                );
+                showDefeatScreen(defeatScreen);
+            } else if ("DRAW".equals(winner)) {
+                JOptionPane.showMessageDialog(this, "게임이 무승부로 끝났습니다!");
+            }
+
+            swingTimer.stop(); // 게임 종료 시 타이머 중지
+            return; // 추가적인 UI 업데이트 불필요
+        }
+
+        // 게임이 종료되지 않았을 때 UI 업데이트
         updateCentralPanel();
         updateUserPanel();
         updateComputerPanel();
         updateGameInfo();
-
-        if (gameState.isGameOver()) {
-            checkGameOver();
-        }
     }
 
     /**
@@ -683,7 +684,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         @Override
         protected void paintBorder(Graphics g) {
             g.setColor(Color.BLACK);
-            g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, radius, radius);
+            g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
         }
 
         @Override
@@ -693,25 +694,25 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         }
     }
 
+    /**
+     * GameObserver에서 상속된 showVictoryScreen 메서드 구현.
+     */
     @Override
     public void showVictoryScreen(VictoryScreen victoryScreen) {
-        System.out.println("Showing victory screen.");
-        // VictoryScreen 추가
-        // this.removeAll();
-        this.setLayout(new BorderLayout());
-        this.add(victoryScreen, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+        System.out.println("승리 화면을 표시합니다.");
+        // VictoryScreen을 mainPanel에 추가하고 표시
+        mainPanel.add(victoryScreen, "VictoryScreen");
+        cardLayout.show(mainPanel, "VictoryScreen");
     }
 
+    /**
+     * GameObserver에서 상속된 showDefeatScreen 메서드 구현.
+     */
     @Override
     public void showDefeatScreen(DefeatScreen defeatScreen) {
-        System.out.println("Showing defeat screen.");
-        // DefeatScreen 추가
-        // this.removeAll();
-        this.setLayout(new BorderLayout());
-        this.add(defeatScreen, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+        System.out.println("패배 화면을 표시합니다.");
+        // DefeatScreen을 mainPanel에 추가하고 표시
+        mainPanel.add(defeatScreen, "DefeatScreen");
+        cardLayout.show(mainPanel, "DefeatScreen");
     }
 }
