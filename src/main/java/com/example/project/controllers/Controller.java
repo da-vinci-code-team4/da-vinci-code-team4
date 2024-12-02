@@ -69,6 +69,10 @@ public class Controller {
      * @param index 중앙 영역에서의 타일 위치 (0-23)
      */
     public void playerSelectInitialTile(int index) {
+        if(gameState.isGameOver()){
+            return;
+        }
+
         if (currentPhase != GamePhase.INITIAL_SELECTION) {
             JOptionPane.showMessageDialog(null, "타일을 선택할 차례가 아닙니다.");
             return;
@@ -93,6 +97,9 @@ public class Controller {
      * 초기 선택 단계에서 선택된 타일을 확인합니다.
      */
     public void confirmInitialSelection() {
+        if(gameState.isGameOver()){
+            return;
+        }
         if (currentPhase != GamePhase.INITIAL_SELECTION) {
             JOptionPane.showMessageDialog(null, "확인할 차례가 아닙니다.");
             return;
@@ -142,6 +149,9 @@ public class Controller {
      * 컴퓨터가 초기 선택 단계에서 4개의 타일을 뽑습니다.
      */
     public void computerInitialDrawTiles() {
+        if(gameState.isGameOver()){
+            return;
+        }
         int tilesToDraw = 4;
         for (int i = 0; i < tilesToDraw; i++) {
             int index = tileManager.getRandomAvailableTileIndex();
@@ -165,6 +175,9 @@ public class Controller {
      * @param index 중앙 영역에서의 타일 위치 (0-23)
      */
     public void playerDrawTile(int index) {
+        if(gameState.isGameOver()){
+            return;
+        }
         if (currentPhase != GamePhase.PLAYER_DRAW_PHASE) {
             JOptionPane.showMessageDialog(null, "타일을 뽑을 차례가 아닙니다.");
             return;
@@ -201,6 +214,9 @@ public class Controller {
      * @param index 컴퓨터 타일의 인덱스
      */
     public void playerGuessComputerTile(int index) {
+        if(gameState.isGameOver()){
+            return;
+        }
         if (currentPhase != GamePhase.PLAYER_GUESS_PHASE) {
             JOptionPane.showMessageDialog(null, "추측할 차례가 아닙니다.");
             return;
@@ -228,7 +244,9 @@ public class Controller {
 
             // 승리 조건 확인
             checkGameOver();
-
+            if(gameState.isGameOver()){
+                return;
+            }
             String option = JOptionPane.showInputDialog(null, "계속하시겠습니까 (Y/N) :");
             if (option != null) {
                 switch (option.trim().toUpperCase()) {
@@ -273,6 +291,9 @@ public class Controller {
     }
 
     public void computerTurn() {
+        if(gameState.isGameOver()){
+            return;
+        }
         // 컴퓨터가 중앙에서 타일을 뽑음
         computerDrawTileFromCenter();
         checkGameOver();
@@ -299,7 +320,9 @@ public class Controller {
 
                 // 승리 조건 확인
                 checkGameOver();
-
+                if(gameState.isGameOver()){
+                    return;
+                }
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
@@ -344,6 +367,9 @@ public class Controller {
      * 컴퓨터가 중앙에서 타일을 뽑는 것을 처리합니다.
      */
     private void computerDrawTileFromCenter() {
+        if(gameState.isGameOver()){
+            return;
+        }
         Tile tile = tileManager.drawRandomCentralTile();
         pcLatest = tile;
         if (tile != null) {
