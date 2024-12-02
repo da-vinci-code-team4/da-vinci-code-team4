@@ -543,7 +543,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     String imagePath = tile.getBackImagePath();
                     URL imageUrl = getClass().getResource(imagePath);
                     if (imageUrl != null) {
-                        slotButton.setIcon(new ImageIcon(imagePath));
+                        slotButton.setIcon(new ImageIcon(imageUrl));
                     } else {
                         slotButton.setBackground(Color.BLUE);
                     }
