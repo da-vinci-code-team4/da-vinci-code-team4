@@ -2,6 +2,7 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.utils.UserManager;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -12,11 +13,13 @@ public class MenuPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private List<User> userList;
+    private UserManager userManager;
 
-    public MenuPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) {
+    public MenuPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList,  UserManager userManager) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
         this.userList = userList;
+        this.userManager = userManager;
 
         setLayout(null); // Layout null để tự định vị các nút
         setBackground(new Color(255, 255, 255, 0));

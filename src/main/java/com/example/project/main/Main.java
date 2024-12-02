@@ -67,7 +67,7 @@ public class Main {
         // 다양한 페이지 생성
         RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userManager);
         LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userManager);
-        MyPage myPage = new MyPage(mainPanel, cardLayout, userList);
+        MyPage myPage = new MyPage(mainPanel, cardLayout, userList, userManager);
         ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // ProfilePage 추가
         CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // CorrectionPage 추가
         PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout); // PlayGameWithPC 추가
