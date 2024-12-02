@@ -386,12 +386,12 @@ public class Controller {
 //            return;
 //        }
 //
-//        if (!tileManager.hasTiles()) {
-//            System.out.println("모든 중앙 타일이 선택되었습니다.");
-//            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
-//            observer.onGameStateChanged(gameState);
-//            return;
-//        }
+        if (!tileManager.hasTiles()) {
+            System.out.println("모든 중앙 타일이 선택되었습니다.");
+            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
+            observer.onGameStateChanged(gameState);
+            return;
+        }
 //
 //        if (tileManager.allTilesGuessedCorrectly()) {
 //            System.out.println("모든 타일이 올바르게 맞추어졌습니다. 승자를 결정합니다.");
