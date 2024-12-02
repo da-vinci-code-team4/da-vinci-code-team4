@@ -70,7 +70,7 @@ public class Main {
         MyPage myPage = new MyPage(mainPanel, cardLayout, userList, userManager);
         ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // ProfilePage 추가
         CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // CorrectionPage 추가
-        PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout); // PlayGameWithPC 추가
+//        PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout); // PlayGameWithPC 추가
 
         // 각 페이지를 mainPanel에 고유한 이름으로 추가
         mainPanel.add(registerPage, "RegisterPage");
@@ -78,7 +78,7 @@ public class Main {
         mainPanel.add(myPage, "MyPage");
         mainPanel.add(profilePage, "ProfilePage");
         mainPanel.add(correctionPage, "CorrectionPage");
-        mainPanel.add(playGameWithPC, "PlayGameWithPC");
+//        mainPanel.add(playGameWithPC, "PlayGameWithPC");
 
         // JFrame의 콘텐츠 패널을 mainPanel로 설정
         frame.setContentPane(mainPanel);
