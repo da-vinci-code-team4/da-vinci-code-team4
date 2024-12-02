@@ -130,7 +130,12 @@ public class Controller {
         // 플레이어의 타일 뽑기 단계로 전환
         currentPhase = GamePhase.PLAYER_DRAW_PHASE;
         observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-        JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+        if(tileManager.hasTiles()){
+            JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요. (조커는 13으로 입력)");
+        }
     }
 
     /**
@@ -298,7 +303,13 @@ public class Controller {
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-                JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+                if(tileManager.hasTiles()){
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요. (조커는 13으로 입력)");
+                }
+
             } else {
                 JOptionPane.showMessageDialog(null, "컴퓨터가 선택한 타일 : " + userTileType + "\n컴퓨터의 추측: " + guessedNumberType);
                 JOptionPane.showMessageDialog(null, "컴퓨터가 틀렸습니다!");
@@ -308,14 +319,24 @@ public class Controller {
                 // 타일 뽑기 단계로 전환
                 currentPhase = GamePhase.PLAYER_DRAW_PHASE;
                 observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-                JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+                if(tileManager.hasTiles()){
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요. (조커는 13으로 입력)");
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null, "컴퓨터가 추측할 타일이 더 이상 없습니다.");
             // 타일 뽑기 단계로 전환
             currentPhase = GamePhase.PLAYER_DRAW_PHASE;
             observer.onGameStateChanged(gameState); // UI 업데이트를 위해 추가
-            JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+            if(tileManager.hasTiles()){
+                JOptionPane.showMessageDialog(null, "당신의 차례: 타일 하나를 선택하여 뽑아주세요 (1).");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "당신의 차례: 상대방의 타일을 선택하여 추측해주세요. (조커는 13으로 입력)");
+            }
         }
     }
 
@@ -386,12 +407,7 @@ public class Controller {
 //            return;
 //        }
 //
-        if (!tileManager.hasTiles()) {
-            System.out.println("모든 중앙 타일이 선택되었습니다.");
-            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
-            observer.onGameStateChanged(gameState);
-            return;
-        }
+
 //
 //        if (tileManager.allTilesGuessedCorrectly()) {
 //            System.out.println("모든 타일이 올바르게 맞추어졌습니다. 승자를 결정합니다.");
@@ -426,6 +442,12 @@ public class Controller {
             gameState.setGameOver(true);
             gameState.setWinner("COMPUTER");
 
+            observer.onGameStateChanged(gameState);
+            return;
+        }
+        if (!tileManager.hasTiles()) {
+            System.out.println("모든 중앙 타일이 선택되었습니다.");
+            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
             observer.onGameStateChanged(gameState);
             return;
         }
