@@ -12,6 +12,8 @@ import com.example.project.views.PlayGameWithPC;
 import com.example.project.ui.SplashScreenPanel;
 import com.example.project.audio.AudioPlayer;
 import com.example.project.audio.AudioManager;
+import com.example.project.utils.UserManager;
+import com.example.project.views.MenuPage;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,6 +53,8 @@ public class Main {
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
 
+        UserManager userManager = new UserManager();
+
         // 사용자 목록 초기화
         List<User> userList = new ArrayList<>();
         initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
@@ -61,8 +65,8 @@ public class Main {
         Session.getInstance().setCurrentUser(currentUser); // 세션에 현재 사용자 설정
 
         // 다양한 페이지 생성
-        RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userList);
-        LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userList);
+        RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userManager);
+        LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userManager);
         MyPage myPage = new MyPage(mainPanel, cardLayout, userList);
         ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // ProfilePage 추가
         CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // CorrectionPage 추가
