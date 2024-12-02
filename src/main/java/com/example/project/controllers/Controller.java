@@ -377,42 +377,42 @@ public class Controller {
         System.out.println("tileManager.hasTiles(): " + tileManager.hasTiles());
         System.out.println("tileManager.allTilesGuessedCorrectly(): " + tileManager.allTilesGuessedCorrectly());
 
-        if (user.getTiles().size() == 13 && user.countGuessedCorrectly() == 13) {
-            System.out.println("플레이어가 모든 타일을 올바르게 맞추었습니다. 게임을 종료합니다.");
-            gameState.setGameOver(true);
-            gameState.setWinner("PLAYER");
+//        if (user.getTiles().size() == 13 && user.countGuessedCorrectly() == 13) {
+//            System.out.println("플레이어가 모든 타일을 올바르게 맞추었습니다. 게임을 종료합니다.");
+//            gameState.setGameOver(true);
+//            gameState.setWinner("PLAYER");
+//
+//            observer.onGameStateChanged(gameState);
+//            return;
+//        }
+//
+//        if (!tileManager.hasTiles()) {
+//            System.out.println("모든 중앙 타일이 선택되었습니다.");
+//            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
+//            observer.onGameStateChanged(gameState);
+//            return;
+//        }
+//
+//        if (tileManager.allTilesGuessedCorrectly()) {
+//            System.out.println("모든 타일이 올바르게 맞추어졌습니다. 승자를 결정합니다.");
+//            gameState.setGameOver(true);
+//
+//            int userCorrect = user.countGuessedCorrectly();
+//            int computerCorrect = computer.countGuessedCorrectly();
+//
+//            if (userCorrect > computerCorrect) {
+//                gameState.setWinner("PLAYER");
+//            } else if (computerCorrect > userCorrect) {
+//                gameState.setWinner("COMPUTER");
+//            } else {
+//                gameState.setWinner("DRAW");
+//            }
+//
+//            observer.onGameStateChanged(gameState);
+//            return;
+//        }
 
-            observer.onGameStateChanged(gameState);
-            return;
-        }
-
-        if (!tileManager.hasTiles()) {
-            System.out.println("모든 중앙 타일이 선택되었습니다.");
-            currentPhase = GamePhase.PLAYER_GUESS_PHASE;
-            observer.onGameStateChanged(gameState);
-            return;
-        }
-
-        if (tileManager.allTilesGuessedCorrectly()) {
-            System.out.println("모든 타일이 올바르게 맞추어졌습니다. 승자를 결정합니다.");
-            gameState.setGameOver(true);
-
-            int userCorrect = user.countGuessedCorrectly();
-            int computerCorrect = computer.countGuessedCorrectly();
-
-            if (userCorrect > computerCorrect) {
-                gameState.setWinner("PLAYER");
-            } else if (computerCorrect > userCorrect) {
-                gameState.setWinner("COMPUTER");
-            } else {
-                gameState.setWinner("DRAW");
-            }
-
-            observer.onGameStateChanged(gameState);
-            return;
-        }
-
-        if (user.getScore() == 13) {
+        if (user.hasAllTilesOpened()) {
             System.out.println("컴퓨터가 승리 조건을 충족했습니다.");
             gameState.setGameOver(true);
             gameState.setWinner("PLAYER");
@@ -421,7 +421,7 @@ public class Controller {
             return;
         }
 
-        if (computer.getScore() == 13) {
+        if (computer.hasAllTilesOpened()) {
             System.out.println("플레이어가 승리 조건을 충족했습니다.");
             gameState.setGameOver(true);
             gameState.setWinner("COMPUTER");
