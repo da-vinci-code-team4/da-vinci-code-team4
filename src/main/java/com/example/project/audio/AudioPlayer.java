@@ -2,6 +2,7 @@ package com.example.project.audio;
 
 import javax.sound.sampled.*;
 import java.io.InputStream;
+import java.io.BufferedInputStream;
 
 public class AudioPlayer {
     private Clip clip;
@@ -16,7 +17,8 @@ public class AudioPlayer {
                 throw new IllegalArgumentException("Audio file not found: " + audioFilePath);
             }
 
-            AudioInputStream stream = AudioSystem.getAudioInputStream(audioStream);
+            BufferedInputStream bufferedIn = new BufferedInputStream(audioStream);
+            AudioInputStream stream = AudioSystem.getAudioInputStream(bufferedIn);
             clip = AudioSystem.getClip();
             clip.open(stream);
 
