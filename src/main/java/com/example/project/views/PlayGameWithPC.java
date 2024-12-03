@@ -21,10 +21,11 @@ import java.util.List;
 
 /**
  * PlayGameWithPC.java
- *
+ * <p>
  * 컴퓨터와 플레이할 때의 사용자 인터페이스.
  */
 public class PlayGameWithPC extends JPanel implements GameObserver {
+
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
@@ -89,10 +90,10 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
      */
     private void showDefeatScreen() {
         DefeatScreen defeatScreen = new DefeatScreen(
-                controller.getCurrentUser(),
-                controller.calculateTimeTaken(),
-                mainPanel,
-                cardLayout
+            controller.getCurrentUser(),
+            controller.calculateTimeTaken(),
+            mainPanel,
+            cardLayout
         );
         showDefeatScreen(defeatScreen);
     }
@@ -102,10 +103,10 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
      */
     private void showVictoryScreen() {
         VictoryScreen victoryScreen = new VictoryScreen(
-                controller.getCurrentUser(),
-                controller.calculateTimeTaken(),
-                mainPanel,
-                cardLayout
+            controller.getCurrentUser(),
+            controller.calculateTimeTaken(),
+            mainPanel,
+            cardLayout
         );
         showVictoryScreen(victoryScreen);
     }
@@ -159,11 +160,11 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             public void actionPerformed(ActionEvent e) {
                 // 확인 대화상자 표시
                 int result = JOptionPane.showConfirmDialog(
-                        PlayGameWithPC.this,
-                        "게임 진행 중 나가시겠습니까?",
-                        "확인",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
+                    PlayGameWithPC.this,
+                    "게임 진행 중 나가시겠습니까?",
+                    "확인",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
                 );
 
                 if (result == JOptionPane.YES_OPTION) {
@@ -558,7 +559,8 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 }
 
                 // 게임 단계가 추측 단계이고 타일이 아직 맞춰지지 않았으면 ActionListener 추가
-                if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE && !tile.isGuessedCorrectly()) {
+                if (controller.getCurrentPhase() == GamePhase.PLAYER_GUESS_PHASE
+                    && !tile.isGuessedCorrectly()) {
                     slotButton.addActionListener(e -> {
                         System.out.println("버튼 " + index + " 클릭됨 (컴퓨터 타일 추측).");
                         controller.playerGuessComputerTile(index);
@@ -597,7 +599,8 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         remainingTilesLabel.setText("중앙 타일 남은 수 : " + controller.getTileManager().getDeckSize());
         opponentMatchedTilesLabel.setText("맞춘 상대 타일 수 : " + userPlayer.getScore());
         opponentTilesMatchedLabel.setText("상대가 맞춘 타일 수 : " + computerPlayer.getScore());
-        opponentRemainingTilesLabel.setText("남은 상대 타일 수 : " + getUnopenedTilesCount(computerPlayer));
+        opponentRemainingTilesLabel.setText(
+            "남은 상대 타일 수 : " + getUnopenedTilesCount(computerPlayer));
         myRemainingTilesLabel.setText("남은 내 타일 수 : " + getUnopenedTilesCount(userPlayer));
     }
 
@@ -626,22 +629,25 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             System.out.println("게임이 종료되었습니다. 결과를 표시합니다.");
             String winner = gameState.getWinner();
             if ("COMPUTER".equals(winner)) {
+                HistoryPage.updateHistory("Victory", 100, controller.calculateTimeTaken());
                 VictoryScreen victoryScreen = new VictoryScreen(
-                        controller.getCurrentUser(),
-                        controller.calculateTimeTaken(),
-                        mainPanel,
-                        cardLayout
+                    controller.getCurrentUser(),
+                    controller.calculateTimeTaken(),
+                    mainPanel,
+                    cardLayout
                 );
                 showVictoryScreen(victoryScreen);
             } else if ("PLAYER".equals(winner)) {
+                HistoryPage.updateHistory("Defeat", 100, controller.calculateTimeTaken());
                 DefeatScreen defeatScreen = new DefeatScreen(
-                        controller.getCurrentUser(),
-                        controller.calculateTimeTaken(),
-                        mainPanel,
-                        cardLayout
+                    controller.getCurrentUser(),
+                    controller.calculateTimeTaken(),
+                    mainPanel,
+                    cardLayout
                 );
                 showDefeatScreen(defeatScreen);
             } else if ("DRAW".equals(winner)) {
+                HistoryPage.updateHistory("Draw", 0, controller.calculateTimeTaken());
                 JOptionPane.showMessageDialog(this, "게임이 무승부로 끝났습니다!");
             }
 
@@ -657,9 +663,33 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
     }
 
     /**
+     * GameObserver에서 상속된 showVictoryScreen 메서드 구현.
+     */
+    @Override
+    public void showVictoryScreen(VictoryScreen victoryScreen) {
+        System.out.println("승리 화면을 표시합니다.");
+
+        // VictoryScreen을 mainPanel에 추가하고 표시
+        mainPanel.add(victoryScreen, "VictoryScreen");
+        cardLayout.show(mainPanel, "VictoryScreen");
+    }
+
+    /**
+     * GameObserver에서 상속된 showDefeatScreen 메서드 구현.
+     */
+    @Override
+    public void showDefeatScreen(DefeatScreen defeatScreen) {
+        System.out.println("패배 화면을 표시합니다.");
+        // DefeatScreen을 mainPanel에 추가하고 표시
+        mainPanel.add(defeatScreen, "DefeatScreen");
+        cardLayout.show(mainPanel, "DefeatScreen");
+    }
+
+    /**
      * 둥근 모서리를 가진 JButton 클래스.
      */
     private class RoundedButton extends JButton {
+
         private int radius;
 
         public RoundedButton(int radius) {
@@ -689,30 +719,9 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
 
         @Override
         public boolean contains(int x, int y) {
-            Shape shape = new java.awt.geom.RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), radius, radius);
+            Shape shape = new java.awt.geom.RoundRectangle2D.Float(0, 0, getWidth(), getHeight(),
+                radius, radius);
             return shape.contains(x, y);
         }
-    }
-
-    /**
-     * GameObserver에서 상속된 showVictoryScreen 메서드 구현.
-     */
-    @Override
-    public void showVictoryScreen(VictoryScreen victoryScreen) {
-        System.out.println("승리 화면을 표시합니다.");
-        // VictoryScreen을 mainPanel에 추가하고 표시
-        mainPanel.add(victoryScreen, "VictoryScreen");
-        cardLayout.show(mainPanel, "VictoryScreen");
-    }
-
-    /**
-     * GameObserver에서 상속된 showDefeatScreen 메서드 구현.
-     */
-    @Override
-    public void showDefeatScreen(DefeatScreen defeatScreen) {
-        System.out.println("패배 화면을 표시합니다.");
-        // DefeatScreen을 mainPanel에 추가하고 표시
-        mainPanel.add(defeatScreen, "DefeatScreen");
-        cardLayout.show(mainPanel, "DefeatScreen");
     }
 }

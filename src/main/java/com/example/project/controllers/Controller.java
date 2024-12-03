@@ -458,7 +458,6 @@ public class Controller {
             System.out.println("컴퓨터가 승리 조건을 충족했습니다.");
             gameState.setGameOver(true);
             gameState.setWinner("PLAYER");
-
             observer.onGameStateChanged(gameState);
             return;
         }

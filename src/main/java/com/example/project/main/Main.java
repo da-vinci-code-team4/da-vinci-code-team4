@@ -3,6 +3,7 @@ package com.example.project.main;
 import com.example.project.controllers.FileController;
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.views.HistoryPage;
 import com.example.project.views.LoginPage;
 import com.example.project.views.RegisterPage;
 import com.example.project.views.MyPage;
@@ -55,6 +56,8 @@ public class Main {
 
         UserManager userManager = new UserManager();
 
+        initializeDefaultHistory();
+
         // 사용자 목록 초기화
         List<User> userList = new ArrayList<>();
         initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
@@ -68,8 +71,10 @@ public class Main {
         RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userManager);
         LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userManager);
         MyPage myPage = new MyPage(mainPanel, cardLayout, userList, userManager);
-        ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // ProfilePage 추가
-        CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // CorrectionPage 추가
+        ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout,
+            currentUser); // ProfilePage 추가
+        CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout,
+            userList); // CorrectionPage 추가
 //        PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout); // PlayGameWithPC 추가
 
         // 각 페이지를 mainPanel에 고유한 이름으로 추가
@@ -91,10 +96,10 @@ public class Main {
         // Swing Timer를 사용하여 페이드 인 및 페이드 아웃 효과 구현
         Timer fadeTimer = new Timer();
         fadeTimer.schedule(new TimerTask() {
-            private float opacity = 0.0f;
-            private boolean fadingIn = true;
             private final float fadeStep = 0.05f; // 투명도 증가/감소 단계
             private final long timerDelay = 50; // 각 단계 간 지연 (ms)
+            private float opacity = 0.0f;
+            private boolean fadingIn = true;
 
             @Override
             public void run() {
@@ -132,7 +137,7 @@ public class Main {
         File externalFile = new File(filePath);
         if (!externalFile.exists()) {
             try (InputStream inputStream = Main.class.getResourceAsStream("/texts/user.txt");
-                 FileOutputStream outputStream = new FileOutputStream(externalFile)) {
+                FileOutputStream outputStream = new FileOutputStream(externalFile)) {
 
                 if (inputStream != null) {
                     byte[] buffer = new byte[1024];
@@ -159,14 +164,14 @@ public class Main {
                 String[] data = line.split("\\s+");
                 if (data.length >= 8) {
                     userList.add(new User(
-                            data[0],
-                            data[1],
-                            data[2],
-                            Integer.parseInt(data[3]),
-                            data[4],
-                            Integer.parseInt(data[5]),
-                            Integer.parseInt(data[6]),
-                            Double.parseDouble(data[7])
+                        data[0],
+                        data[1],
+                        data[2],
+                        Integer.parseInt(data[3]),
+                        data[4],
+                        Integer.parseInt(data[5]),
+                        Integer.parseInt(data[6]),
+                        Double.parseDouble(data[7])
                     ));
                 } else {
                     System.out.println("사용자 데이터가 유효하지 않습니다: " + line);
@@ -176,4 +181,44 @@ public class Main {
             e.printStackTrace();
         }
     }
+
+    public static void initializeDefaultHistory() {
+        List<String[]> data = new ArrayList<>();
+        String filePath = System.getProperty("user.dir") + "/history.txt";
+        System.out.println("파일 경로: " + filePath);  // 파일 경로 출력
+
+        File externalFile = new File(filePath);
+        if (!externalFile.exists()) {
+            try (InputStream inputStream = HistoryPage.class.getResourceAsStream(
+                "/texts/history.txt");
+                FileOutputStream outputStream = new FileOutputStream(externalFile)) {
+
+                if (inputStream != null) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                    System.out.println("파일이 외부로 복사되었습니다: " + filePath);
+                } else {
+                    System.out.println("!/texts/history.txt");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 파일에서 사용자 읽기
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // 공백 기준으로 데이터 분리
+                data.add(line.split("\\s+"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HistoryPage.setHistoryData(data);
+    }
 }
+
