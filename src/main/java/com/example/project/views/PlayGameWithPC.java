@@ -629,6 +629,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
             System.out.println("게임이 종료되었습니다. 결과를 표시합니다.");
             String winner = gameState.getWinner();
             if ("COMPUTER".equals(winner)) {
+                Session.getInstance().getCurrentUser().updateAfterGame("Victory");
                 HistoryPage.updateHistory("Victory", 100, controller.calculateTimeTaken());
                 VictoryScreen victoryScreen = new VictoryScreen(
                     controller.getCurrentUser(),
@@ -638,6 +639,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                 );
                 showVictoryScreen(victoryScreen);
             } else if ("PLAYER".equals(winner)) {
+                Session.getInstance().getCurrentUser().updateAfterGame("Defeat");
                 HistoryPage.updateHistory("Defeat", 100, controller.calculateTimeTaken());
                 DefeatScreen defeatScreen = new DefeatScreen(
                     controller.getCurrentUser(),

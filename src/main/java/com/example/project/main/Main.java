@@ -220,5 +220,25 @@ public class Main {
         }
         HistoryPage.setHistoryData(data);
     }
+
+    public static void updateUsers(List<User>temp){
+        try (BufferedWriter bw = new BufferedWriter(
+            new FileWriter(System.getProperty("user.dir") + "/user.txt", false))) { // false: Overwrite file
+            for (User user : temp) {
+                System.out.println(user.getId() + " " + user.getPassword() + " " + user.getUsername());
+                bw.write(user.getId() + " " +
+                    user.getPassword() + " " +
+                    user.getUsername() + " " +
+                    user.getAge() + " " +
+                    user.getRecord() + " " +
+                    user.getCore() + " " +
+                    user.getRanking() + " " +
+                    user.getRatio() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "파일을 쓸 수 없습니다: " + e.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
 
