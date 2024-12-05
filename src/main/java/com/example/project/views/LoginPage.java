@@ -76,6 +76,17 @@ public class LoginPage extends JPanel {
         loginButton.setBounds(178 + 50, 250, 216, 50); // 위치 및 크기 설정
         loginButton.addActionListener(e -> handleLogin());
         rectanglePanel.add(loginButton);
+
+        // Nút Back
+        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/ViewImage/back.png")));
+        backButton.setBounds(1384, 30, 128, 86);
+        backButton.setBorderPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setFocusPainted(false);
+        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "RegisterPage"));
+        AudioUtil.addClickSound(backButton);
+        background.add(backButton);
     }
 
     /**
