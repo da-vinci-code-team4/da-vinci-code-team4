@@ -6,7 +6,11 @@ import com.example.project.ui.CustomSliderUI;
 import com.example.project.utils.AudioUtil;
 
 import javax.swing.*;
+
+import java.awt.event.MouseEvent;
+
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.io.*;
 import java.util.Properties;
 
@@ -16,8 +20,8 @@ public class AudioSettingPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
-    private int backgroundMusicVolume = 50;
-    private int soundEffectsVolume = 50;
+    private int backgroundMusicVolume = 41;
+    private int soundEffectsVolume = 41;
 
     private AudioManager audioManager;
 
@@ -67,9 +71,8 @@ public class AudioSettingPage extends JPanel {
         groupPanel.setBackground(new Color(0, 0, 0, 150));
         groupPanel.setLayout(null);
         background.add(groupPanel);
-
-        JSlider volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100,
-                groupType.equals("Background Music") ? backgroundMusicVolume : soundEffectsVolume);
+        int initialVolume = (groupType.equals("Background Music")) ? backgroundMusicVolume : soundEffectsVolume;
+        JSlider volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, initialVolume);
         volumeSlider.setBounds(20, 55, 800, 50);
         volumeSlider.setMajorTickSpacing(20);
         volumeSlider.setMinorTickSpacing(5);
@@ -100,6 +103,23 @@ public class AudioSettingPage extends JPanel {
             saveAudioSettings(); // Save immediately
             System.out.println(labelText + " Volume: " + volume);
         });
+        
+        if (groupType.equals("Background Music")) {
+            volumeSlider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    audioManager.playBackgroundMusic();
+                }
+            });
+        }
+        else if (groupType.equals("Sound Effects")) {
+            volumeSlider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    audioManager.playClickSound();
+                }
+            });
+        }
     }
 
     private void addBackButton(JLabel background) {
@@ -139,17 +159,19 @@ public class AudioSettingPage extends JPanel {
     }
 
     private void loadAudioSettings() {
-        try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
-            Properties props = new Properties();
-            props.load(input);
-            backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "50"));
-            soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "50"));
-        } catch (IOException e) {
-            System.out.println("No settings file found. Using default values.");
-        }
+        // try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
+        //     Properties props = new Properties();
+        //     props.load(input);
+        //     backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "50"));
+        //     soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "50"));
+        // } catch (IOException e) {
+        //     System.out.println("No settings file found. Using default values.");
+        // }
     }
 
     private float scaleVolume(int volume) {
-        return -80f + (volume / 100f) * 86f;
+        return (volume == 0) ? -80f : -80f + (volume / 100f) * 86f;
     }
+
+
 }

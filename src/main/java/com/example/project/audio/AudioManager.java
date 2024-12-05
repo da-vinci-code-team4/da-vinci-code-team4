@@ -31,6 +31,7 @@ public class AudioManager {
 
     public void setBackgroundMusicVolume(int volume) {
         backgroundMusicPlayer.setVolume(scaleVolume(volume));
+        System.out.println("Background music volume: " + backgroundMusicPlayer.getVolume());
     }
 
     public void setSoundEffectsVolume(int volume) {
@@ -46,6 +47,6 @@ public class AudioManager {
     }
 
     private float scaleVolume(int volume) {
-        return -80f + (volume / 100f) * 86f;
+        return (volume == 0) ? -80f : (float) (30 * Math.log10(volume / 100.0));
     }
 }
