@@ -457,7 +457,7 @@ public class Controller {
         if (user.hasAllTilesOpened()) {
             System.out.println("컴퓨터가 승리 조건을 충족했습니다.");
             gameState.setGameOver(true);
-            gameState.setWinner("PLAYER");
+            gameState.setWinner("COMPUTER");
             observer.onGameStateChanged(gameState);
             return;
         }
@@ -465,7 +465,7 @@ public class Controller {
         if (computer.hasAllTilesOpened()) {
             System.out.println("플레이어가 승리 조건을 충족했습니다.");
             gameState.setGameOver(true);
-            gameState.setWinner("COMPUTER");
+            gameState.setWinner("PLAYER");
 
             observer.onGameStateChanged(gameState);
             return;

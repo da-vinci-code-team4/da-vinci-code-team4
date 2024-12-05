@@ -372,7 +372,6 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
      */
     private void startGame() {
         controller.startGame();
-
         // 플레이어에게 4개의 타일을 선택하라는 알림 표시
         JOptionPane.showMessageDialog(this, "가져올 타일을 선택하세요(4개)");
     }
@@ -637,7 +636,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         if (gameState.isGameOver()) {
             System.out.println("게임이 종료되었습니다. 결과를 표시합니다.");
             String winner = gameState.getWinner();
-            if ("COMPUTER".equals(winner)) {
+            if ("PLAYER".equals(winner)) {
                 Session.getInstance().getCurrentUser().updateAfterGame("Victory");
                 HistoryPage.updateHistory("Victory", 100, controller.calculateTimeTaken());
                 VictoryScreen victoryScreen = new VictoryScreen(
@@ -647,7 +646,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     cardLayout
                 );
                 showVictoryScreen(victoryScreen);
-            } else if ("PLAYER".equals(winner)) {
+            } else if ("COMPUTER".equals(winner)) {
                 Session.getInstance().getCurrentUser().updateAfterGame("Defeat");
                 HistoryPage.updateHistory("Defeat", 100, controller.calculateTimeTaken());
                 DefeatScreen defeatScreen = new DefeatScreen(
