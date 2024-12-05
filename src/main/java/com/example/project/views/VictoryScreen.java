@@ -63,7 +63,8 @@ public class VictoryScreen extends JPanel {
         innerPanel.add(scoreLabel);
 
         // 랭킹 표시 레이블 추가
-        JLabel rankLabel = new JLabel("랭킹: " + user.getRanking());
+//        "랭킹: " + user.getRanking()
+        JLabel rankLabel = new JLabel();
         rankLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 20));
         rankLabel.setHorizontalAlignment(SwingConstants.CENTER);
         rankLabel.setBounds(0, scoreLabel.getY() + 40, 1502, 30);
