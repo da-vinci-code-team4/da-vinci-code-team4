@@ -1,6 +1,7 @@
 package com.example.project.models;
 
 import com.example.project.config.Tile;
+import com.example.project.config.TileColor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -78,7 +79,15 @@ public abstract class Player {
 
     //타일 정렬하는 메소드
     public void sorting() {
-        tiles.sort((tile1, tile2) -> Integer.compare(tile1.getNumber(), tile2.getNumber()));
+        tiles.sort((tile1, tile2) -> {
+            // So sánh theo số
+            int numberCompare = Integer.compare(tile1.getNumber(), tile2.getNumber());
+            if (numberCompare != 0) {
+                return numberCompare;
+            }
+            // Nếu số bằng nhau, so sánh theo màu sắc: BLACK trước WHITE
+            return tile1.getTileColorEnum().compareTo(tile2.getTileColorEnum());
+        });
     }
 
     //최근타일 공개
