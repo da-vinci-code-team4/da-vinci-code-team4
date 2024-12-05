@@ -15,10 +15,9 @@ public class PlayGameWithRandom extends JPanel {
         setLayout(null);
 
         // Thêm Label
-        JLabel label = new JLabel("PlayGameWithRandom 구현 중입니다. " +
-                "나중에 다시 시도해주세요");
+        JLabel label = new JLabel("<html>PlayGameWithRandom 구현 중입니다.<br>나중에 다시 시도해주세요</html>");
         label.setFont(new Font("맑은 고딕", Font.BOLD, 50));
-        label.setBounds(250, 300, 1300, 100);
+        label.setBounds(250, 300, 1300, 150);
         add(label);
 
         // Tạo hình chữ nhật bo góc bán trong suốt
