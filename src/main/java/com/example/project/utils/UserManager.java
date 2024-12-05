@@ -91,14 +91,24 @@ public class UserManager {
                 String id = properties.getProperty("user" + i + ".id");
                 String password = properties.getProperty("user" + i + ".password");
                 String username = properties.getProperty("user" + i + ".username");
-                int age = Integer.parseInt(properties.getProperty("user" + i + ".age"));
-                // Bạn có thể thêm các thuộc tính khác nếu cần
+                String ageStr = properties.getProperty("user" + i + ".age");
+    
+                int age = 0;
+                if (ageStr != null) {
+                    try {
+                        age = Integer.parseInt(ageStr);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Number format exception for age: " + ageStr);
+                    }
+                }
+    
+                // 필요한 경우 다른 속성 추가
                 User user = new User(id, password, username, age);
                 userList.add(user);
             }
         } catch (FileNotFoundException e) {
-            // Nếu tệp không tồn tại, bắt đầu với danh sách người dùng trống
-            System.out.println("id.properties không tìm thấy, bắt đầu với danh sách người dùng từ user.txt.");
+            // 파일이 존재하지 않으면 빈 사용자 목록으로 시작
+            System.out.println("id.properties 파일을 찾을 수 없습니다. user.txt에서 사용자 목록을 시작합니다.");
         } catch (IOException e) {
             e.printStackTrace();
         }
