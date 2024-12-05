@@ -28,6 +28,10 @@ public class Tile implements Serializable, Cloneable {
         this.isSelected = false;
     }
 
+    public TileColor getTileColorEnum() {
+        return tileColor;
+    }
+
     // Getter 및 Setter
     public TileType getTileType() {
         return tileType;
