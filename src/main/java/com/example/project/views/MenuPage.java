@@ -89,6 +89,7 @@ public class MenuPage extends JPanel {
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
         background.add(backButton);
+        AudioUtil.addClickSound(backButton);
     }
 
     /**
