@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.main.Main;
 import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.AudioUtil;
@@ -280,6 +281,7 @@ public class CorrectionPage extends JPanel {
                 JOptionPane.showMessageDialog(this, "이미 있는 아이디 입니다.", "경고", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            user = currentUser;
         }
 
         // Cập nhật thông tin người dùng
@@ -289,7 +291,7 @@ public class CorrectionPage extends JPanel {
         currentUser.setAge(newAge);
 
         JOptionPane.showMessageDialog(this, "저장되었습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
-
+        Main.updateUsers(userList);
         // Bạn có thể thêm logic để lưu thay đổi này vào cơ sở dữ liệu hoặc danh sách người dùng
         // Ví dụ: userList đã được cập nhật vì currentUser tham chiếu tới một phần tử trong userList
 
