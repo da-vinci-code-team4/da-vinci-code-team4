@@ -54,7 +54,7 @@ public class User {
      * @param age 나이
      */
     public User(String id, String password, String username, int age) {
-        this(id, password, username, age, "0승-0패", 0, 0, 0.0);
+        this(id, password, username, age, "0w-0l", 0, 0, 0.0);
     }
 
     // Getter 메서드
