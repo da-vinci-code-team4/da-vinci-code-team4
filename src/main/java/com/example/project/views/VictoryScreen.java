@@ -55,7 +55,7 @@ public class VictoryScreen extends JPanel {
         innerPanel.add(timeLabel);
 
         // 점수 표시 레이블 추가 (100점 증가)
-        int displayScore = user.getCore() + 100;
+        int displayScore = user.getCore();
         JLabel scoreLabel = new JLabel("점수: " + displayScore + "P(+100)");
         scoreLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
