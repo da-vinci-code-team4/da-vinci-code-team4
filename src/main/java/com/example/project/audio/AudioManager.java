@@ -11,6 +11,7 @@ public class AudioManager {
         gamebackgroundMusicPlayer = new AudioPlayer("audio/_BackgroundMusic.wav", true);
         clickSoundPlayer = new AudioPlayer("audio/Click.wav");
         setBackgroundMusicVolume(41);
+        setGameBackgroundMusicVolume(41);
         setSoundEffectsVolume(41);
     }
 
@@ -46,6 +47,10 @@ public class AudioManager {
     public void setBackgroundMusicVolume(int volume) {
         backgroundMusicPlayer.setVolume(scaleVolume(volume));
         System.out.println("Background music volume: " + backgroundMusicPlayer.getVolume());
+    }
+
+    public void setGameBackgroundMusicVolume(int volume) {
+        gamebackgroundMusicPlayer.setVolume(scaleVolume(volume));
     }
 
     public void setSoundEffectsVolume(int volume) {

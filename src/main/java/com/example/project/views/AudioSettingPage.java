@@ -96,6 +96,7 @@ public class AudioSettingPage extends JPanel {
             if (groupType.equals("Background Music")) {
                 backgroundMusicVolume = volume;
                 adjustBackgroundMusicVolume(volume);
+                adjustGameBackgroundMusicVolume(volume);
             } else if (groupType.equals("Sound Effects")) {
                 soundEffectsVolume = volume;
                 adjustSoundEffectsVolume(volume);
@@ -134,6 +135,11 @@ public class AudioSettingPage extends JPanel {
         audioManager.setBackgroundMusicVolume(volume);
     }
 
+    private void adjustGameBackgroundMusicVolume(int volume) {
+        float scaledVolume = scaleVolume(volume);
+        audioManager.setGameBackgroundMusicVolume(volume);
+    }
+    
     private void adjustSoundEffectsVolume(int volume) {
         float scaledVolume = scaleVolume(volume);
         audioManager.setSoundEffectsVolume(volume);
