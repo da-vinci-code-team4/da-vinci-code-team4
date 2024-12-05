@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.audio.AudioManager;
 import com.example.project.models.User;
 
 import javax.swing.*;
@@ -47,7 +48,7 @@ public class DefeatScreen extends JPanel {
 
         // 시간 표시 레이블 추가
         JLabel timeLabel = new JLabel("시간: " + formatTime(timeTaken));
-        timeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        timeLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeLabel.setBounds(0, iconLabel.getY() + defeatIcon.getIconHeight() - 20, 1502, 30);
         innerPanel.add(timeLabel);
@@ -55,27 +56,27 @@ public class DefeatScreen extends JPanel {
         // 점수 표시 레이블 추가 (100점 감소)
         int displayScore = user.getCore() - 100;
         JLabel scoreLabel = new JLabel("점수: " + displayScore + "P(-100)");
-        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        scoreLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scoreLabel.setBounds(0, timeLabel.getY() + 40, 1502, 30);
         innerPanel.add(scoreLabel);
 
         // 랭킹 표시 레이블 추가
         JLabel rankLabel = new JLabel("랭킹: " + user.getRanking());
-        rankLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        rankLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
         rankLabel.setHorizontalAlignment(SwingConstants.CENTER);
         rankLabel.setBounds(0, scoreLabel.getY() + 40, 1502, 30);
         innerPanel.add(rankLabel);
 
         // "다시" 버튼 추가 (Retry)
         JButton retryButton = new JButton("다시");
-        retryButton.setFont(new Font("Arial", Font.BOLD, 16));
+        retryButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         retryButton.setBounds(1502 / 2 - 170, rankLabel.getY() + 60, 150, 40);
         innerPanel.add(retryButton);
 
         // "홈" 버튼 추가 (Home)
         JButton homeButton = new JButton("홈");
-        homeButton.setFont(new Font("Arial", Font.BOLD, 16));
+        homeButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         homeButton.setBounds(1502 / 2 + 20, rankLabel.getY() + 60, 150, 40);
         innerPanel.add(homeButton);
 
@@ -102,6 +103,7 @@ public class DefeatScreen extends JPanel {
 
                 // PlayGameWithPC 카드 표시
                 cardLayout.show(mainPanel, "PlayGameWithPC");
+                AudioManager.getInstance().playGameBackgroundMusic();
 
                 // UI 업데이트를 위해 재검증 및 다시 그리기
                 mainPanel.revalidate();
@@ -115,6 +117,7 @@ public class DefeatScreen extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("홈 버튼이 클릭되었습니다. MyPage로 전환합니다.");
                 cardLayout.show(mainPanel, "MyPage");
+                AudioManager.getInstance().playBackgroundMusic();
             }
         });
     }

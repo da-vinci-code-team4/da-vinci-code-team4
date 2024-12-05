@@ -683,7 +683,6 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         // VictoryScreen을 mainPanel에 추가하고 표시
         mainPanel.add(victoryScreen, "VictoryScreen");
         cardLayout.show(mainPanel, "VictoryScreen");
-        AudioManager.getInstance().playBackgroundMusic();
     }
 
     /**
@@ -695,7 +694,6 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         // DefeatScreen을 mainPanel에 추가하고 표시
         mainPanel.add(defeatScreen, "DefeatScreen");
         cardLayout.show(mainPanel, "DefeatScreen");
-        AudioManager.getInstance().playBackgroundMusic();
     }
 
     /**
