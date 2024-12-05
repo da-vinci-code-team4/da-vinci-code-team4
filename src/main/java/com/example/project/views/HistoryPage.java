@@ -139,7 +139,7 @@ public class HistoryPage extends JPanel {
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setBounds(positions[i] - 158, 0, 200, 59); // Điều chỉnh vị trí theo cột
-            label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            label.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
         }
@@ -507,7 +507,7 @@ public class HistoryPage extends JPanel {
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setBounds(positions[i] - 158, 0, 200, 59); // 컬럼 위치 조정
-            label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            label.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
         }
@@ -550,28 +550,28 @@ public class HistoryPage extends JPanel {
             // 날짜 레이블
             JLabel dateLabel = new JLabel(date, SwingConstants.CENTER);
             dateLabel.setBounds(10, 0, 200, height);
-            dateLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            dateLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             dateLabel.setForeground(Color.WHITE);
             groupPanel.add(dateLabel);
 
             // 결과 레이블
             JLabel resultsLabel = new JLabel(result, SwingConstants.CENTER);
             resultsLabel.setBounds(214, 0, 200, height);
-            resultsLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            resultsLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             resultsLabel.setForeground(Color.WHITE);
             groupPanel.add(resultsLabel);
 
             // 점수 레이블
             JLabel coreLabel = new JLabel(coreDisplay, SwingConstants.CENTER);
             coreLabel.setBounds(538, 0, 200, height);
-            coreLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            coreLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             coreLabel.setForeground(Color.WHITE);
             groupPanel.add(coreLabel);
 
             // 플레이 시간 레이블
             JLabel playTimeLabel = new JLabel(playTime, SwingConstants.CENTER);
             playTimeLabel.setBounds(766, 0, 200, height);
-            playTimeLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            playTimeLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             playTimeLabel.setForeground(Color.WHITE);
             groupPanel.add(playTimeLabel);
 

@@ -123,4 +123,8 @@ public abstract class Player {
         this.tiles.clear();
     }
 
+    public boolean isTileAllGuessed() {
+        return tiles.stream()
+                .allMatch(Tile::isGuessedCorrectly);
+    }
 }

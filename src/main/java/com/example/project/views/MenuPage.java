@@ -104,7 +104,7 @@ public class MenuPage extends JPanel {
         button.setIcon(new ImageIcon(getClass().getResource("/img/ViewImage/background_button.png")));
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.CENTER);
-        button.setFont(new Font("맑은 고딕", Font.BOLD, 48));
+        button.setFont(new Font("Malgun Gothic", Font.BOLD, 48));
         button.setForeground(Color.WHITE);
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
