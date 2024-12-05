@@ -139,7 +139,7 @@ public class HistoryPage extends JPanel {
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setBounds(positions[i] - 158, 0, 200, 59); // Điều chỉnh vị trí theo cột
-            label.setFont(new Font("Arial", Font.BOLD, 20));
+            label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
         }
@@ -168,9 +168,9 @@ public class HistoryPage extends JPanel {
 //        return data;
 //    }
 
-    /**
-     * Cập nhật dataPanel để hiển thị dữ liệu của trang hiện tại.
-     */
+/**
+ * Cập nhật dataPanel để hiển thị dữ liệu của trang hiện tại.
+ */
     /*
     private void updateDataPanel() {
         dataPanel.removeAll();
@@ -331,8 +331,17 @@ public class HistoryPage extends JPanel {
 
 package com.example.project.views;
 
+import com.example.project.main.Main;
+import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -345,9 +354,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryPage extends JPanel {
-    private int currentPage = 0; // 현재 페이지
+
     private static final int ROWS_PER_PAGE = 6; // 페이지당 표시되는 행 수
-    private List<String[]> historyData; // history.txt에서 읽은 데이터
+    private static List<String[]> historyData; // history.txt에서 읽은 데이터
+    private int currentPage = 0; // 현재 페이지
     private JPanel dataPanel;
     private JButton rejoinButton;
     private JButton continueButton;
@@ -372,7 +382,6 @@ public class HistoryPage extends JPanel {
         createHeader(background);
 
         // history.txt에서 데이터 읽기
-        historyData = readHistoryData("src/main/resources/texts/history.txt");
 
         // 날짜(Date) 기준으로 최신순 정렬
         historyData.sort((a, b) -> b[0].compareTo(a[0])); // 날짜 형식이 YYYY/MM/DD라고 가정
@@ -392,6 +401,7 @@ public class HistoryPage extends JPanel {
         rejoinButton.setContentAreaFilled(false);
         rejoinButton.setFocusPainted(false);
         rejoinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(rejoinButton);
         rejoinButton.addActionListener(e -> {
             if (currentPage > 0) {
                 currentPage--;
@@ -415,6 +425,7 @@ public class HistoryPage extends JPanel {
         continueButton.setContentAreaFilled(false);
         continueButton.setFocusPainted(false);
         continueButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(continueButton);
         continueButton.addActionListener(e -> {
             if ((currentPage + 1) * ROWS_PER_PAGE < historyData.size()) {
                 currentPage++;
@@ -443,11 +454,41 @@ public class HistoryPage extends JPanel {
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(backButton);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage")); // MenuPage로 이동
         background.add(backButton);
 
         // 초기 데이터 표시
         updateDataPanel();
+    }
+
+    public static void updateHistory(String result, int score, int time) {
+        LocalDate today = LocalDate.now();
+        // 날짜 형식 지정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        // 날짜 포맷에 맞게 출력
+
+        String[] data = new String[4];
+        data[0] = today.format(formatter);
+        data[1] = result;
+        data[2] = Integer.toString(score);
+        data[3] = String.format("%02d:%02d", time / 60, time % 60);
+        historyData.add(data);
+
+        //텍스트파일에 재 입력
+        try (BufferedWriter bw = new BufferedWriter(
+            new FileWriter(System.getProperty("user.dir") + "/history.txt",
+                false))) { // false: 기존 파일 덮어쓰기
+            for (String[] lineData : historyData) {
+                // 배열을 공백으로 구분해서 한 줄로 작성
+                String line = String.join(" ", lineData);
+                bw.write(line);
+                bw.newLine(); // 각 줄마다 개행 추가
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "파일을 쓸 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -466,33 +507,12 @@ public class HistoryPage extends JPanel {
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setBounds(positions[i] - 158, 0, 200, 59); // 컬럼 위치 조정
-            label.setFont(new Font("Arial", Font.BOLD, 20));
+            label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
         }
 
         background.add(headerPanel);
-    }
-
-    /**
-     * 텍스트 파일에서 히스토리 데이터 읽기.
-     *
-     * @param filePath history.txt 파일 경로
-     * @return 분리된 문자열 배열 목록
-     */
-    private List<String[]> readHistoryData(String filePath) {
-        List<String[]> data = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // 공백 기준으로 데이터 분리
-                data.add(line.split("\\s+"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "history.txt 파일을 읽을 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
-        }
-        return data;
     }
 
     /**
@@ -506,7 +526,8 @@ public class HistoryPage extends JPanel {
         int replayButtonWidth = 60;
         int replayButtonHeight = 60;
 
-        for (int i = currentPage * ROWS_PER_PAGE; i < Math.min((currentPage + 1) * ROWS_PER_PAGE, historyData.size()); i++) {
+        for (int i = currentPage * ROWS_PER_PAGE;
+            i < Math.min((currentPage + 1) * ROWS_PER_PAGE, historyData.size()); i++) {
             String[] row = historyData.get(i);
 
             // 각 행: 날짜(Date), 결과(Result), 점수(Core), 플레이 시간(Play Time)
@@ -517,7 +538,8 @@ public class HistoryPage extends JPanel {
 
             // 점수 계산 (+/- 표시)
             int core = Integer.parseInt(coreStr);
-            String coreDisplay = (result.equalsIgnoreCase("Victory") ? "P(+" + core + ")" : "P(-" + core + ")");
+            String coreDisplay = (result.equalsIgnoreCase("Victory") ? "P(+" + core + ")"
+                : "P(-" + core + ")");
 
             // 각 행의 패널
             JPanel groupPanel = new RoundedPanel(10);
@@ -528,28 +550,28 @@ public class HistoryPage extends JPanel {
             // 날짜 레이블
             JLabel dateLabel = new JLabel(date, SwingConstants.CENTER);
             dateLabel.setBounds(10, 0, 200, height);
-            dateLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            dateLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
             dateLabel.setForeground(Color.WHITE);
             groupPanel.add(dateLabel);
 
             // 결과 레이블
             JLabel resultsLabel = new JLabel(result, SwingConstants.CENTER);
             resultsLabel.setBounds(214, 0, 200, height);
-            resultsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            resultsLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
             resultsLabel.setForeground(Color.WHITE);
             groupPanel.add(resultsLabel);
 
             // 점수 레이블
             JLabel coreLabel = new JLabel(coreDisplay, SwingConstants.CENTER);
             coreLabel.setBounds(538, 0, 200, height);
-            coreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            coreLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
             coreLabel.setForeground(Color.WHITE);
             groupPanel.add(coreLabel);
 
             // 플레이 시간 레이블
             JLabel playTimeLabel = new JLabel(playTime, SwingConstants.CENTER);
             playTimeLabel.setBounds(766, 0, 200, height);
-            playTimeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            playTimeLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
             playTimeLabel.setForeground(Color.WHITE);
             groupPanel.add(playTimeLabel);
 
@@ -567,10 +589,12 @@ public class HistoryPage extends JPanel {
             replayButton.setContentAreaFilled(false);
             replayButton.setFocusPainted(false);
             replayButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            AudioUtil.addClickSound(replayButton);
             // 리플레이 버튼의 ActionListener (기능 추가 필요)
             replayButton.addActionListener(e -> {
                 // 리플레이 기능은 나중에 추가 예정
-                JOptionPane.showMessageDialog(this, "리플레이 기능은 나중에 추가될 예정입니다.", "정보", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "리플레이 기능은 나중에 추가될 예정입니다.", "정보",
+                    JOptionPane.INFORMATION_MESSAGE);
             });
             groupPanel.add(replayButton);
 
@@ -652,4 +676,9 @@ public class HistoryPage extends JPanel {
             return null;
         }
     }
+
+    public static void setHistoryData(List<String[]> data) {
+        historyData = data;
+    }
+
 }

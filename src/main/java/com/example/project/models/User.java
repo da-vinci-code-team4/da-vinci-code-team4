@@ -1,5 +1,10 @@
 package com.example.project.models;
 
+import com.example.project.main.Main;
+import java.util.ArrayList;
+import java.util.List;
+import org.checkerframework.checker.units.qual.A;
+
 /**
  * User.java
  *
@@ -124,5 +129,34 @@ public class User {
 
     public void setUserImage(String userImage) {
         this.userImage = userImage;
+    }
+
+    public void updateAfterGame(String result){
+        String[] parts = getRecord().split("[^0-9]+");
+        int win =Integer.parseInt(parts[0]);
+        int lose = Integer.parseInt(parts[1]);
+
+        if(result.equals("Victory")){
+            setCore(getCore()+100);
+            setRecord((win+1) + "w-"+lose+"l");
+        }
+        else{
+            setCore(getCore()-100);
+            setRecord(win + "w-"+(lose+1)+"l");
+        }
+
+        setRatio((((double) win /(win+lose))*100));
+
+        List<User> temp = new ArrayList<>();
+        for (User user : Session.getInstance().getUserList()) {
+            if(user.getId().equals(Session.getInstance().getCurrentUser().getId())){
+                user.setCore(Session.getInstance().getCurrentUser().getCore());
+                user.setRecord(Session.getInstance().getCurrentUser().getRecord());
+                user.setRatio(Session.getInstance().getCurrentUser().getRatio());
+            }
+            temp.add(user);
+        }
+        Session.getInstance().setUserList(temp);
+        Main.updateUsers(temp);
     }
 }

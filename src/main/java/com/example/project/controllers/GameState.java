@@ -13,6 +13,15 @@ public class GameState {
     private List<Tile> computerTiles;
     private List<Tile> userTiles;
     private boolean isGameOver;
+    private String winner;
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
 
     public List<Tile> getCentralTiles() {
         return centralTiles;

@@ -1,14 +1,19 @@
 package com.example.project.main;
 
-import com.example.project.controllers.FileController;
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.views.HistoryPage;
 import com.example.project.views.LoginPage;
 import com.example.project.views.RegisterPage;
 import com.example.project.views.MyPage;
 import com.example.project.views.ProfilePage;
 import com.example.project.views.CorrectionPage;
+import com.example.project.views.PlayGameWithPC;
 import com.example.project.ui.SplashScreenPanel;
+import com.example.project.audio.AudioPlayer;
+import com.example.project.audio.AudioManager;
+import com.example.project.utils.UserManager;
+import com.example.project.views.MenuPage;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,41 +27,65 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.*;
 
 public class Main {
+    //public static AudioPlayer backgroundMusicPlayer;
+    //public static AudioPlayer soundEffectsPlayer;
+
     public static void main(String[] args) {
+
+        AudioManager audioManager = AudioManager.getInstance();
+
+        //backgroundMusicPlayer = new AudioPlayer("audio/BackgroundMusic.wav", true); // Looping background music
+        //soundEffectsPlayer = new AudioPlayer("audio/Click.wav"); // Sound effect for clicks
+
+        //backgroundMusicPlayer.play();
+        audioManager.playBackgroundMusic();
+
         // 메인 JFrame 생성
-        JFrame frame = new JFrame("Application");
+        JFrame frame = new JFrame("애플리케이션");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1502, 916); // 적절한 크기 설정
         frame.setLocationRelativeTo(null);
 
-        // CardLayout과 메인 JPanel 생성
+        // CardLayout 및 mainPanel 생성
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
 
-        // 사용자 목록
+        UserManager userManager = new UserManager();
+
+        initializeDefaultHistory();
+
+        // 사용자 목록 초기화
         List<User> userList = new ArrayList<>();
         initializeDefaultUsers(userList); // 기본 사용자 초기화 메서드 호출
         Session.getInstance().setUserList(userList);
 
-        // 현재 사용자 설정 (예: 사용자 목록의 첫 번째 사용자)
+        // 현재 사용자 설정 (예: 목록의 첫 번째 사용자)
         User currentUser = userList.get(0);
-        Session.getInstance().setCurrentUser(currentUser); // Session에 현재 사용자 설정
+        Session.getInstance().setCurrentUser(currentUser); // 세션에 현재 사용자 설정
 
         // 다양한 페이지 생성
-        RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userList);
-        LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userList);
-        MyPage myPage = new MyPage(mainPanel, cardLayout, userList);
-        ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, currentUser); // ProfilePage 추가
-        CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout, userList); // CorrectionPage 추가
+        RegisterPage registerPage = new RegisterPage(mainPanel, cardLayout, userManager);
+        LoginPage loginPage = new LoginPage(mainPanel, cardLayout, userManager);
+        MyPage myPage = new MyPage(mainPanel, cardLayout, userList, userManager);
+        ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout,
+            currentUser); // ProfilePage 추가
+        CorrectionPage correctionPage = new CorrectionPage(mainPanel, cardLayout,
+            userList); // CorrectionPage 추가
+//        PlayGameWithPC playGameWithPC = new PlayGameWithPC(mainPanel, cardLayout); // PlayGameWithPC 추가
 
-        // 페이지를 mainPanel에 추가
-        // mainPanel.add(registerPage, "RegisterPage");
-        // mainPanel.add(loginPage, "LoginPage");
+        // 각 페이지를 mainPanel에 고유한 이름으로 추가
+        mainPanel.add(registerPage, "RegisterPage");
+        mainPanel.add(loginPage, "LoginPage");
         mainPanel.add(myPage, "MyPage");
-        mainPanel.add(profilePage, "ProfilePage"); // ProfilePage를 mainPanel에 추가
-        mainPanel.add(correctionPage, "CorrectionPage"); // CorrectionPage를 mainPanel에 추가
+        mainPanel.add(profilePage, "ProfilePage");
+        mainPanel.add(correctionPage, "CorrectionPage");
+//        mainPanel.add(playGameWithPC, "PlayGameWithPC");
+
+        // JFrame의 콘텐츠 패널을 mainPanel로 설정
+        frame.setContentPane(mainPanel);
 
         // SplashScreenPanel 생성
         SplashScreenPanel splashPanel = new SplashScreenPanel("/img/ViewImage/Background.png");
@@ -66,10 +95,10 @@ public class Main {
         // Swing Timer를 사용하여 페이드 인 및 페이드 아웃 효과 구현
         Timer fadeTimer = new Timer();
         fadeTimer.schedule(new TimerTask() {
+            private final float fadeStep = 0.05f; // 투명도 증가/감소 단계
+            private final long timerDelay = 50; // 각 단계 간 지연 (ms)
             private float opacity = 0.0f;
             private boolean fadingIn = true;
-            private final float fadeStep = 0.05f; // 투명도 증가/감소 단계
-            private final long timerDelay = 50; // 각 단계 사이의 지연 시간 (ms)
 
             @Override
             public void run() {
@@ -98,15 +127,14 @@ public class Main {
         }, 0, 50); // 50ms마다 실행
     }
 
-    // 기본 사용자 초기화 메서드
+    // 기본 사용자를 초기화하는 메서드
     private static void initializeDefaultUsers(List<User> userList) {
-        // 각 사용자에 대한 추가 정보와 함께 사용자 초기화
+        // 파일에서 사용자 추가 또는 수동으로 추가
         String filePath = System.getProperty("user.dir") + "/user.txt";
 
-        // JAR 파일 외부에 user.txt가 없으면 resources에서 복사
+        // 외부에 user.txt 파일이 없으면 리소스에서 복사
         File externalFile = new File(filePath);
         if (!externalFile.exists()) {
-            // resources 폴더 내의 파일을 외부로 복사
             try (InputStream inputStream = Main.class.getResourceAsStream("/texts/user.txt");
                 FileOutputStream outputStream = new FileOutputStream(externalFile)) {
 
@@ -126,21 +154,90 @@ public class Main {
                 return;
             }
         }
+
+        // 파일에서 사용자 읽기
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split("\\s+");
-                userList.add(new User(data[0],data[1],data[2],Integer.parseInt(data[3]), data[4], Integer.parseInt(data[5]), Integer.parseInt(data[6]), Double.parseDouble(data[7]))); // 나눠진 데이터를 List에 추가
+                if (data.length >= 8) {
+                    userList.add(new User(
+                        data[0],
+                        data[1],
+                        data[2],
+                        Integer.parseInt(data[3]),
+                        data[4],
+                        Integer.parseInt(data[5]),
+                        Integer.parseInt(data[6]),
+                        Double.parseDouble(data[7])
+                    ));
+                } else {
+                    System.out.println("사용자 데이터가 유효하지 않습니다: " + line);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        userList.add(new User("JiMin", "12345678", "JiMin", 25, "90W - 10L", 1200, 90, 90.0));
-//        userList.add(new User("YoungBin", "12345678", "YoungBin", 23, "80W - 20L", 1100, 92, 80.0));
-//        userList.add(new User("QuocAnh", "12345678", "QuocAnh", 26, "70W - 30L", 1000, 100, 70.0));
-//        userList.add(new User("HyungJoon", "12345678", "HyungJoon", 23, "85W - 15L", 1150, 96, 85.0));
-//        userList.add(new User("YeWon", "12345678", "YeWon", 22, "95W - 5L", 1250, 89, 95.0));
-//        userList.add(new User("TaeHyun", "12345678", "TaeHyun", 25, "65W - 35L", 950, 126, 65.0));
+    }
+
+    public static void initializeDefaultHistory() {
+        List<String[]> data = new ArrayList<>();
+        String filePath = System.getProperty("user.dir") + "/history.txt";
+        System.out.println("파일 경로: " + filePath);  // 파일 경로 출력
+
+        File externalFile = new File(filePath);
+        if (!externalFile.exists()) {
+            try (InputStream inputStream = HistoryPage.class.getResourceAsStream(
+                "/texts/history.txt");
+                FileOutputStream outputStream = new FileOutputStream(externalFile)) {
+
+                if (inputStream != null) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                    System.out.println("파일이 외부로 복사되었습니다: " + filePath);
+                } else {
+                    System.out.println("!/texts/history.txt");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 파일에서 사용자 읽기
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // 공백 기준으로 데이터 분리
+                data.add(line.split("\\s+"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HistoryPage.setHistoryData(data);
+    }
+
+    public static void updateUsers(List<User>temp){
+        try (BufferedWriter bw = new BufferedWriter(
+            new FileWriter(System.getProperty("user.dir") + "/user.txt", false))) { // false: Overwrite file
+            for (User user : temp) {
+                System.out.println(user.getId() + " " + user.getPassword() + " " + user.getUsername());
+                bw.write(user.getId() + " " +
+                    user.getPassword() + " " +
+                    user.getUsername() + " " +
+                    user.getAge() + " " +
+                    user.getRecord() + " " +
+                    user.getCore() + " " +
+                    user.getRanking() + " " +
+                    user.getRatio() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "파일을 쓸 수 없습니다: " + e.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
+

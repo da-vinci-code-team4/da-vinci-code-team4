@@ -2,6 +2,7 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -89,7 +90,7 @@ public class CorrectionPage extends JPanel {
 
         // Instruction Label
         JLabel instructionLabel = new JLabel("Click on the image to change");
-        instructionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        instructionLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         instructionLabel.setForeground(Color.WHITE);
         instructionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         instructionLabel.setBounds(0, 0, 356, 30); // Vị trí ở trên cùng của imageColumn
@@ -117,7 +118,7 @@ public class CorrectionPage extends JPanel {
 
         // --------------------- Group ID ---------------------
         JLabel idLabel = new JLabel("ID:");
-        idLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        idLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         idLabel.setForeground(Color.WHITE);
         idLabel.setBounds(0, 0, 250, 59);
         idLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -126,12 +127,12 @@ public class CorrectionPage extends JPanel {
         idField = new JTextField(currentUser.getId());
         idField.setBounds(300, 0, 400, 59);
         idField.setBackground(new Color(0xD9D9D9));
-        idField.setFont(new Font("Arial", Font.PLAIN, 24));
+        idField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         infoContainer.add(idField);
 
         // --------------------- Group Password ---------------------
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        passwordLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setBounds(0, 80, 250, 59);
         passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -140,12 +141,12 @@ public class CorrectionPage extends JPanel {
         passwordField = new JPasswordField(currentUser.getPassword());
         passwordField.setBounds(300, 80, 400, 59);
         passwordField.setBackground(new Color(0xD9D9D9));
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 24));
+        passwordField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         infoContainer.add(passwordField);
 
         // --------------------- Group Username ---------------------
         JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        usernameLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setBounds(0, 160, 250, 59);
         usernameLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -154,12 +155,12 @@ public class CorrectionPage extends JPanel {
         usernameField = new JTextField(currentUser.getUsername());
         usernameField.setBounds(300, 160, 400, 59);
         usernameField.setBackground(new Color(0xD9D9D9));
-        usernameField.setFont(new Font("Arial", Font.PLAIN, 24));
+        usernameField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         infoContainer.add(usernameField);
 
         // --------------------- Group Age ---------------------
         JLabel ageLabel = new JLabel("Age:");
-        ageLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        ageLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         ageLabel.setForeground(Color.WHITE);
         ageLabel.setBounds(0, 240, 250, 59);
         ageLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -169,13 +170,14 @@ public class CorrectionPage extends JPanel {
         ageSpinner = new JSpinner(ageModel);
         ageSpinner.setBounds(300, 240, 100, 59);
         ageSpinner.setBackground(new Color(0xD9D9D9));
-        ageSpinner.setFont(new Font("Arial", Font.PLAIN, 24));
+        ageSpinner.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         infoContainer.add(ageSpinner);
 
         // --------------------- Nút Save ---------------------
-        JButton saveButton = createRoundedButton("Save", 200, 60, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.BOLD, 30));
+        JButton saveButton = createRoundedButton("Save", 200, 60, 20, new Color(0xD9D9D9), Color.BLACK, new Font("맑은 고딕", Font.BOLD, 30));
         saveButton.setBounds(309, 350, 200, 60); // Vị trí và kích thước
         saveButton.addActionListener(e -> handleSave());
+        AudioUtil.addClickSound(saveButton);
         infoContainer.add(saveButton);
 
         // --------------------- Nút Back ---------------------
@@ -186,6 +188,7 @@ public class CorrectionPage extends JPanel {
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage"));
+        AudioUtil.addClickSound(backButton);
         backgroundImg.add(backButton);
     }
 
@@ -251,6 +254,7 @@ public class CorrectionPage extends JPanel {
         button.setContentAreaFilled(false);
         button.setOpaque(false); // Thiết lập không opaque để hỗ trợ độ trong suốt
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(button);
         return button;
     }
 

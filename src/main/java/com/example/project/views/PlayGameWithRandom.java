@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -15,10 +16,9 @@ public class PlayGameWithRandom extends JPanel {
         setLayout(null);
 
         // Thêm Label
-        JLabel label = new JLabel("PlayGameWithRandom 구현 중입니다. " +
-                "나중에 다시 시도해주세요");
-        label.setFont(new Font("Arial", Font.BOLD, 50));
-        label.setBounds(250, 300, 1300, 100);
+        JLabel label = new JLabel("<html>PlayGameWithRandom 구현 중입니다.<br>나중에 다시 시도해주세요</html>");
+        label.setFont(new Font("맑은 고딕", Font.BOLD, 50));
+        label.setBounds(250, 300, 1300, 150);
         add(label);
 
         // Tạo hình chữ nhật bo góc bán trong suốt
@@ -42,6 +42,7 @@ public class PlayGameWithRandom extends JPanel {
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "PlayPage"));
+        AudioUtil.addClickSound(backButton);
         background.add(backButton);
 
         // Thêm các thành phần khác cho trang này

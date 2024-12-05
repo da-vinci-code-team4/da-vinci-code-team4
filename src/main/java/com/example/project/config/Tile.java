@@ -3,6 +3,7 @@ package com.example.project.config;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,6 +28,10 @@ public class Tile implements Serializable, Cloneable {
         this.isSelected = false;
     }
 
+    public TileColor getTileColorEnum() {
+        return tileColor;
+    }
+
     // Getter 및 Setter
     public TileType getTileType() {
         return tileType;
@@ -40,10 +45,29 @@ public class Tile implements Serializable, Cloneable {
         int setting;
         if(this.tileType == TileType.JOKER) {
             String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (tiles.size()) + " )");
-            if(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
-                while(Integer.parseInt(inp) > tiles.size() || Integer.parseInt(inp) < 0) {
-                    JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
-                    inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + tiles.size() + " )");
+            while (true) {
+                if (inp != null) {  // 사용자가 Cancel을 누른 경우를 대비
+                    // 입력값이 숫자인지 확인
+                    boolean isValid = false;
+                    try {
+                        int inputNum = Integer.parseInt(inp);  // 문자열을 정수로 변환
+                        // 숫자가 유효한 범위 내에 있는지 확인
+                        if (inputNum >= 0 && inputNum <= tiles.size()) {
+                            isValid = true;  // 유효한 입력
+                        }
+                    } catch (NumberFormatException e) {
+                        // 숫자가 아닐 경우
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        break;  // 유효한 값이 들어오면 반복 종료
+                    } else {
+                        JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
+                        inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + tiles.size() + " )");
+                    }
+                } else {
+                    break;  // 사용자가 Cancel을 눌렀으면 종료
                 }
             }
 
@@ -74,10 +98,29 @@ public class Tile implements Serializable, Cloneable {
         int setting;
         if(this.tileType == TileType.JOKER) {
             String inp = JOptionPane.showInputDialog("조커를 넣을 위치를 입력하세요 (0 - " + (selectedTiles.size()-1) + " )");
-            if(Integer.parseInt(inp) > selectedTiles.size() || Integer.parseInt(inp) < 0) {
-                while(Integer.parseInt(inp) > selectedTiles.size() || Integer.parseInt(inp) < 0) {
-                    JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
-                    inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + (selectedTiles.size()-1) + " )");
+            while (true) {
+                if (inp != null) {  // 사용자가 Cancel을 누른 경우를 대비
+                    // 입력값이 숫자인지 확인
+                    boolean isValid = false;
+                    try {
+                        int inputNum = Integer.parseInt(inp);  // 문자열을 정수로 변환
+                        // 숫자가 유효한 범위 내에 있는지 확인
+                        if (inputNum >= 0 && inputNum <= selectedTiles.size()) {
+                            isValid = true;  // 유효한 입력
+                        }
+                    } catch (NumberFormatException e) {
+                        // 숫자가 아닐 경우
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        break;  // 유효한 값이 들어오면 반복 종료
+                    } else {
+                        JOptionPane.showMessageDialog(null, "유효하지 않은 위치 선택입니다.");
+                        inp = JOptionPane.showInputDialog("조커를 넣을 위치를 다시 입력하세요 (0 - " + selectedTiles.size() + " )");
+                    }
+                } else {
+                    break;  // 사용자가 Cancel을 눌렀으면 종료
                 }
             }
 
@@ -101,6 +144,13 @@ public class Tile implements Serializable, Cloneable {
                 }
             }
             setNumber(setting);
+        }
+    }
+    public void isJoker() {
+        if(this.tileType == TileType.JOKER){
+            Random rand = new Random();
+            number = rand.nextInt(0,13) * 10 - 1;
+            setNumber(number);
         }
     }
 
