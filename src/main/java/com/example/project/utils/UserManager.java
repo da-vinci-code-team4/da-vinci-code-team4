@@ -123,8 +123,8 @@ public class UserManager {
     public synchronized boolean addUser(User user) {
         // Kiểm tra ID đã tồn tại chưa
         for (User existingUser : userList) {
-            if (existingUser.getId().equals(user.getId())) {
-                return false; // ID đã tồn tại
+            if (existingUser.getId() != null && existingUser.getId().equals(user.getId())) {
+                return false; // ID가 이미 존재함
             }
         }
         userList.add(user);
@@ -160,13 +160,12 @@ public class UserManager {
      */
     public User authenticate(String id, String password) {
         for (User user : userList) {
-            if (user.getId().equals(id) && user.getPassword().equals(password)) {
+            if (user.getId() != null && user.getId().equals(id) && user.getPassword().equals(password)) {
                 return user;
             }
         }
         return null;
     }
-
     /**
      * Lấy danh sách người dùng.
      *

@@ -49,7 +49,7 @@ public class LoginPage extends JPanel {
 
         // --------------------- ID 그룹 ---------------------
         JLabel idLabel = new JLabel("ID");
-        idLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        idLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         idLabel.setForeground(Color.WHITE);
         idLabel.setBounds(50, 42, 100, 40); // 왼쪽 정렬
         rectanglePanel.add(idLabel);
@@ -57,12 +57,12 @@ public class LoginPage extends JPanel {
         idField = new JTextField();
         idField.setBounds(265, 30, 342, 59); // 위치 및 크기 설정
         idField.setBackground(new Color(0xD9D9D9));
-        idField.setFont(new Font("Arial", Font.PLAIN, 24));
+        idField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         rectanglePanel.add(idField);
 
         // --------------------- 비밀번호 그룹 ---------------------
         JLabel passwordLabel = new JLabel("비밀번호");
-        passwordLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        passwordLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setBounds(50, 42 + groupHeight + groupSpacing, 200, 40); // 왼쪽 정렬
         rectanglePanel.add(passwordLabel);
@@ -70,12 +70,12 @@ public class LoginPage extends JPanel {
         passwordField = new JPasswordField();
         passwordField.setBounds(265, 30 + groupHeight + groupSpacing, 342, 59);
         passwordField.setBackground(new Color(0xD9D9D9));
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 24));
+        passwordField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         rectanglePanel.add(passwordField);
 
 
         // --------------------- 로그인 버튼 ---------------------
-        JButton loginButton = createRoundedButton("로그인", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
+        JButton loginButton = createRoundedButton("로그인", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("맑은 고딕", Font.PLAIN, 28));
         loginButton.setBounds(178 + 50, 250, 216, 50); // 위치 및 크기 설정
         loginButton.addActionListener(e -> handleLogin());
         rectanglePanel.add(loginButton);

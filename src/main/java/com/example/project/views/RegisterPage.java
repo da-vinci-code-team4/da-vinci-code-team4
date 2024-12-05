@@ -51,7 +51,7 @@ public class RegisterPage extends JPanel {
 
         // --------------------- ID 그룹 ---------------------
         JLabel idLabel = new JLabel("ID");
-        idLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        idLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         idLabel.setForeground(Color.WHITE);
         idLabel.setBounds(50, 42, 100, 40); // 왼쪽 정렬
         rectanglePanel.add(idLabel);
@@ -59,12 +59,12 @@ public class RegisterPage extends JPanel {
         idField = new JTextField();
         idField.setBounds(265, 30, 342, 59); // 위치 및 크기
         idField.setBackground(new Color(0xD9D9D9));
-        idField.setFont(new Font("Arial", Font.PLAIN, 24));
+        idField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         rectanglePanel.add(idField);
 
         // --------------------- 비밀번호 그룹 ---------------------
         JLabel passwordLabel = new JLabel("비밀번호");
-        passwordLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        passwordLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setBounds(50, 42 + groupHeight + groupSpacing, 200, 40); // 왼쪽 정렬
         rectanglePanel.add(passwordLabel);
@@ -72,12 +72,12 @@ public class RegisterPage extends JPanel {
         passwordField = new JPasswordField();
         passwordField.setBounds(265, 30 + groupHeight + groupSpacing, 342, 59);
         passwordField.setBackground(new Color(0xD9D9D9));
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 24));
+        passwordField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         rectanglePanel.add(passwordField);
 
         // --------------------- 사용자 이름 그룹 ---------------------
         JLabel usernameLabel = new JLabel("사용자 이름");
-        usernameLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        usernameLabel.setFont(new Font("맑은 고딕", Font.BOLD, 37));
         usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setBounds(50, 42 + 2 * (groupHeight + groupSpacing), 200, 40);
         rectanglePanel.add(usernameLabel);
@@ -85,12 +85,12 @@ public class RegisterPage extends JPanel {
         usernameField = new JTextField();
         usernameField.setBounds(265, 30 + 2 * (groupHeight + groupSpacing), 342, 59);
         usernameField.setBackground(new Color(0xD9D9D9));
-        usernameField.setFont(new Font("Arial", Font.PLAIN, 24));
+        usernameField.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         rectanglePanel.add(usernameField);
 
         // --------------------- 나이 그룹 ---------------------
         JLabel ageLabel = new JLabel("나이");
-        ageLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        ageLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         ageLabel.setForeground(Color.WHITE);
         ageLabel.setBounds(50, 42 + 3 * (groupHeight + groupSpacing), 100, 40);
         rectanglePanel.add(ageLabel);
@@ -99,17 +99,17 @@ public class RegisterPage extends JPanel {
         ageSpinner = new JSpinner(ageModel);
         ageSpinner.setBounds(265, 30 + 3 * (groupHeight + groupSpacing), 342, 59);
         ageSpinner.setBackground(new Color(0xD9D9D9));
-        ageSpinner.setFont(new Font("Arial", Font.PLAIN, 24));
+        ageSpinner.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         rectanglePanel.add(ageSpinner);
 
         // --------------------- Register 버튼 ---------------------
-        JButton registerButton = createRoundedButton("회원가입", 390, 70, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.BOLD, 40));
+        JButton registerButton = createRoundedButton("회원가입", 390, 70, 20, new Color(0xD9D9D9), Color.BLACK, new Font("맑은 고딕", Font.BOLD, 40));
         registerButton.setBounds(95 + 50, 500, 390, 70); // 위치 및 크기
         registerButton.addActionListener(e -> handleRegister());
         rectanglePanel.add(registerButton);
 
         // --------------------- 로그인 버튼 ---------------------
-        JButton loginButton = createRoundedButton("로그인", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("Arial", Font.PLAIN, 28));
+        JButton loginButton = createRoundedButton("로그인", 216, 50, 20, new Color(0xD9D9D9), Color.BLACK, new Font("맑은 고딕", Font.PLAIN, 28));
         loginButton.setBounds(178 + 50, 600, 216, 50);
         loginButton.addActionListener(e -> cardLayout.show(mainPanel, "LoginPage"));
         rectanglePanel.add(loginButton);

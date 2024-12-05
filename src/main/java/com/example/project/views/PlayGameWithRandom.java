@@ -17,7 +17,7 @@ public class PlayGameWithRandom extends JPanel {
         // Thêm Label
         JLabel label = new JLabel("PlayGameWithRandom 구현 중입니다. " +
                 "나중에 다시 시도해주세요");
-        label.setFont(new Font("Arial", Font.BOLD, 50));
+        label.setFont(new Font("맑은 고딕", Font.BOLD, 50));
         label.setBounds(250, 300, 1300, 100);
         add(label);
 
