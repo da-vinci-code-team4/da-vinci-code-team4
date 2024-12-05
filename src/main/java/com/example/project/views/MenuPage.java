@@ -2,7 +2,6 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
-import com.example.project.utils.UserManager;
 import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
@@ -14,13 +13,12 @@ public class MenuPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private List<User> userList;
-    private UserManager userManager;
 
-    public MenuPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList, UserManager userManager) {
+
+    public MenuPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
         this.userList = userList;
-        this.userManager = userManager;
 
         setLayout(null); // 레이아웃 null로 설정하여 버튼 위치 지정
         setBackground(new Color(255, 255, 255, 0));
