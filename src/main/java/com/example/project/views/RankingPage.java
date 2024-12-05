@@ -109,7 +109,7 @@ public class RankingPage extends JPanel {
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setBounds(positions[i] - 158, 0, 200, 59); // 열 위치 지정
-            label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            label.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
         }
@@ -359,7 +359,7 @@ public class RankingPage extends JPanel {
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setBounds(positions[i] - 158, 0, 200, 59); // 해당 열 위치
-            label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            label.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
         }
@@ -411,21 +411,21 @@ public class RankingPage extends JPanel {
             // 순위
             JLabel rankLabel = new JLabel(String.valueOf(rank), SwingConstants.CENTER);
             rankLabel.setBounds(10, 0, 200, height);
-            rankLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            rankLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             rankLabel.setForeground(Color.WHITE);
             groupPanel.add(rankLabel);
 
             // 사용자명
             JLabel usernameLabel = new JLabel(row[0], SwingConstants.CENTER);
             usernameLabel.setBounds(214, 0, 200, height);
-            usernameLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            usernameLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             usernameLabel.setForeground(Color.WHITE);
             groupPanel.add(usernameLabel);
 
             // 점수
             JLabel coreLabel = new JLabel(row[1] + "P", SwingConstants.CENTER);
             coreLabel.setBounds(538, 0, 200, height);
-            coreLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            coreLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             coreLabel.setForeground(Color.WHITE);
             groupPanel.add(coreLabel);
 
@@ -440,7 +440,7 @@ public class RankingPage extends JPanel {
             double ratio = (double) wins / (wins + losses) * 100;
             JLabel ratioLabel = new JLabel(String.format("%.0f%%", ratio), SwingConstants.CENTER);
             ratioLabel.setBounds(1060, 0, 200, height);
-            ratioLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+            ratioLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             ratioLabel.setForeground(Color.WHITE);
             groupPanel.add(ratioLabel);
 
@@ -490,7 +490,7 @@ public class RankingPage extends JPanel {
 
         // 승리 수
         JLabel winLabel = new JLabel(wins + "W", SwingConstants.CENTER);
-        winLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        winLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 14));
         winLabel.setForeground(Color.WHITE);
         winLabel.setBounds(0, 0, (int) ((double) wins / totalGames * 300), 30);
         panel.add(winLabel);
@@ -503,7 +503,7 @@ public class RankingPage extends JPanel {
 
         // 패배 수
         JLabel lossLabel = new JLabel(losses + "L", SwingConstants.CENTER);
-        lossLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        lossLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 14));
         lossLabel.setForeground(Color.WHITE);
         lossLabel.setBounds((int) ((double) wins / totalGames * 300), 0, (int) ((double) losses / totalGames * 300), 30);
         panel.add(lossLabel);

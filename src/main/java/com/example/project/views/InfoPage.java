@@ -32,7 +32,7 @@ public class InfoPage extends JPanel {
 
         // Văn bản chính
         JLabel mainText = new JLabel("경기대학교 24년도 객체프로그래밍 금123 4조");
-        mainText.setFont(new Font("맑은 고딕", Font.BOLD, 55));
+        mainText.setFont(new Font("Malgun Gothic", Font.BOLD, 55));
         mainText.setForeground(Color.WHITE);
         mainText.setHorizontalAlignment(SwingConstants.CENTER);
         mainText.setBounds(0, 250, 1200, 97); // Căn giữa trong rectanglePanel
@@ -40,7 +40,7 @@ public class InfoPage extends JPanel {
 
         // Văn bản phiên bản
         JLabel versionText = new JLabel("version 0.0.0.1");
-        versionText.setFont(new Font("맑은 고딕", Font.ITALIC, 42));
+        versionText.setFont(new Font("Malgun Gothic", Font.ITALIC, 42));
         versionText.setForeground(Color.WHITE);
         versionText.setHorizontalAlignment(SwingConstants.CENTER);
         versionText.setBounds(0, 360, 1200, 40); // Bên dưới mainText
