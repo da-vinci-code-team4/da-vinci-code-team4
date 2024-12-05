@@ -4,8 +4,8 @@ import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
-import com.example.project.utils.UserManager;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,12 +23,13 @@ public class RegisterPage extends JPanel {
     private JSpinner ageSpinner;
 
     // 사용자 관리
-    private UserManager userManager;
 
-    public RegisterPage(JPanel mainPanel, CardLayout cardLayout, UserManager userManager) {
+    private List<User> userList;
+
+    public RegisterPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
-        this.userManager = userManager;
+        this.userList = userList;
 
         setLayout(null); // 레이아웃 null 설정
         setBackground(Color.WHITE); // RegisterPage 배경색
@@ -161,7 +162,7 @@ public class RegisterPage extends JPanel {
 
         // UserManager를 사용하여 새 사용자 추가
         User newUser = new User(id, password, username, age);
-        boolean isAdded = userManager.addUser(newUser);
+        boolean isAdded = userList.add(newUser);
 
         if (!isAdded) {
             JOptionPane.showMessageDialog(this, "ID가 이미 존재합니다. 다른 ID를 선택해주세요.", "오류", JOptionPane.ERROR_MESSAGE);

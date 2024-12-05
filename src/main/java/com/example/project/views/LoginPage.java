@@ -4,8 +4,7 @@ import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
-import com.example.project.utils.UserManager; // 추가: UserManager 가져오기
-
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,18 +14,15 @@ import java.awt.*;
 public class LoginPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
-
+    private List<User> userList;
     // 입력 필드
     private JTextField idField;
     private JPasswordField passwordField;
 
-    // 사용자 관리
-    private UserManager userManager; // 추가: UserManager 사용
-
-    public LoginPage(JPanel mainPanel, CardLayout cardLayout, UserManager userManager) { // 변경: UserManager 전달
+    public LoginPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) { // 변경: UserManager 전달
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
-        this.userManager = userManager; // 추가: UserManager 설정
+        this.userList = userList;
         setLayout(null); // 레이아웃 null 설정
         setBackground(Color.WHITE); // LoginPage 배경색
 
@@ -138,10 +134,17 @@ public class LoginPage extends JPanel {
             return;
         }
 
-        // UserManager를 사용하여 사용자 인증
-        User authenticatedUser = userManager.authenticate(id, password);
+        boolean isAuthenticated = false;
+        User authenticatedUser = null; // Thêm biến để lưu trữ người dùng xác thực
+        for (User user : userList) {
+            if (user.getId().equals(id) && user.getPassword().equals(password)) {
+                isAuthenticated = true;
+                authenticatedUser = user; // Lưu trữ người dùng đã xác thực
+                break;
+            }
+        }
 
-        if (authenticatedUser != null) {
+        if (isAuthenticated && authenticatedUser != null) {
             // Session에 현재 사용자 설정
             Session.getInstance().setCurrentUser(authenticatedUser);
 

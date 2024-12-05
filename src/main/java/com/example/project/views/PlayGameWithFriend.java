@@ -15,16 +15,20 @@ public class PlayGameWithFriend extends JPanel {
         this.cardLayout = cardLayout;
         setLayout(null);
 
-        // Thêm Label
-        JLabel label = new JLabel("<html>PlayGameWithFriend 구현 중입니다.<br> 나중에 다시 시도해주세요</html>");
-        label.setFont(new Font("Malgun Gothic", Font.BOLD, 50));
-        label.setBounds(250, 300, 1300, 150);
-        add(label);
+        // Hiển thị hộp thoại thông báo khi panel được tạo
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "PlayGameWithFriend 구현 중입니다. 나중에 다시 시도해주세요",
+                    "Message",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        });
 
         // Tạo hình chữ nhật bo góc bán trong suốt
         RoundedPanel rectanglePanel = new RoundedPanel(20); // Bo góc 20px
         rectanglePanel.setBounds(179, 150, 1200, 644); // Vị trí và kích thước của hình chữ nhật
-        rectanglePanel.setBackground(new Color(255, 255, 255, 180)); // Màu đen với độ trong suốt 71%
+        rectanglePanel.setBackground(new Color(255, 255, 255, 180)); // Màu trắng với độ trong suốt 71%
         rectanglePanel.setLayout(null); // Sử dụng layout null cho nội dung bên trong
         add(rectanglePanel); // Thêm Rectangle trước
 
@@ -33,8 +37,6 @@ public class PlayGameWithFriend extends JPanel {
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
         add(background);
-
-
 
         // Nút Back để quay lại PlayPage
         JButton backButton = new JButton(new ImageIcon(getClass().getResource("/img/ViewImage/back.png")));

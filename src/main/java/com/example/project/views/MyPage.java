@@ -3,7 +3,6 @@ package com.example.project.views;
 import com.example.project.models.User;
 import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
-import com.example.project.utils.UserManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,16 +11,14 @@ import java.util.List;
 public class MyPage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
+    private List<User> userList;
 
     // 등록된 사용자 목록
-    private List<User> userList;
-    private UserManager userManager;
 
-    public MyPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList, UserManager userManager) {
+    public MyPage(JPanel mainPanel, CardLayout cardLayout, List<User> userList) {
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
         this.userList = userList;
-        this.userManager = userManager;
 
         setLayout(null); // 레이아웃을 null로 설정하여 컴포넌트의 위치를 직접 지정
         setBackground(Color.WHITE); // MyPage 배경색 설정
@@ -58,7 +55,7 @@ public class MyPage extends JPanel {
         menuButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         AudioUtil.addClickSound(menuButton); // 클릭 시 소리 추가
         menuButton.addActionListener(e -> {
-            MenuPage menuPage = new MenuPage(mainPanel, cardLayout, userList, userManager);
+            MenuPage menuPage = new MenuPage(mainPanel, cardLayout, userList);
             mainPanel.add(menuPage, "MenuPage");
             cardLayout.show(mainPanel, "MenuPage");
         });
