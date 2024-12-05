@@ -2,6 +2,7 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 import com.example.project.utils.UserManager; // 추가: UserManager 가져오기
 
@@ -119,6 +120,7 @@ public class LoginPage extends JPanel {
         button.setContentAreaFilled(false);
         button.setOpaque(false); // 투명도 지원을 위해 설정
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(button);
         return button;
     }
 

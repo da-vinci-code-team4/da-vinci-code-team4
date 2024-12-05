@@ -1,6 +1,7 @@
 package com.example.project.views;
 
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,12 +72,14 @@ public class VictoryScreen extends JPanel {
         JButton retryButton = new JButton("다시");
         retryButton.setFont(new Font("Arial", Font.BOLD, 16));
         retryButton.setBounds(1502 / 2 - 170, rankLabel.getY() + 60, 150, 40);
+        AudioUtil.addClickSound(retryButton);
         innerPanel.add(retryButton);
 
         // "홈" 버튼 추가 (Home)
         JButton homeButton = new JButton("홈");
         homeButton.setFont(new Font("Arial", Font.BOLD, 16));
         homeButton.setBounds(1502 / 2 + 20, rankLabel.getY() + 60, 150, 40);
+        AudioUtil.addClickSound(homeButton);
         innerPanel.add(homeButton);
 
         // "다시" 버튼 이벤트 처리

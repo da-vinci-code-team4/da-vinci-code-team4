@@ -2,6 +2,7 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 import com.example.project.utils.UserManager;
 
@@ -141,6 +142,7 @@ public class RegisterPage extends JPanel {
         button.setContentAreaFilled(false);
         button.setOpaque(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(button);
         return button;
     }
 

@@ -1,6 +1,7 @@
 package com.example.project.views;
 
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 import com.example.project.utils.UserManager;
 
@@ -55,6 +56,7 @@ public class MyPage extends JPanel {
         menuButton.setContentAreaFilled(false);
         menuButton.setFocusPainted(false); // 포커스 상태 비활성화
         menuButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(menuButton); // 클릭 시 소리 추가
         menuButton.addActionListener(e -> {
             MenuPage menuPage = new MenuPage(mainPanel, cardLayout, userList, userManager);
             mainPanel.add(menuPage, "MenuPage");
@@ -69,6 +71,7 @@ public class MyPage extends JPanel {
         settingButton.setContentAreaFilled(false);
         settingButton.setFocusPainted(false); // 포커스 상태 비활성화
         settingButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(settingButton); // 클릭 시 소리 추가
         // 설정 버튼 클릭 시 AudioSettingPage로 이동
         settingButton.addActionListener(e -> {
             // AudioSettingPage가 mainPanel에 추가되었는지 확인
@@ -87,6 +90,7 @@ public class MyPage extends JPanel {
         infoButton.setContentAreaFilled(false);
         infoButton.setFocusPainted(false); // 포커스 상태 비활성화
         infoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(infoButton); // 클릭 시 소리 추가
         // 정보 버튼 클릭 시 InfoPage로 이동
         infoButton.addActionListener(e -> {
             InfoPage infoPage = new InfoPage(mainPanel, cardLayout);
@@ -110,6 +114,7 @@ public class MyPage extends JPanel {
         playButton.setContentAreaFilled(false);
         playButton.setFocusPainted(false); // 포커스 상태 비활성화
         playButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(playButton); // 클릭 시 소리 추가
 
         // 플레이 버튼 클릭 시 PlayPage로 이동
         playButton.addActionListener(e -> {

@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -86,6 +87,7 @@ public class PlayPage extends JPanel {
         button.setFocusPainted(false); // Vô hiệu hóa trạng thái focus
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setToolTipText(tooltip);
+        AudioUtil.addClickSound(button);
         return button;
     }
 

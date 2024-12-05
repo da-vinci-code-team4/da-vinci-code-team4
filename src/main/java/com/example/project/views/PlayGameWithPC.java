@@ -9,6 +9,7 @@ import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
 import com.example.project.models.Player;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 import com.example.project.models.Session;
 
@@ -355,6 +356,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder());
+        AudioUtil.addClickSound(button);
         return button;
     }
 

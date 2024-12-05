@@ -3,6 +3,7 @@ package com.example.project.views;
 import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.UserManager;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -110,6 +111,7 @@ public class MenuPage extends JPanel {
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(button);
         return button;
     }
 }

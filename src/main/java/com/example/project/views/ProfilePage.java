@@ -1,6 +1,7 @@
 package com.example.project.views;
 
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -90,6 +91,7 @@ public class ProfilePage extends JPanel {
         JButton backButton = createButton("/img/ViewImage/back.png", "뒤로가기 버튼");
         backButton.setBounds(1384, 30, 128, 86);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
+        AudioUtil.addClickSound(backButton);
         backgroundImg.add(backButton);
     }
 
@@ -111,6 +113,7 @@ public class ProfilePage extends JPanel {
         button.setFocusPainted(false); // 포커스 상태 비활성화
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setToolTipText(tooltip);
+        AudioUtil.addClickSound(button);
         return button;
     }
 }

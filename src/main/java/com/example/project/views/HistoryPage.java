@@ -333,6 +333,7 @@ package com.example.project.views;
 
 import com.example.project.main.Main;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import java.io.BufferedWriter;
@@ -400,6 +401,7 @@ public class HistoryPage extends JPanel {
         rejoinButton.setContentAreaFilled(false);
         rejoinButton.setFocusPainted(false);
         rejoinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(rejoinButton);
         rejoinButton.addActionListener(e -> {
             if (currentPage > 0) {
                 currentPage--;
@@ -423,6 +425,7 @@ public class HistoryPage extends JPanel {
         continueButton.setContentAreaFilled(false);
         continueButton.setFocusPainted(false);
         continueButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(continueButton);
         continueButton.addActionListener(e -> {
             if ((currentPage + 1) * ROWS_PER_PAGE < historyData.size()) {
                 currentPage++;
@@ -451,6 +454,7 @@ public class HistoryPage extends JPanel {
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(backButton);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage")); // MenuPage로 이동
         background.add(backButton);
 
@@ -585,6 +589,7 @@ public class HistoryPage extends JPanel {
             replayButton.setContentAreaFilled(false);
             replayButton.setFocusPainted(false);
             replayButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            AudioUtil.addClickSound(replayButton);
             // 리플레이 버튼의 ActionListener (기능 추가 필요)
             replayButton.addActionListener(e -> {
                 // 리플레이 기능은 나중에 추가 예정

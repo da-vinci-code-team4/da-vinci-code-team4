@@ -247,6 +247,7 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -300,6 +301,7 @@ public class RankingPage extends JPanel {
         rejoinButton.setBorderPainted(false);
         rejoinButton.setContentAreaFilled(false);
         rejoinButton.setFocusPainted(false);
+        AudioUtil.addClickSound(rejoinButton);
         rejoinButton.addActionListener(e -> {
             if (currentPage > 0) {
                 currentPage--;
@@ -314,6 +316,7 @@ public class RankingPage extends JPanel {
         continueButton.setBorderPainted(false);
         continueButton.setContentAreaFilled(false);
         continueButton.setFocusPainted(false);
+        AudioUtil.addClickSound(continueButton);
         continueButton.addActionListener(e -> {
             if ((currentPage + 1) * ROWS_PER_PAGE < rankingData.size()) {
                 currentPage++;
@@ -339,6 +342,7 @@ public class RankingPage extends JPanel {
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage")); // MenuPage로 이동
+        AudioUtil.addClickSound(backButton);
         background.add(backButton);
     }
 

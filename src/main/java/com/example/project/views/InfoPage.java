@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -53,6 +54,7 @@ public class InfoPage extends JPanel {
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MyPage"));
+        AudioUtil.addClickSound(backButton);
         background.add(backButton);
     }
 }

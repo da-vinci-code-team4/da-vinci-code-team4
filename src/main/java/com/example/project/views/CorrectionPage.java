@@ -2,6 +2,7 @@ package com.example.project.views;
 
 import com.example.project.models.Session;
 import com.example.project.models.User;
+import com.example.project.utils.AudioUtil;
 import com.example.project.utils.RoundedPanel;
 
 import javax.swing.*;
@@ -176,6 +177,7 @@ public class CorrectionPage extends JPanel {
         JButton saveButton = createRoundedButton("Save", 200, 60, 20, new Color(0xD9D9D9), Color.BLACK, new Font("맑은 고딕", Font.BOLD, 30));
         saveButton.setBounds(309, 350, 200, 60); // Vị trí và kích thước
         saveButton.addActionListener(e -> handleSave());
+        AudioUtil.addClickSound(saveButton);
         infoContainer.add(saveButton);
 
         // --------------------- Nút Back ---------------------
@@ -186,6 +188,7 @@ public class CorrectionPage extends JPanel {
         backButton.setFocusPainted(false);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MenuPage"));
+        AudioUtil.addClickSound(backButton);
         backgroundImg.add(backButton);
     }
 
@@ -251,6 +254,7 @@ public class CorrectionPage extends JPanel {
         button.setContentAreaFilled(false);
         button.setOpaque(false); // Thiết lập không opaque để hỗ trợ độ trong suốt
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        AudioUtil.addClickSound(button);
         return button;
     }
 
