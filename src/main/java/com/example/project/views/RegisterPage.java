@@ -1,5 +1,6 @@
 package com.example.project.views;
 
+import com.example.project.main.Main;
 import com.example.project.models.Session;
 import com.example.project.models.User;
 import com.example.project.utils.AudioUtil;
@@ -176,6 +177,7 @@ public class RegisterPage extends JPanel {
 
         // ProfilePage로 이동
         ProfilePage profilePage = new ProfilePage(mainPanel, cardLayout, newUser);
+        Main.updateUsers(userList);
         mainPanel.add(profilePage, "ProfilePage");
         cardLayout.show(mainPanel, "ProfilePage");
     }
