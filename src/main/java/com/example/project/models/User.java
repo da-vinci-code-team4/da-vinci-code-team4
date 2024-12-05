@@ -54,7 +54,7 @@ public class User {
      * @param age 나이
      */
     public User(String id, String password, String username, int age) {
-        this(id, password, username, age, "0승 - 0패", 0, 0, 0.0);
+        this(id, password, username, age, "0승-0패", 0, 0, 0.0);
     }
 
     // Getter 메서드
@@ -139,13 +139,13 @@ public class User {
         if(result.equals("Victory")){
             setCore(getCore()+100);
             setRecord((win+1) + "w-"+lose+"l");
+            setRatio((double) (win + 1) / (win+1+lose) * 100);
         }
         else{
             setCore(getCore()-100);
             setRecord(win + "w-"+(lose+1)+"l");
+            setRatio((double) (win) / (win+1+lose) * 100);
         }
-
-        setRatio((((double) win /(win+lose))*100));
 
         List<User> temp = new ArrayList<>();
         for (User user : Session.getInstance().getUserList()) {
