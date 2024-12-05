@@ -3,11 +3,15 @@ package com.example.project.audio;
 public class AudioManager {
     private static AudioManager instance;
     private AudioPlayer backgroundMusicPlayer;
+    private AudioPlayer gamebackgroundMusicPlayer;
     private AudioPlayer clickSoundPlayer;
 
     private AudioManager() {
         backgroundMusicPlayer = new AudioPlayer("audio/BackgroundMusic.wav", true);
+        gamebackgroundMusicPlayer = new AudioPlayer("audio/_BackgroundMusic.wav", true);
         clickSoundPlayer = new AudioPlayer("audio/Click.wav");
+        setBackgroundMusicVolume(41);
+        setSoundEffectsVolume(41);
     }
 
     public static synchronized AudioManager getInstance() {
@@ -17,7 +21,17 @@ public class AudioManager {
         return instance;
     }
 
+    public void playGameBackgroundMusic() {
+        stopBackgroundMusic();
+        gamebackgroundMusicPlayer.play();
+    }
+
+    public void stopGameBackgroundMusic() {
+        gamebackgroundMusicPlayer.stop();
+    }
+    
     public void playBackgroundMusic() {
+        stopGameBackgroundMusic();
         backgroundMusicPlayer.play();
     }
 

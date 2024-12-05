@@ -104,15 +104,7 @@ public class AudioSettingPage extends JPanel {
             System.out.println(labelText + " Volume: " + volume);
         });
         
-        if (groupType.equals("Background Music")) {
-            volumeSlider.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    audioManager.playBackgroundMusic();
-                }
-            });
-        }
-        else if (groupType.equals("Sound Effects")) {
+        if (groupType.equals("Sound Effects")) {
             volumeSlider.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
@@ -148,22 +140,22 @@ public class AudioSettingPage extends JPanel {
     }
 
     private void saveAudioSettings() {
-        try (FileOutputStream output = new FileOutputStream(CONFIG_FILE)) {
-            Properties props = new Properties();
-            props.setProperty("backgroundMusicVolume", String.valueOf(backgroundMusicVolume));
-            props.setProperty("soundEffectsVolume", String.valueOf(soundEffectsVolume));
-            props.store(output, "Audio Settings");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // try (FileOutputStream output = new FileOutputStream(CONFIG_FILE)) {
+        //     Properties props = new Properties();
+        //     props.setProperty("backgroundMusicVolume", String.valueOf(backgroundMusicVolume));
+        //     props.setProperty("soundEffectsVolume", String.valueOf(soundEffectsVolume));
+        //     props.store(output, "Audio Settings");
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
     }
 
     private void loadAudioSettings() {
         // try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
         //     Properties props = new Properties();
         //     props.load(input);
-        //     backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "50"));
-        //     soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "50"));
+        //     backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "41"));
+        //     soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "41"));
         // } catch (IOException e) {
         //     System.out.println("No settings file found. Using default values.");
         // }

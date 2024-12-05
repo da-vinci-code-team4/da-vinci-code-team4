@@ -4,6 +4,7 @@ import com.example.project.controllers.Controller;
 import com.example.project.controllers.GameObserver;
 import com.example.project.controllers.GamePhase;
 import com.example.project.controllers.GameState;
+import com.example.project.audio.AudioManager;
 import com.example.project.config.Tile;
 import com.example.project.models.Computer;
 import com.example.project.models.GameUser;
@@ -14,6 +15,9 @@ import com.example.project.utils.RoundedPanel;
 import com.example.project.models.Session;
 
 import javax.swing.*;
+
+import org.checkerframework.checker.units.qual.A;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
@@ -67,6 +71,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         setLayout(null);
         setBackground(Color.WHITE);
 
+        AudioManager.getInstance().playGameBackgroundMusic();
         // 컨트롤러 초기화
         controller = new Controller(this);
         gameState = controller.getGameState();
@@ -116,6 +121,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
      * 모든 UI 구성 요소를 초기화합니다.
      */
     private void initializeUIComponents() {
+        
         // mainContent 패널 생성
         JPanel mainContent = new JPanel(null);
         mainContent.setBackground(Color.WHITE);
@@ -172,6 +178,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
                     // Yes를 선택하면 타이머를 멈추고 MyPage로 전환
                     swingTimer.stop();
                     cardLayout.show(mainPanel, "MyPage");
+                    AudioManager.getInstance().playBackgroundMusic();
                 }
                 // No를 선택하면 아무 것도 하지 않음
             }
@@ -676,6 +683,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         // VictoryScreen을 mainPanel에 추가하고 표시
         mainPanel.add(victoryScreen, "VictoryScreen");
         cardLayout.show(mainPanel, "VictoryScreen");
+        AudioManager.getInstance().playBackgroundMusic();
     }
 
     /**
@@ -687,6 +695,7 @@ public class PlayGameWithPC extends JPanel implements GameObserver {
         // DefeatScreen을 mainPanel에 추가하고 표시
         mainPanel.add(defeatScreen, "DefeatScreen");
         cardLayout.show(mainPanel, "DefeatScreen");
+        AudioManager.getInstance().playBackgroundMusic();
     }
 
     /**
