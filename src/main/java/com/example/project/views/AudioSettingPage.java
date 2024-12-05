@@ -146,25 +146,25 @@ public class AudioSettingPage extends JPanel {
     }
 
     private void saveAudioSettings() {
-        // try (FileOutputStream output = new FileOutputStream(CONFIG_FILE)) {
-        //     Properties props = new Properties();
-        //     props.setProperty("backgroundMusicVolume", String.valueOf(backgroundMusicVolume));
-        //     props.setProperty("soundEffectsVolume", String.valueOf(soundEffectsVolume));
-        //     props.store(output, "Audio Settings");
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
+        try (FileOutputStream output = new FileOutputStream(CONFIG_FILE)) {
+            Properties props = new Properties();
+            props.setProperty("backgroundMusicVolume", String.valueOf(backgroundMusicVolume));
+            props.setProperty("soundEffectsVolume", String.valueOf(soundEffectsVolume));
+            props.store(output, "Audio Settings");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadAudioSettings() {
-        // try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
-        //     Properties props = new Properties();
-        //     props.load(input);
-        //     backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "41"));
-        //     soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "41"));
-        // } catch (IOException e) {
-        //     System.out.println("No settings file found. Using default values.");
-        // }
+        try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
+            Properties props = new Properties();
+            props.load(input);
+            backgroundMusicVolume = Integer.parseInt(props.getProperty("backgroundMusicVolume", "41"));
+            soundEffectsVolume = Integer.parseInt(props.getProperty("soundEffectsVolume", "41"));
+        } catch (IOException e) {
+            System.out.println("No settings file found. Using default values.");
+        }
     }
 
     private float scaleVolume(int volume) {
