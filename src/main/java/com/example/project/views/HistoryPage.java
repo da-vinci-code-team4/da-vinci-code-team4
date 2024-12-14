@@ -351,12 +351,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections; // Collections 클래스 import 추가
 import java.util.List;
 
 public class HistoryPage extends JPanel {
 
     private static final int ROWS_PER_PAGE = 6; // 페이지당 표시되는 행 수
-    private static List<String[]> historyData; // history.txt에서 읽은 데이터
+    private static List<String[]> historyData; // history.txt에서 가져온 데이터 저장
     private int currentPage = 0; // 현재 페이지
     private JPanel dataPanel;
     private JButton rejoinButton;
@@ -364,7 +365,7 @@ public class HistoryPage extends JPanel {
 
     public HistoryPage(JPanel mainPanel, CardLayout cardLayout) {
         setLayout(null);
-        setBackground(new Color(0, 0, 0, 0)); // 배경 없음
+        setBackground(new Color(0, 0, 0, 0)); // 투명 배경 설정
 
         // 배경 설정
         JLabel background = new JLabel();
@@ -372,7 +373,7 @@ public class HistoryPage extends JPanel {
         if (bgImage != null) {
             background.setIcon(new ImageIcon(bgImage));
         } else {
-            System.err.println("Background.png을 찾을 수 없습니다!");
+            System.err.println("Background.png 파일을 찾을 수 없습니다!");
         }
         background.setBounds(0, 0, 1502, 916);
         background.setLayout(null);
@@ -382,19 +383,33 @@ public class HistoryPage extends JPanel {
         createHeader(background);
 
         // history.txt에서 데이터 읽기
+        loadHistoryData();
 
-        // 날짜(Date) 기준으로 최신순 정렬
-        historyData.sort((a, b) -> b[0].compareTo(a[0])); // 날짜 형식이 YYYY/MM/DD라고 가정
+        // 최신 데이터를 위로 정렬하기 위해 리스트를 뒤집음
+        Collections.reverse(historyData);
 
-        // 이전 버튼 생성
+        // 날짜와 시간별로 정렬하려면 주석 해제
+        /*
+        historyData.sort((a, b) -> {
+            // 날짜 비교
+            int dateCompare = b[0].compareTo(a[0]);
+            if (dateCompare != 0) {
+                return dateCompare;
+            }
+            // 시간이 동일한 경우 시간 비교
+            return b[3].compareTo(a[3]); // a[3]과 b[3]은 "HH:mm" 형식으로 가정
+        });
+        */
+
+        // "이전 페이지" 버튼 생성
         rejoinButton = new JButton();
         BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon1.png");
         BufferedImage rejoinImg = loadImage("/img/ViewImage/rejon.png");
         if (rejoin1Img != null) {
             rejoinButton.setIcon(new ImageIcon(rejoin1Img));
         } else {
-            System.err.println("rejon.png을 찾을 수 없습니다!");
-            rejoinButton.setText("Rejoin"); // 이미지가 없을 때 대체 텍스트 추가
+            System.err.println("rejon.png 파일을 찾을 수 없습니다!");
+            rejoinButton.setText("Rejoin"); // 이미지가 없을 경우 텍스트 표시
         }
         rejoinButton.setBounds(33, 450, 80, 120);
         rejoinButton.setBorderPainted(false);
@@ -410,15 +425,15 @@ public class HistoryPage extends JPanel {
         });
         background.add(rejoinButton);
 
-        // 다음 버튼 생성
+        // "다음 페이지" 버튼 생성
         continueButton = new JButton();
         BufferedImage continue1Img = loadImage("/img/ViewImage/continue1.png");
         BufferedImage continueImg = loadImage("/img/ViewImage/continue.png");
         if (continue1Img != null) {
             continueButton.setIcon(new ImageIcon(continue1Img));
         } else {
-            System.err.println("continue1.png을 찾을 수 없습니다!");
-            continueButton.setText("Continue"); // 이미지가 없을 때 대체 텍스트 추가
+            System.err.println("continue1.png 파일을 찾을 수 없습니다!");
+            continueButton.setText("Continue"); // 이미지가 없을 경우 텍스트 표시
         }
         continueButton.setBounds(1396, 450, 80, 120);
         continueButton.setBorderPainted(false);
@@ -434,20 +449,20 @@ public class HistoryPage extends JPanel {
         });
         background.add(continueButton);
 
-        // 데이터 패널
+        // 데이터 패널 생성
         dataPanel = new JPanel(null);
         dataPanel.setBounds(0, 246, 1502, 600);
         dataPanel.setOpaque(false);
         background.add(dataPanel);
 
-        // 뒤로가기 버튼 (MenuPage로 돌아감)
+        // "메뉴로 돌아가기" 버튼 생성
         JButton backButton = new JButton();
         BufferedImage backImg = loadImage("/img/ViewImage/back.png");
         if (backImg != null) {
             backButton.setIcon(new ImageIcon(backImg));
         } else {
-            System.err.println("back.png을 찾을 수 없습니다!");
-            backButton.setText("Back"); // 이미지가 없을 때 대체 텍스트 추가
+            System.err.println("back.png 파일을 찾을 수 없습니다!");
+            backButton.setText("Back"); // 이미지가 없을 경우 텍스트 표시
         }
         backButton.setBounds(1384, 30, 128, 86);
         backButton.setBorderPainted(false);
@@ -462,51 +477,79 @@ public class HistoryPage extends JPanel {
         updateDataPanel();
     }
 
+    /**
+     * history.txt 파일에서 데이터를 읽고 historyData에 저장
+     */
+    private void loadHistoryData() {
+        historyData = new ArrayList<>();
+        String filePath = System.getProperty("user.dir") + "/history.txt";
+        File historyFile = new File(filePath);
+        if (!historyFile.exists()) {
+            System.err.println("history.txt 파일이 존재하지 않습니다: " + filePath);
+            JOptionPane.showMessageDialog(this, "history.txt 파일이 존재하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.trim().split("\\s+");
+                if (parts.length == 4) {
+                    historyData.add(parts);
+                } else {
+                    System.err.println("유효하지 않은 데이터 라인: " + line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "history.txt 파일을 읽을 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * 새 항목 추가 및 history.txt 파일에 기록
+     */
     public static void updateHistory(String result, int score, int time) {
         LocalDate today = LocalDate.now();
-        // 날짜 형식 지정
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        // 날짜 포맷에 맞게 출력
 
         String[] data = new String[4];
         data[0] = today.format(formatter);
         data[1] = result;
         data[2] = Integer.toString(score);
         data[3] = String.format("%02d:%02d", time / 60, time % 60);
-        historyData.add(data);
 
-        //텍스트파일에 재 입력
-        try (BufferedWriter bw = new BufferedWriter(
-            new FileWriter(System.getProperty("user.dir") + "/history.txt",
-                false))) { // false: 기존 파일 덮어쓰기
+        // 리스트 맨 앞에 추가
+        historyData.add(0, data);
+
+        // history.txt 파일에 기록
+        String filePath = System.getProperty("user.dir") + "/history.txt";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, false))) {
             for (String[] lineData : historyData) {
-                // 배열을 공백으로 구분해서 한 줄로 작성
                 String line = String.join(" ", lineData);
                 bw.write(line);
-                bw.newLine(); // 각 줄마다 개행 추가
+                bw.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "파일을 쓸 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "history.txt 파일에 기록할 수 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     /**
-     * 헤더 생성 (컬럼: 날짜(Date), 결과(Results), 점수(Core), 플레이 시간(Play Time), 리플레이(Replay)).
+     * 헤더를 생성하여 날짜, 결과, 점수, 플레이 시간, 리플레이 열 표시
      */
     private void createHeader(JLabel background) {
-        // 헤더 패널
         JPanel headerPanel = new RoundedPanel(10);
         headerPanel.setBounds(158, 167, 1221, 59);
         headerPanel.setBackground(new Color(0, 0, 0, 180));
         headerPanel.setLayout(null);
 
-        // 헤더 레이블
         String[] headers = {"날짜", "결과", "점수", "플레이 시간", "리플레이"};
         int[] positions = {168, 382, 707, 935, 1230};
         for (int i = 0; i < headers.length; i++) {
             JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
-            label.setBounds(positions[i] - 158, 0, 200, 59); // 컬럼 위치 조정
+            label.setBounds(positions[i] - 158, 0, 200, 59);
             label.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             label.setForeground(Color.WHITE);
             headerPanel.add(label);
@@ -516,96 +559,79 @@ public class HistoryPage extends JPanel {
     }
 
     /**
-     * 현재 페이지 데이터를 표시하도록 dataPanel 업데이트.
+     * 현재 페이지 데이터를 표시하도록 dataPanel 업데이트
      */
     private void updateDataPanel() {
         dataPanel.removeAll();
 
-        int startY = 0; // 첫 번째 행의 Y 위치 시작점
-        int height = 80; // 각 행 높이
-        int replayButtonWidth = 60;
-        int replayButtonHeight = 60;
+        int startY = 0;
+        int height = 80;
 
         for (int i = currentPage * ROWS_PER_PAGE;
-            i < Math.min((currentPage + 1) * ROWS_PER_PAGE, historyData.size()); i++) {
+             i < Math.min((currentPage + 1) * ROWS_PER_PAGE, historyData.size()); i++) {
             String[] row = historyData.get(i);
 
-            // 각 행: 날짜(Date), 결과(Result), 점수(Core), 플레이 시간(Play Time)
             String date = row[0];
             String result = row[1];
             String coreStr = row[2];
             String playTime = row[3];
 
-            // 점수 계산 (+/- 표시)
             int core = Integer.parseInt(coreStr);
-            String coreDisplay = (result.equalsIgnoreCase("Victory") ? "P(+" + core + ")"
-                : "P(-" + core + ")");
+            String coreDisplay = core + "P";
 
-            // 각 행의 패널
             JPanel groupPanel = new RoundedPanel(10);
             groupPanel.setBounds(158, startY, 1221, height);
             groupPanel.setBackground(new Color(0, 0, 0, 180));
             groupPanel.setLayout(null);
 
-            // 날짜 레이블
             JLabel dateLabel = new JLabel(date, SwingConstants.CENTER);
             dateLabel.setBounds(10, 0, 200, height);
             dateLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             dateLabel.setForeground(Color.WHITE);
             groupPanel.add(dateLabel);
 
-            // 결과 레이블
             JLabel resultsLabel = new JLabel(result, SwingConstants.CENTER);
             resultsLabel.setBounds(214, 0, 200, height);
             resultsLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             resultsLabel.setForeground(Color.WHITE);
             groupPanel.add(resultsLabel);
 
-            // 점수 레이블
             JLabel coreLabel = new JLabel(coreDisplay, SwingConstants.CENTER);
             coreLabel.setBounds(538, 0, 200, height);
             coreLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             coreLabel.setForeground(Color.WHITE);
             groupPanel.add(coreLabel);
 
-            // 플레이 시간 레이블
             JLabel playTimeLabel = new JLabel(playTime, SwingConstants.CENTER);
             playTimeLabel.setBounds(766, 0, 200, height);
             playTimeLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 20));
             playTimeLabel.setForeground(Color.WHITE);
             groupPanel.add(playTimeLabel);
 
-            // 리플레이 버튼
             JButton replayButton = new JButton();
             BufferedImage replayImg = loadImage("/img/ViewImage/replay.png");
             if (replayImg != null) {
                 replayButton.setIcon(new ImageIcon(replayImg));
             } else {
-                System.err.println("replay.png을 찾을 수 없습니다!");
-                replayButton.setText("Replay"); // 이미지가 없을 때 대체 텍스트 추가
+                System.err.println("replay.png 파일을 찾을 수 없습니다!");
+                replayButton.setText("Replay");
             }
-            replayButton.setBounds(1060, 10, replayButtonWidth, replayButtonHeight);
+            replayButton.setBounds(1060, 10, 60, 60);
             replayButton.setBorderPainted(false);
             replayButton.setContentAreaFilled(false);
             replayButton.setFocusPainted(false);
             replayButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             AudioUtil.addClickSound(replayButton);
-            // 리플레이 버튼의 ActionListener (기능 추가 필요)
             replayButton.addActionListener(e -> {
-                // 리플레이 기능은 나중에 추가 예정
-                JOptionPane.showMessageDialog(this, "리플레이 기능은 나중에 추가될 예정입니다.", "정보",
-                    JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Replay 기능은 나중에 추가될 예정입니다.", "정보", JOptionPane.INFORMATION_MESSAGE);
             });
             groupPanel.add(replayButton);
 
-            // dataPanel에 행 패널 추가
             dataPanel.add(groupPanel);
 
-            // 다음 행의 Y 위치 업데이트
-            startY += height + 10; // 행 간 간격 10px
+            startY += height + 10;
         }
 
-        // 이전 및 다음 버튼 상태 업데이트
         updateNavigationButtons();
 
         dataPanel.revalidate();
@@ -613,17 +639,16 @@ public class HistoryPage extends JPanel {
     }
 
     /**
-     * 현재 페이지에 따라 이전 및 다음 버튼 상태와 아이콘을 업데이트.
+     * 이전 및 다음 버튼 상태와 아이콘 업데이트
      */
     private void updateNavigationButtons() {
-        // 이전 버튼 상태 업데이트
         if (currentPage > 0) {
             BufferedImage rejoin1Img = loadImage("/img/ViewImage/rejon1.png");
             if (rejoin1Img != null) {
                 rejoinButton.setIcon(new ImageIcon(rejoin1Img));
                 rejoinButton.setEnabled(true);
             } else {
-                System.err.println("rejon1.png을 찾을 수 없습니다!");
+                System.err.println("rejon1.png 파일을 찾을 수 없습니다!");
                 rejoinButton.setEnabled(false);
             }
         } else {
@@ -631,19 +656,18 @@ public class HistoryPage extends JPanel {
             if (rejoinImg != null) {
                 rejoinButton.setIcon(new ImageIcon(rejoinImg));
             } else {
-                System.err.println("rejon.png을 찾을 수 없습니다!");
+                System.err.println("rejon.png 파일을 찾을 수 없습니다!");
             }
             rejoinButton.setEnabled(false);
         }
 
-        // 다음 버튼 상태 업데이트
         if ((currentPage + 1) * ROWS_PER_PAGE < historyData.size()) {
             BufferedImage continue1Img = loadImage("/img/ViewImage/continue1.png");
             if (continue1Img != null) {
                 continueButton.setIcon(new ImageIcon(continue1Img));
                 continueButton.setEnabled(true);
             } else {
-                System.err.println("continue1.png을 찾을 수 없습니다!");
+                System.err.println("continue1.png 파일을 찾을 수 없습니다!");
                 continueButton.setEnabled(false);
             }
         } else {
@@ -651,17 +675,17 @@ public class HistoryPage extends JPanel {
             if (continueImg != null) {
                 continueButton.setIcon(new ImageIcon(continueImg));
             } else {
-                System.err.println("continue.png을 찾을 수 없습니다!");
+                System.err.println("continue.png 파일을 찾을 수 없습니다!");
             }
             continueButton.setEnabled(false);
         }
     }
 
     /**
-     * 리소스 경로에서 이미지를 로드.
+     * 리소스 경로에서 이미지를 로드
      *
-     * @param path 리소스 이미지 경로.
-     * @return 성공 시 BufferedImage, 실패 시 null.
+     * @param path 리소스 이미지 경로
+     * @return 성공 시 BufferedImage, 실패 시 null
      */
     private BufferedImage loadImage(String path) {
         try (InputStream is = getClass().getResourceAsStream(path)) {
@@ -677,6 +701,11 @@ public class HistoryPage extends JPanel {
         }
     }
 
+    /**
+     * 외부에서 historyData를 설정하기 위한 메소드
+     *
+     * @param data 외부 데이터 리스트
+     */
     public static void setHistoryData(List<String[]> data) {
         historyData = data;
     }
