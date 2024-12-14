@@ -68,14 +68,14 @@ public class ProfilePage extends JPanel {
 
         // --------------------- 정보 열 ---------------------
         JPanel infoColumn = new JPanel(null);
-        infoColumn.setBounds(356 + 40, 0, 818, 575);
+        infoColumn.setBounds(356 + 40, 0, 818, 650);
         infoColumn.setOpaque(false);
         contentPanel.add(infoColumn);
 
         // 정보 컨테이너
         JPanel infoContainer = new JPanel();
         infoContainer.setLayout(null);
-        infoContainer.setBounds(0, 0, 818, 575);
+        infoContainer.setBounds(0, 0, 818, 650);
         infoContainer.setOpaque(false);
         infoColumn.add(infoContainer);
 
@@ -84,7 +84,7 @@ public class ProfilePage extends JPanel {
         addInfoItem(infoContainer, "나이: " + currentUser.getAge(), 80);
         addInfoItem(infoContainer, "기록: " + currentUser.getRecord(), 160);
         addInfoItem(infoContainer, "점수: " + currentUser.getCore() + "P", 240);
-//        addInfoItem(infoContainer, "랭킹: " + currentUser.getRanking(), 320);
+        addInfoItem(infoContainer, "랭킹: " + currentUser.getRanking(), 320);
         addInfoItem(infoContainer, "승률: " + currentUser.getRatio() + "%", 400);
 
         // 뒤로가기 버튼
@@ -100,7 +100,7 @@ public class ProfilePage extends JPanel {
         JLabel infoLabel = new JLabel(text);
         infoLabel.setFont(new Font("Carrois Gothic", Font.PLAIN, 64));
         infoLabel.setForeground(Color.WHITE);
-        infoLabel.setBounds(0, yPosition, 818, 50);
+        infoLabel.setBounds(0, yPosition, 818, 55);
         infoLabel.setHorizontalAlignment(SwingConstants.LEFT);
         container.add(infoLabel);
     }
